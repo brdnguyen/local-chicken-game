@@ -390,6 +390,102 @@
             min-height: 80px;
             -webkit-appearance: none;
         }
+        
+        .money-display {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.1em;
+            display: inline-block;
+            margin: 10px 0;
+            box-shadow: 0 3px 10px rgba(255,165,0,0.3);
+            border: 2px solid #FF8C00;
+        }
+        
+        .shop-item {
+            background: #FFF9E6;
+            border: 3px solid #FFD700;
+            border-radius: 15px;
+            padding: 12px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .shop-item.owned {
+            background: #E8F5E9;
+            border-color: #81C784;
+        }
+        
+        .shop-item .item-icon {
+            font-size: 2em;
+            width: 50px;
+            text-align: center;
+        }
+        
+        .shop-item .item-info {
+            flex: 1;
+        }
+        
+        .shop-item .item-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .shop-item .item-desc {
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .shop-item .item-price {
+            font-weight: 700;
+            color: #FF8C00;
+        }
+        
+        .shop-item .owned-badge {
+            background: #81C784;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .inventory-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        
+        .inventory-item {
+            background: #FFF0F5;
+            border: 2px solid #FFB6C1;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            width: 70px;
+        }
+        
+        .inventory-item .item-emoji {
+            font-size: 1.8em;
+        }
+        
+        .coin-earn {
+            color: #FF8C00;
+            font-weight: 600;
+            animation: coinPop 0.5s ease-out;
+        }
+        
+        @keyframes coinPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -458,10 +554,18 @@
 
         <!-- Main Game Screen -->
         <div id="game-screen" class="screen">
+            <div style="text-align: center;">
+                <div class="money-display">💰 $<span id="money-amount">5</span></div>
+            </div>
+            
             <div class="nav-bar">
                 <div class="nav-item active" onclick="showTab('chicken')" id="nav-chicken">
                     <div class="icon">🐔</div>
                     <div>Chicken</div>
+                </div>
+                <div class="nav-item" onclick="showTab('shop')" id="nav-shop">
+                    <div class="icon">🛒</div>
+                    <div>Shop</div>
                 </div>
                 <div class="nav-item" onclick="showTab('friends')" id="nav-friends">
                     <div class="icon">👥</div>
@@ -507,6 +611,21 @@
 
                 <h2>🏆 Milestones</h2>
                 <div class="milestone-list" id="milestone-list"></div>
+            </div>
+
+            <!-- Shop Tab -->
+            <div id="shop-tab" class="tab-content hidden">
+                <h2>🛒 Chicken Shop</h2>
+                <p style="text-align: center; color: #666; margin: 10px 0;">
+                    Buy cute stuff for your chicken! 🎁
+                </p>
+                
+                <div id="shop-items"></div>
+                
+                <h2>🎒 My Items</h2>
+                <div id="inventory" class="inventory-grid">
+                    <p style="text-align: center; color: #888; width: 100%;">No items yet!</p>
+                </div>
             </div>
 
             <!-- Friends Tab -->
@@ -592,6 +711,42 @@
             wantFlap: { icon: '🪽', text: 'Wants to Flap', priority: 1 },
             sick: { icon: '🤒', text: 'Sick', priority: 3 },
             bored: { icon: '😐', text: 'Bored', priority: 1 }
+        };
+
+        // Shop items
+        const SHOP_ITEMS = {
+            'fake-eggs': {
+                id: 'fake-eggs',
+                name: 'Fake Chicken Eggs',
+                icon: '🥚',
+                price: 1,
+                description: 'Cute decorative eggs! Makes chicken +10 happier.',
+                effect: { happiness: 10 }
+            },
+            'cup-water-set': {
+                id: 'cup-water-set',
+                name: 'Cup & Water Set',
+                icon: '🥤',
+                price: 1,
+                description: 'Fancy drinking set! Water lasts longer.',
+                effect: { thirstDecayReduction: 0.3 }
+            },
+            'fancy-seeds': {
+                id: 'fancy-seeds',
+                name: 'Fancy Seeds',
+                icon: '🌻',
+                price: 1,
+                description: 'Delicious premium seeds! Food lasts longer.',
+                effect: { hungerDecayReduction: 0.3 }
+            },
+            'chicken-toy': {
+                id: 'chicken-toy',
+                name: 'Chicken Toy',
+                icon: '🎀',
+                price: 1,
+                description: 'A fun toy to play with! Less boredom.',
+                effect: { happinessDecayReduction: 0.3 }
+            }
         };
 
         // ASCII Art for different stages
@@ -696,7 +851,9 @@
         let gameState = {
             chicken: null,
             friends: [],
-            lastUpdate: null
+            lastUpdate: null,
+            money: 5,
+            inventory: []
         };
 
         let selectedBreed = null;
@@ -706,6 +863,7 @@
             loadGame();
             if (gameState.chicken) {
                 updateGame();
+                updateMoneyDisplay();
                 showScreen('game-screen');
             }
             // Update game every minute
@@ -726,6 +884,9 @@
             
             if (tabName === 'share') {
                 generateQRCode();
+            }
+            if (tabName === 'shop') {
+                renderShop();
             }
         }
 
@@ -786,13 +947,29 @@
             const timePassed = now - gameState.lastUpdate;
             const minutesPassed = timePassed / 60000;
 
-            // Update needs (decrease over time)
+            // Update needs (decrease over time) - with item effects
             const decay = minutesPassed * 0.5; // Needs decrease by 0.5 per minute
-            gameState.chicken.needs.hunger = Math.max(0, gameState.chicken.needs.hunger - decay);
-            gameState.chicken.needs.thirst = Math.max(0, gameState.chicken.needs.thirst - decay * 1.2);
+            
+            // Check for item effects that reduce decay
+            let hungerDecay = decay;
+            let thirstDecay = decay * 1.2;
+            let happinessDecay = decay * 0.2;
+            
+            if (gameState.inventory.includes('fancy-seeds')) {
+                hungerDecay *= 0.7; // 30% slower hunger decay
+            }
+            if (gameState.inventory.includes('cup-water-set')) {
+                thirstDecay *= 0.7; // 30% slower thirst decay
+            }
+            if (gameState.inventory.includes('chicken-toy')) {
+                happinessDecay *= 0.7; // 30% slower happiness decay
+            }
+            
+            gameState.chicken.needs.hunger = Math.max(0, gameState.chicken.needs.hunger - hungerDecay);
+            gameState.chicken.needs.thirst = Math.max(0, gameState.chicken.needs.thirst - thirstDecay);
             gameState.chicken.needs.cleanliness = Math.max(0, gameState.chicken.needs.cleanliness - decay * 0.3);
             gameState.chicken.needs.sleep = Math.max(0, gameState.chicken.needs.sleep - decay * 0.4);
-            gameState.chicken.needs.happiness = Math.max(0, gameState.chicken.needs.happiness - decay * 0.2);
+            gameState.chicken.needs.happiness = Math.max(0, gameState.chicken.needs.happiness - happinessDecay);
             gameState.chicken.needs.exercise = Math.max(0, gameState.chicken.needs.exercise - decay * 0.3);
 
             // Check if chicken gets sick (if needs are too low)
@@ -844,6 +1021,11 @@
                     message = '🪽 *flap flap flap* Wheee!';
                     break;
             }
+
+            // Earn $1 for taking care of chicken!
+            gameState.money += 1;
+            message += '<br><span class="coin-earn">+$1 💰</span>';
+            updateMoneyDisplay();
 
             saveGame();
             renderChicken();
@@ -1198,6 +1380,80 @@
             document.getElementById('overlay').classList.add('hidden');
         }
 
+        function updateMoneyDisplay() {
+            document.getElementById('money-amount').textContent = gameState.money;
+        }
+
+        // ============= SHOP SYSTEM =============
+        function renderShop() {
+            const shopDiv = document.getElementById('shop-items');
+            
+            shopDiv.innerHTML = Object.values(SHOP_ITEMS).map(item => {
+                const owned = gameState.inventory.includes(item.id);
+                return `
+                    <div class="shop-item ${owned ? 'owned' : ''}">
+                        <div class="item-icon">${item.icon}</div>
+                        <div class="item-info">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-desc">${item.description}</div>
+                        </div>
+                        ${owned 
+                            ? '<span class="owned-badge">✓ Owned</span>' 
+                            : `<button class="btn small" onclick="buyItem('${item.id}')">$${item.price}</button>`
+                        }
+                    </div>
+                `;
+            }).join('');
+            
+            renderInventory();
+        }
+
+        function renderInventory() {
+            const invDiv = document.getElementById('inventory');
+            
+            if (gameState.inventory.length === 0) {
+                invDiv.innerHTML = '<p style="text-align: center; color: #888; width: 100%;">No items yet! 🛒</p>';
+                return;
+            }
+            
+            invDiv.innerHTML = gameState.inventory.map(itemId => {
+                const item = SHOP_ITEMS[itemId];
+                return `
+                    <div class="inventory-item">
+                        <div class="item-emoji">${item.icon}</div>
+                        <div style="font-size: 0.75em;">${item.name.split(' ')[0]}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function buyItem(itemId) {
+            const item = SHOP_ITEMS[itemId];
+            
+            if (gameState.inventory.includes(itemId)) {
+                showPopup('🛒 You already have this item!');
+                return;
+            }
+            
+            if (gameState.money < item.price) {
+                showPopup('💸 Not enough money!<br>Take care of your chicken to earn more!');
+                return;
+            }
+            
+            gameState.money -= item.price;
+            gameState.inventory.push(itemId);
+            
+            // Apply immediate happiness boost for fake eggs
+            if (itemId === 'fake-eggs' && gameState.chicken) {
+                gameState.chicken.needs.happiness = Math.min(100, gameState.chicken.needs.happiness + 10);
+            }
+            
+            updateMoneyDisplay();
+            saveGame();
+            renderShop();
+            showPopup(`🎉 You bought ${item.name}!<br>${item.icon} ${item.description}`);
+        }
+
         // ============= SAVE/LOAD =============
         function saveGame() {
             localStorage.setItem('chickenGame', JSON.stringify(gameState));
@@ -1206,7 +1462,14 @@
         function loadGame() {
             const saved = localStorage.getItem('chickenGame');
             if (saved) {
-                gameState = JSON.parse(saved);
+                const loaded = JSON.parse(saved);
+                gameState = {
+                    ...gameState,
+                    ...loaded,
+                    // Ensure money and inventory exist for old saves
+                    money: loaded.money !== undefined ? loaded.money : 5,
+                    inventory: loaded.inventory || []
+                };
             }
         }
 
@@ -1214,6 +1477,7 @@
             loadGame();
             if (gameState.chicken) {
                 updateGame();
+                updateMoneyDisplay();
                 showScreen('game-screen');
                 renderFriends();
             } else {
