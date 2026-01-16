@@ -9,13 +9,17 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-text-size-adjust: 100%;
         }
         
         body {
-            font-family: 'Comic Sans MS', 'Chalkboard', cursive, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #87CEEB 0%, #98FB98 50%, #F0E68C 100%);
             min-height: 100vh;
             padding: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
         
         .container {
@@ -31,14 +35,16 @@
         h1 {
             text-align: center;
             color: #FF69B4;
-            font-size: 1.8em;
+            font-size: 1.6em;
+            font-weight: 700;
             margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         
         h2 {
             color: #FF69B4;
-            font-size: 1.3em;
+            font-size: 1.15em;
+            font-weight: 600;
             margin: 15px 0 10px 0;
             border-bottom: 2px dashed #FFB6C1;
             padding-bottom: 5px;
@@ -83,9 +89,10 @@
         
         .status-item {
             background: #FFE4E1;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 15px;
-            font-size: 0.85em;
+            font-size: 0.9em;
+            font-weight: 500;
             border: 2px solid #FFB6C1;
         }
         
@@ -119,6 +126,7 @@
             padding: 12px 20px;
             border-radius: 25px;
             font-size: 1em;
+            font-weight: 600;
             font-family: inherit;
             cursor: pointer;
             margin: 5px;
@@ -154,14 +162,23 @@
             margin: 8px 0;
             border: 3px solid #FFB6C1;
             border-radius: 15px;
-            font-size: 1em;
+            font-size: 16px;
             font-family: inherit;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         input:focus, select:focus {
             outline: none;
             border-color: #FF69B4;
             box-shadow: 0 0 10px rgba(255,105,180,0.3);
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-top: 10px;
         }
         
         .breed-selector {
@@ -179,8 +196,10 @@
             padding: 10px;
             cursor: pointer;
             text-align: center;
-            width: 90px;
+            width: 95px;
             transition: all 0.2s;
+            font-weight: 500;
+            font-size: 0.9em;
         }
         
         .breed-option:hover, .breed-option.selected {
@@ -205,9 +224,10 @@
             background: #E8F5E9;
             border: 2px solid #81C784;
             border-radius: 10px;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
-            font-size: 0.9em;
+            font-size: 0.95em;
+            line-height: 1.6;
         }
         
         .lifecycle-bar {
@@ -334,8 +354,9 @@
         .nav-item {
             text-align: center;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border-radius: 10px;
+            font-weight: 500;
         }
         
         .nav-item.active {
@@ -344,7 +365,9 @@
         }
         
         .nav-item .icon {
-            font-size: 1.5em;
+            font-size: 1.4em;
+            display: block;
+            margin-bottom: 2px;
         }
         
         .scan-area {
@@ -361,10 +384,11 @@
             margin: 8px 0;
             border: 3px solid #FFB6C1;
             border-radius: 15px;
-            font-size: 0.9em;
-            font-family: monospace;
+            font-size: 14px;
+            font-family: ui-monospace, 'SF Mono', Menlo, Monaco, monospace;
             resize: vertical;
             min-height: 80px;
+            -webkit-appearance: none;
         }
     </style>
 </head>
