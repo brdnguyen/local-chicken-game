@@ -1,757 +1,857 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>🐔 My Virtual Chicken 🐔</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-text-size-adjust: 100%;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 50%, #F0E68C 100%);
-            min-height: 100vh;
-            padding: 10px;
-            font-size: 16px;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
-        
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-            border: 4px solid #FFB6C1;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #FF69B4;
-            font-size: 1.6em;
-            font-weight: 700;
-            margin-bottom: 15px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        h2 {
-            color: #FF69B4;
-            font-size: 1.15em;
-            font-weight: 600;
-            margin: 15px 0 10px 0;
-            border-bottom: 2px dashed #FFB6C1;
-            padding-bottom: 5px;
-        }
-        
-        .screen {
-            display: none;
-        }
-        
-        .screen.active {
-            display: block;
-        }
-        
-        .chicken-display {
-            background: #FFFACD;
-            border: 3px solid #FFD700;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 10px 0;
-            text-align: center;
-        }
-        
-        .ascii-art {
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            line-height: 1.2;
-            white-space: pre;
-            background: #FFF8DC;
-            padding: 10px;
-            border-radius: 10px;
-            display: inline-block;
-            margin: 10px 0;
-        }
-        
-        .status-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            margin: 10px 0;
-        }
-        
-        .status-item {
-            background: #FFE4E1;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            font-weight: 500;
-            border: 2px solid #FFB6C1;
-        }
-        
-        .status-item.warning {
-            background: #FFEB3B;
-            border-color: #FFC107;
-            animation: pulse 1s infinite;
-        }
-        
-        .status-item.critical {
-            background: #FF8A80;
-            border-color: #FF5252;
-            animation: shake 0.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
-        }
-        
-        .btn {
-            background: linear-gradient(180deg, #FF69B4, #FF1493);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            margin: 5px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .btn:hover, .btn:active {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.3);
-        }
-        
-        .btn.small {
-            padding: 8px 15px;
-            font-size: 0.9em;
-        }
-        
-        .btn.green {
-            background: linear-gradient(180deg, #90EE90, #32CD32);
-        }
-        
-        .btn.blue {
-            background: linear-gradient(180deg, #87CEEB, #4169E1);
-        }
-        
-        .btn.orange {
-            background: linear-gradient(180deg, #FFB347, #FF8C00);
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 3px solid #FFB6C1;
-            border-radius: 15px;
-            font-size: 16px;
-            font-family: inherit;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: #FF69B4;
-            box-shadow: 0 0 10px rgba(255,105,180,0.3);
-        }
-        
-        label {
-            display: block;
-            font-weight: 600;
-            color: #555;
-            margin-top: 10px;
-        }
-        
-        .breed-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin: 10px 0;
-        }
-        
-        .breed-option {
-            background: #FFF0F5;
-            border: 3px solid #FFB6C1;
-            border-radius: 15px;
-            padding: 10px;
-            cursor: pointer;
-            text-align: center;
-            width: 95px;
-            transition: all 0.2s;
-            font-weight: 500;
-            font-size: 0.9em;
-        }
-        
-        .breed-option:hover, .breed-option.selected {
-            border-color: #FF69B4;
-            background: #FFE4E1;
-            transform: scale(1.05);
-        }
-        
-        .breed-option .breed-icon {
-            font-size: 2em;
-        }
-        
-        .action-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin: 15px 0;
-        }
-        
-        .info-box {
-            background: #E8F5E9;
-            border: 2px solid #81C784;
-            border-radius: 10px;
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 0.95em;
-            line-height: 1.6;
-        }
-        
-        .lifecycle-bar {
-            background: #E0E0E0;
-            border-radius: 10px;
-            height: 20px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-        
-        .lifecycle-progress {
-            background: linear-gradient(90deg, #FFD700, #FFA500, #FF69B4);
-            height: 100%;
-            transition: width 0.5s;
-        }
-        
-        .qr-container {
-            text-align: center;
-            padding: 15px;
-            background: white;
-            border-radius: 15px;
-            margin: 10px 0;
-        }
-        
-        #qrcode {
-            display: inline-block;
-            padding: 10px;
-            background: white;
-        }
-        
-        .friend-card {
-            background: #FFF0F5;
-            border: 2px solid #FFB6C1;
-            border-radius: 15px;
-            padding: 12px;
-            margin: 10px 0;
-        }
-        
-        .friend-card .name {
-            font-weight: bold;
-            color: #FF69B4;
-            font-size: 1.1em;
-        }
-        
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin-bottom: 15px;
-        }
-        
-        .tab {
-            padding: 10px 15px;
-            background: #FFE4E1;
-            border: 2px solid #FFB6C1;
-            border-radius: 15px 15px 0 0;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-        
-        .tab.active {
-            background: #FF69B4;
-            color: white;
-            border-color: #FF69B4;
-        }
-        
-        .milestone-list {
-            text-align: left;
-            padding: 10px;
-        }
-        
-        .milestone {
-            padding: 5px 0;
-            border-bottom: 1px dashed #FFB6C1;
-        }
-        
-        .milestone.achieved {
-            color: #32CD32;
-        }
-        
-        .milestone.current {
-            font-weight: bold;
-            color: #FF69B4;
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-        
-        .message-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            border: 4px solid #FF69B4;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            z-index: 1000;
-            text-align: center;
-            max-width: 300px;
-        }
-        
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
-        
-        .nav-bar {
-            display: flex;
-            justify-content: space-around;
-            background: #FFE4E1;
-            border-radius: 15px;
-            padding: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .nav-item {
-            text-align: center;
-            cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-weight: 500;
-        }
-        
-        .nav-item.active {
-            background: #FF69B4;
-            color: white;
-        }
-        
-        .nav-item .icon {
-            font-size: 1.4em;
-            display: block;
-            margin-bottom: 2px;
-        }
-        
-        .scan-area {
-            border: 3px dashed #FF69B4;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 10px 0;
-            text-align: center;
-        }
-        
-        textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 3px solid #FFB6C1;
-            border-radius: 15px;
-            font-size: 14px;
-            font-family: ui-monospace, 'SF Mono', Menlo, Monaco, monospace;
-            resize: vertical;
-            min-height: 80px;
-            -webkit-appearance: none;
-        }
-        
-        .money-display {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: #333;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 1.1em;
-            display: inline-block;
-            margin: 10px 0;
-            box-shadow: 0 3px 10px rgba(255,165,0,0.3);
-            border: 2px solid #FF8C00;
-        }
-        
-        .shop-item {
-            background: #FFF9E6;
-            border: 3px solid #FFD700;
-            border-radius: 15px;
-            padding: 12px;
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .shop-item.owned {
-            background: #E8F5E9;
-            border-color: #81C784;
-        }
-        
-        .shop-item .item-icon {
-            font-size: 2em;
-            width: 50px;
-            text-align: center;
-        }
-        
-        .shop-item .item-info {
-            flex: 1;
-        }
-        
-        .shop-item .item-name {
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .shop-item .item-desc {
-            font-size: 0.85em;
-            color: #666;
-        }
-        
-        .shop-item .item-price {
-            font-weight: 700;
-            color: #FF8C00;
-        }
-        
-        .shop-item .owned-badge {
-            background: #81C784;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 10px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-        
-        .inventory-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin: 10px 0;
-        }
-        
-        .inventory-item {
-            background: #FFF0F5;
-            border: 2px solid #FFB6C1;
-            border-radius: 12px;
-            padding: 10px;
-            text-align: center;
-            width: 70px;
-        }
-        
-        .inventory-item .item-emoji {
-            font-size: 1.8em;
-        }
-        
-        .coin-earn {
-            color: #FF8C00;
-            font-weight: 600;
-            animation: coinPop 0.5s ease-out;
-        }
-        
-        @keyframes coinPop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #87ceeb 0%,
+          #98fb98 50%,
+          #f0e68c 100%
+        );
+        min-height: 100vh;
+        padding: 10px;
+        font-size: 16px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        border: 4px solid #ffb6c1;
+      }
+
+      h1 {
+        text-align: center;
+        color: #ff69b4;
+        font-size: 1.6em;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #ff69b4;
+        font-size: 1.15em;
+        font-weight: 600;
+        margin: 15px 0 10px 0;
+        border-bottom: 2px dashed #ffb6c1;
+        padding-bottom: 5px;
+      }
+
+      .screen {
+        display: none;
+      }
+
+      .screen.active {
+        display: block;
+      }
+
+      .chicken-display {
+        background: #fffacd;
+        border: 3px solid #ffd700;
+        border-radius: 15px;
+        padding: 15px;
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      .ascii-art {
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        line-height: 1.2;
+        white-space: pre;
+        background: #fff8dc;
+        padding: 10px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 10px 0;
+      }
+
+      .status-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin: 10px 0;
+      }
+
+      .status-item {
+        background: #ffe4e1;
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-size: 0.9em;
+        font-weight: 500;
+        border: 2px solid #ffb6c1;
+      }
+
+      .status-item.warning {
+        background: #ffeb3b;
+        border-color: #ffc107;
+        animation: pulse 1s infinite;
+      }
+
+      .status-item.critical {
+        background: #ff8a80;
+        border-color: #ff5252;
+        animation: shake 0.5s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-2px);
+        }
+        75% {
+          transform: translateX(2px);
+        }
+      }
+
+      .btn {
+        background: linear-gradient(180deg, #ff69b4, #ff1493);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 1em;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        margin: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .btn:hover,
+      .btn:active {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn.small {
+        padding: 8px 15px;
+        font-size: 0.9em;
+      }
+
+      .btn.green {
+        background: linear-gradient(180deg, #90ee90, #32cd32);
+      }
+
+      .btn.blue {
+        background: linear-gradient(180deg, #87ceeb, #4169e1);
+      }
+
+      .btn.orange {
+        background: linear-gradient(180deg, #ffb347, #ff8c00);
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border: 3px solid #ffb6c1;
+        border-radius: 15px;
+        font-size: 16px;
+        font-family: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: #ff69b4;
+        box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        color: #555;
+        margin-top: 10px;
+      }
+
+      .breed-selector {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 10px 0;
+      }
+
+      .breed-option {
+        background: #fff0f5;
+        border: 3px solid #ffb6c1;
+        border-radius: 15px;
+        padding: 10px;
+        cursor: pointer;
+        text-align: center;
+        width: 95px;
+        transition: all 0.2s;
+        font-weight: 500;
+        font-size: 0.9em;
+      }
+
+      .breed-option:hover,
+      .breed-option.selected {
+        border-color: #ff69b4;
+        background: #ffe4e1;
+        transform: scale(1.05);
+      }
+
+      .breed-option .breed-icon {
+        font-size: 2em;
+      }
+
+      .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin: 15px 0;
+      }
+
+      .info-box {
+        background: #e8f5e9;
+        border: 2px solid #81c784;
+        border-radius: 10px;
+        padding: 12px;
+        margin: 10px 0;
+        font-size: 0.95em;
+        line-height: 1.6;
+      }
+
+      .lifecycle-bar {
+        background: #e0e0e0;
+        border-radius: 10px;
+        height: 20px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      .lifecycle-progress {
+        background: linear-gradient(90deg, #ffd700, #ffa500, #ff69b4);
+        height: 100%;
+        transition: width 0.5s;
+      }
+
+      .qr-container {
+        text-align: center;
+        padding: 15px;
+        background: white;
+        border-radius: 15px;
+        margin: 10px 0;
+      }
+
+      #qrcode {
+        display: inline-block;
+        padding: 10px;
+        background: white;
+      }
+
+      .friend-card {
+        background: #fff0f5;
+        border: 2px solid #ffb6c1;
+        border-radius: 15px;
+        padding: 12px;
+        margin: 10px 0;
+      }
+
+      .friend-card .name {
+        font-weight: bold;
+        color: #ff69b4;
+        font-size: 1.1em;
+      }
+
+      .tabs {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin-bottom: 15px;
+      }
+
+      .tab {
+        padding: 10px 15px;
+        background: #ffe4e1;
+        border: 2px solid #ffb6c1;
+        border-radius: 15px 15px 0 0;
+        cursor: pointer;
+        font-size: 0.9em;
+      }
+
+      .tab.active {
+        background: #ff69b4;
+        color: white;
+        border-color: #ff69b4;
+      }
+
+      .milestone-list {
+        text-align: left;
+        padding: 10px;
+      }
+
+      .milestone {
+        padding: 5px 0;
+        border-bottom: 1px dashed #ffb6c1;
+      }
+
+      .milestone.achieved {
+        color: #32cd32;
+      }
+
+      .milestone.current {
+        font-weight: bold;
+        color: #ff69b4;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .message-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        border: 4px solid #ff69b4;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        text-align: center;
+        max-width: 300px;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+
+      .nav-bar {
+        display: flex;
+        justify-content: space-around;
+        background: #ffe4e1;
+        border-radius: 15px;
+        padding: 10px;
+        margin-bottom: 15px;
+      }
+
+      .nav-item {
+        text-align: center;
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 500;
+      }
+
+      .nav-item.active {
+        background: #ff69b4;
+        color: white;
+      }
+
+      .nav-item .icon {
+        font-size: 1.4em;
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      .scan-area {
+        border: 3px dashed #ff69b4;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border: 3px solid #ffb6c1;
+        border-radius: 15px;
+        font-size: 14px;
+        font-family: ui-monospace, "SF Mono", Menlo, Monaco, monospace;
+        resize: vertical;
+        min-height: 80px;
+        -webkit-appearance: none;
+      }
+
+      .money-display {
+        background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+        color: #333;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 1.1em;
+        display: inline-block;
+        margin: 10px 0;
+        box-shadow: 0 3px 10px rgba(255, 165, 0, 0.3);
+        border: 2px solid #ff8c00;
+      }
+
+      .shop-item {
+        background: #fff9e6;
+        border: 3px solid #ffd700;
+        border-radius: 15px;
+        padding: 12px;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .shop-item.owned {
+        background: #e8f5e9;
+        border-color: #81c784;
+      }
+
+      .shop-item .item-icon {
+        font-size: 2em;
+        width: 50px;
+        text-align: center;
+      }
+
+      .shop-item .item-info {
+        flex: 1;
+      }
+
+      .shop-item .item-name {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .shop-item .item-desc {
+        font-size: 0.85em;
+        color: #666;
+      }
+
+      .shop-item .item-price {
+        font-weight: 700;
+        color: #ff8c00;
+      }
+
+      .shop-item .owned-badge {
+        background: #81c784;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 10px;
+        font-size: 0.8em;
+        font-weight: 600;
+      }
+
+      .inventory-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 10px 0;
+      }
+
+      .inventory-item {
+        background: #fff0f5;
+        border: 2px solid #ffb6c1;
+        border-radius: 12px;
+        padding: 10px;
+        text-align: center;
+        width: 70px;
+      }
+
+      .inventory-item .item-emoji {
+        font-size: 1.8em;
+      }
+
+      .coin-earn {
+        color: #ff8c00;
+        font-weight: 600;
+        animation: coinPop 0.5s ease-out;
+      }
+
+      @keyframes coinPop {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.3);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <!-- Welcome Screen -->
-        <div id="welcome-screen" class="screen active">
-            <h1>🐔 My Virtual Chicken 🐔</h1>
-            <div class="ascii-art">
-    \\
-  _  \\ 
- / \  ||
-( @ > ||
- \__/ //
-  ||//
-  ^^
-            </div>
-            <p style="text-align: center; margin: 15px 0; color: #666;">
-                Welcome to the cutest chicken game ever! 🌸<br>
-                Raise your own virtual chicken!
+      <!-- Welcome Screen -->
+      <div id="welcome-screen" class="screen active">
+        <h1>🐔 My Virtual Chicken 🐔</h1>
+        <div class="ascii-art">\\ _ \\ / \ || ( @ > || \__/ // ||// ^^</div>
+        <p style="text-align: center; margin: 15px 0; color: #666">
+          Welcome to the cutest chicken game ever! 🌸<br />
+          Raise your own virtual chicken!
+        </p>
+        <div style="text-align: center">
+          <button class="btn" onclick="showScreen('create-screen')">
+            🐣 New Chicken
+          </button>
+          <button class="btn green" onclick="loadExistingChicken()">
+            📂 Continue
+          </button>
+        </div>
+      </div>
+
+      <!-- Create Chicken Screen -->
+      <div id="create-screen" class="screen">
+        <h1>🐣 Create Your Chicken 🐣</h1>
+
+        <label>Your Name (Owner):</label>
+        <input
+          type="text"
+          id="owner-name"
+          placeholder="Enter your name..."
+          maxlength="20"
+        />
+
+        <label>Chicken's Name:</label>
+        <input
+          type="text"
+          id="chicken-name"
+          placeholder="Name your chicken..."
+          maxlength="20"
+        />
+
+        <label>Choose a Breed:</label>
+        <div class="breed-selector">
+          <div
+            class="breed-option"
+            data-breed="isa-brown"
+            onclick="selectBreed(this)"
+          >
+            <div class="breed-icon">🐔</div>
+            <div>ISA Brown</div>
+          </div>
+          <div
+            class="breed-option"
+            data-breed="silkie"
+            onclick="selectBreed(this)"
+          >
+            <div class="breed-icon">🐥</div>
+            <div>Silkie</div>
+          </div>
+          <div
+            class="breed-option"
+            data-breed="leghorn"
+            onclick="selectBreed(this)"
+          >
+            <div class="breed-icon">🐓</div>
+            <div>Leghorn</div>
+          </div>
+          <div
+            class="breed-option"
+            data-breed="plymouth"
+            onclick="selectBreed(this)"
+          >
+            <div class="breed-icon">🐤</div>
+            <div>Plymouth Rock</div>
+          </div>
+          <div
+            class="breed-option"
+            data-breed="orpington"
+            onclick="selectBreed(this)"
+          >
+            <div class="breed-icon">🪺</div>
+            <div>Orpington</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px">
+          <button class="btn" onclick="createChicken()">
+            🥚 Hatch My Chicken!
+          </button>
+          <button class="btn blue" onclick="showScreen('welcome-screen')">
+            ⬅️ Back
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Game Screen -->
+      <div id="game-screen" class="screen">
+        <div style="text-align: center">
+          <div class="money-display">💰 $<span id="money-amount">5</span></div>
+        </div>
+
+        <div class="nav-bar">
+          <div
+            class="nav-item active"
+            onclick="showTab('chicken')"
+            id="nav-chicken"
+          >
+            <div class="icon">🐔</div>
+            <div>Chicken</div>
+          </div>
+          <div class="nav-item" onclick="showTab('shop')" id="nav-shop">
+            <div class="icon">🛒</div>
+            <div>Shop</div>
+          </div>
+          <div class="nav-item" onclick="showTab('friends')" id="nav-friends">
+            <div class="icon">👥</div>
+            <div>Friends</div>
+          </div>
+          <div class="nav-item" onclick="showTab('share')" id="nav-share">
+            <div class="icon">📱</div>
+            <div>Share</div>
+          </div>
+        </div>
+
+        <!-- Chicken Tab -->
+        <div id="chicken-tab" class="tab-content">
+          <div class="chicken-display">
+            <div id="chicken-ascii" class="ascii-art"></div>
+            <h2 id="display-name">Clucky</h2>
+            <p id="display-breed" style="color: #888">ISA Brown</p>
+            <p id="display-owner" style="color: #666; font-size: 0.9em">
+              Owner: You
             </p>
-            <div style="text-align: center;">
-                <button class="btn" onclick="showScreen('create-screen')">🐣 New Chicken</button>
-                <button class="btn green" onclick="loadExistingChicken()">📂 Continue</button>
+          </div>
+
+          <div class="info-box">
+            <strong>🌟 Life Stage:</strong> <span id="life-stage">Egg</span>
+            <br /><strong>📅 Age:</strong> <span id="chicken-age">0 days</span>
+            <div class="lifecycle-bar">
+              <div
+                class="lifecycle-progress"
+                id="lifecycle-progress"
+                style="width: 5%"
+              ></div>
             </div>
+          </div>
+
+          <h2>❤️ How's My Chicken?</h2>
+          <div class="status-bar" id="status-bar">
+            <span class="status-item">😊 Happy</span>
+          </div>
+
+          <h2>🎮 Actions</h2>
+          <div class="action-buttons">
+            <button class="btn small green" onclick="doAction('feed')">
+              🌾 Feed
+            </button>
+            <button class="btn small blue" onclick="doAction('water')">
+              💧 Water
+            </button>
+            <button class="btn small orange" onclick="doAction('dustbath')">
+              🛁 Dust Bath
+            </button>
+            <button class="btn small" onclick="doAction('play')">
+              🎾 Play
+            </button>
+            <button class="btn small green" onclick="doAction('sleep')">
+              😴 Sleep
+            </button>
+            <button class="btn small blue" onclick="doAction('flap')">
+              🪽 Let Flap
+            </button>
+          </div>
+
+          <h2>🏆 Milestones</h2>
+          <div class="milestone-list" id="milestone-list"></div>
         </div>
 
-        <!-- Create Chicken Screen -->
-        <div id="create-screen" class="screen">
-            <h1>🐣 Create Your Chicken 🐣</h1>
-            
-            <label>Your Name (Owner):</label>
-            <input type="text" id="owner-name" placeholder="Enter your name..." maxlength="20">
-            
-            <label>Chicken's Name:</label>
-            <input type="text" id="chicken-name" placeholder="Name your chicken..." maxlength="20">
-            
-            <label>Choose a Breed:</label>
-            <div class="breed-selector">
-                <div class="breed-option" data-breed="isa-brown" onclick="selectBreed(this)">
-                    <div class="breed-icon">🐔</div>
-                    <div>ISA Brown</div>
-                </div>
-                <div class="breed-option" data-breed="silkie" onclick="selectBreed(this)">
-                    <div class="breed-icon">🐥</div>
-                    <div>Silkie</div>
-                </div>
-                <div class="breed-option" data-breed="leghorn" onclick="selectBreed(this)">
-                    <div class="breed-icon">🐓</div>
-                    <div>Leghorn</div>
-                </div>
-                <div class="breed-option" data-breed="plymouth" onclick="selectBreed(this)">
-                    <div class="breed-icon">🐤</div>
-                    <div>Plymouth Rock</div>
-                </div>
-                <div class="breed-option" data-breed="orpington" onclick="selectBreed(this)">
-                    <div class="breed-icon">🪺</div>
-                    <div>Orpington</div>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="btn" onclick="createChicken()">🥚 Hatch My Chicken!</button>
-                <button class="btn blue" onclick="showScreen('welcome-screen')">⬅️ Back</button>
-            </div>
+        <!-- Shop Tab -->
+        <div id="shop-tab" class="tab-content hidden">
+          <h2>🛒 Chicken Shop</h2>
+          <p style="text-align: center; color: #666; margin: 10px 0">
+            Buy cute stuff for your chicken! 🎁
+          </p>
+
+          <div id="shop-items"></div>
+
+          <h2>🎒 My Items</h2>
+          <div id="inventory" class="inventory-grid">
+            <p style="text-align: center; color: #888; width: 100%">
+              No items yet!
+            </p>
+          </div>
         </div>
 
-        <!-- Main Game Screen -->
-        <div id="game-screen" class="screen">
-            <div style="text-align: center;">
-                <div class="money-display">💰 $<span id="money-amount">5</span></div>
-            </div>
-            
-            <div class="nav-bar">
-                <div class="nav-item active" onclick="showTab('chicken')" id="nav-chicken">
-                    <div class="icon">🐔</div>
-                    <div>Chicken</div>
-                </div>
-                <div class="nav-item" onclick="showTab('shop')" id="nav-shop">
-                    <div class="icon">🛒</div>
-                    <div>Shop</div>
-                </div>
-                <div class="nav-item" onclick="showTab('friends')" id="nav-friends">
-                    <div class="icon">👥</div>
-                    <div>Friends</div>
-                </div>
-                <div class="nav-item" onclick="showTab('share')" id="nav-share">
-                    <div class="icon">📱</div>
-                    <div>Share</div>
-                </div>
-            </div>
+        <!-- Friends Tab -->
+        <div id="friends-tab" class="tab-content hidden">
+          <h2>👥 My Chicken Friends</h2>
 
-            <!-- Chicken Tab -->
-            <div id="chicken-tab" class="tab-content">
-                <div class="chicken-display">
-                    <div id="chicken-ascii" class="ascii-art"></div>
-                    <h2 id="display-name">Clucky</h2>
-                    <p id="display-breed" style="color: #888;">ISA Brown</p>
-                    <p id="display-owner" style="color: #666; font-size: 0.9em;">Owner: You</p>
-                </div>
+          <div class="scan-area">
+            <p>📸 Paste your friend's chicken code below:</p>
+            <textarea
+              id="friend-code-input"
+              placeholder="Paste chicken code here..."
+            ></textarea>
+            <button class="btn green" onclick="addFriend()">
+              ➕ Add Friend
+            </button>
+          </div>
 
-                <div class="info-box">
-                    <strong>🌟 Life Stage:</strong> <span id="life-stage">Egg</span>
-                    <br><strong>📅 Age:</strong> <span id="chicken-age">0 days</span>
-                    <div class="lifecycle-bar">
-                        <div class="lifecycle-progress" id="lifecycle-progress" style="width: 5%;"></div>
-                    </div>
-                </div>
-
-                <h2>❤️ How's My Chicken?</h2>
-                <div class="status-bar" id="status-bar">
-                    <span class="status-item">😊 Happy</span>
-                </div>
-
-                <h2>🎮 Actions</h2>
-                <div class="action-buttons">
-                    <button class="btn small green" onclick="doAction('feed')">🌾 Feed</button>
-                    <button class="btn small blue" onclick="doAction('water')">💧 Water</button>
-                    <button class="btn small orange" onclick="doAction('dustbath')">🛁 Dust Bath</button>
-                    <button class="btn small" onclick="doAction('play')">🎾 Play</button>
-                    <button class="btn small green" onclick="doAction('sleep')">😴 Sleep</button>
-                    <button class="btn small blue" onclick="doAction('flap')">🪽 Let Flap</button>
-                </div>
-
-                <h2>🏆 Milestones</h2>
-                <div class="milestone-list" id="milestone-list"></div>
-            </div>
-
-            <!-- Shop Tab -->
-            <div id="shop-tab" class="tab-content hidden">
-                <h2>🛒 Chicken Shop</h2>
-                <p style="text-align: center; color: #666; margin: 10px 0;">
-                    Buy cute stuff for your chicken! 🎁
-                </p>
-                
-                <div id="shop-items"></div>
-                
-                <h2>🎒 My Items</h2>
-                <div id="inventory" class="inventory-grid">
-                    <p style="text-align: center; color: #888; width: 100%;">No items yet!</p>
-                </div>
-            </div>
-
-            <!-- Friends Tab -->
-            <div id="friends-tab" class="tab-content hidden">
-                <h2>👥 My Chicken Friends</h2>
-                
-                <div class="scan-area">
-                    <p>📸 Paste your friend's chicken code below:</p>
-                    <textarea id="friend-code-input" placeholder="Paste chicken code here..."></textarea>
-                    <button class="btn green" onclick="addFriend()">➕ Add Friend</button>
-                </div>
-
-                <div id="friends-list">
-                    <p style="text-align: center; color: #888; margin: 20px 0;">
-                        No friends yet! 🐣<br>
-                        Scan a friend's code to add them!
-                    </p>
-                </div>
-            </div>
-
-            <!-- Share Tab -->
-            <div id="share-tab" class="tab-content hidden">
-                <h2>📱 Share Your Chicken</h2>
-                <p style="text-align: center; color: #666; margin: 10px 0;">
-                    Show this code to your friends so they can add your chicken! 🐔
-                </p>
-                
-                <div class="qr-container">
-                    <div id="qrcode"></div>
-                    <p style="margin-top: 10px; font-size: 0.8em; color: #888;">
-                        Scan with camera or copy the code below
-                    </p>
-                </div>
-
-                <div style="text-align: center;">
-                    <button class="btn small blue" onclick="copyChickenCode()">📋 Copy Code</button>
-                </div>
-                
-                <div class="info-box" style="margin-top: 15px;">
-                    <strong>Your Chicken Code:</strong>
-                    <textarea id="chicken-code" readonly style="min-height: 60px; font-size: 0.8em;"></textarea>
-                </div>
-            </div>
+          <div id="friends-list">
+            <p style="text-align: center; color: #888; margin: 20px 0">
+              No friends yet! 🐣<br />
+              Scan a friend's code to add them!
+            </p>
+          </div>
         </div>
+
+        <!-- Share Tab -->
+        <div id="share-tab" class="tab-content hidden">
+          <h2>📱 Share Your Chicken</h2>
+          <p style="text-align: center; color: #666; margin: 10px 0">
+            Show this code to your friends so they can add your chicken! 🐔
+          </p>
+
+          <div class="qr-container">
+            <div id="qrcode"></div>
+            <p style="margin-top: 10px; font-size: 0.8em; color: #888">
+              Scan with camera or copy the code below
+            </p>
+          </div>
+
+          <div style="text-align: center">
+            <button class="btn small blue" onclick="copyChickenCode()">
+              📋 Copy Code
+            </button>
+          </div>
+
+          <div class="info-box" style="margin-top: 15px">
+            <strong>Your Chicken Code:</strong>
+            <textarea
+              id="chicken-code"
+              readonly
+              style="min-height: 60px; font-size: 0.8em"
+            ></textarea>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Message Popup -->
     <div id="overlay" class="overlay hidden" onclick="hidePopup()"></div>
     <div id="popup" class="message-popup hidden">
-        <div id="popup-content"></div>
-        <button class="btn small" onclick="hidePopup()">OK! 👍</button>
+      <div id="popup-content"></div>
+      <button class="btn small" onclick="hidePopup()">OK! 👍</button>
     </div>
 
     <script>
-        // ============= GAME DATA =============
-        const BREEDS = {
-            'isa-brown': { name: 'ISA Brown', color: '#8B4513', eggColor: 'brown' },
-            'silkie': { name: 'Silkie', color: '#F5F5DC', eggColor: 'cream' },
-            'leghorn': { name: 'Leghorn', color: '#FFFFFF', eggColor: 'white' },
-            'plymouth': { name: 'Plymouth Rock', color: '#808080', eggColor: 'brown' },
-            'orpington': { name: 'Orpington', color: '#FFD700', eggColor: 'brown' }
-        };
+      // ============= GAME DATA =============
+      const BREEDS = {
+        "isa-brown": { name: "ISA Brown", color: "#8B4513", eggColor: "brown" },
+        silkie: { name: "Silkie", color: "#F5F5DC", eggColor: "cream" },
+        leghorn: { name: "Leghorn", color: "#FFFFFF", eggColor: "white" },
+        plymouth: {
+          name: "Plymouth Rock",
+          color: "#808080",
+          eggColor: "brown",
+        },
+        orpington: { name: "Orpington", color: "#FFD700", eggColor: "brown" },
+      };
 
-        const MILESTONES = [
-            { day: 0, name: '🥚 Egg', stage: 'egg' },
-            { day: 1, name: '🐣 Hatching!', stage: 'hatching' },
-            { day: 2, name: '🐥 Fluffy Chick', stage: 'chick' },
-            { day: 7, name: '🐤 One Week Old', stage: 'chick-week' },
-            { day: 30, name: '🐔 One Month Old', stage: 'pullet' },
-            { day: 60, name: '🐔 Two Months Old', stage: 'pullet2' },
-            { day: 90, name: '🐔 Three Months Old', stage: 'teenager' },
-            { day: 150, name: '🥚 First Egg!', stage: 'laying' },
-            { day: 180, name: '🐓 Six Months Old', stage: 'adult' },
-            { day: 365, name: '🎂 One Year Old!', stage: 'mature' }
-        ];
+      const MILESTONES = [
+        { day: 0, name: "🥚 Egg", stage: "egg" },
+        { day: 1, name: "🐣 Hatching!", stage: "hatching" },
+        { day: 2, name: "🐥 Fluffy Chick", stage: "chick" },
+        { day: 7, name: "🐤 One Week Old", stage: "chick-week" },
+        { day: 30, name: "🐔 One Month Old", stage: "pullet" },
+        { day: 60, name: "🐔 Two Months Old", stage: "pullet2" },
+        { day: 90, name: "🐔 Three Months Old", stage: "teenager" },
+        { day: 150, name: "🥚 First Egg!", stage: "laying" },
+        { day: 180, name: "🐓 Six Months Old", stage: "adult" },
+        { day: 365, name: "🎂 One Year Old!", stage: "mature" },
+      ];
 
-        const STATUSES = {
-            happy: { icon: '😊', text: 'Happy', priority: 0 },
-            hungry: { icon: '🍽️', text: 'Hungry', priority: 2 },
-            thirsty: { icon: '💧', text: 'Needs Water', priority: 2 },
-            dusty: { icon: '🛁', text: 'Needs Dust Bath', priority: 1 },
-            sleepy: { icon: '😴', text: 'Sleepy', priority: 1 },
-            wantFlap: { icon: '🪽', text: 'Wants to Flap', priority: 1 },
-            sick: { icon: '🤒', text: 'Sick', priority: 3 },
-            bored: { icon: '😐', text: 'Bored', priority: 1 }
-        };
+      const STATUSES = {
+        happy: { icon: "😊", text: "Happy", priority: 0 },
+        hungry: { icon: "🍽️", text: "Hungry", priority: 2 },
+        thirsty: { icon: "💧", text: "Needs Water", priority: 2 },
+        dusty: { icon: "🛁", text: "Needs Dust Bath", priority: 1 },
+        sleepy: { icon: "😴", text: "Sleepy", priority: 1 },
+        wantFlap: { icon: "🪽", text: "Wants to Flap", priority: 1 },
+        sick: { icon: "🤒", text: "Sick", priority: 3 },
+        bored: { icon: "😐", text: "Bored", priority: 1 },
+      };
 
-        // Shop items
-        const SHOP_ITEMS = {
-            'fake-eggs': {
-                id: 'fake-eggs',
-                name: 'Fake Chicken Eggs',
-                icon: '🥚',
-                price: 1,
-                description: 'Cute decorative eggs! Makes chicken +10 happier.',
-                effect: { happiness: 10 }
-            },
-            'cup-water-set': {
-                id: 'cup-water-set',
-                name: 'Cup & Water Set',
-                icon: '🥤',
-                price: 1,
-                description: 'Fancy drinking set! Water lasts longer.',
-                effect: { thirstDecayReduction: 0.3 }
-            },
-            'fancy-seeds': {
-                id: 'fancy-seeds',
-                name: 'Fancy Seeds',
-                icon: '🌻',
-                price: 1,
-                description: 'Delicious premium seeds! Food lasts longer.',
-                effect: { hungerDecayReduction: 0.3 }
-            },
-            'chicken-toy': {
-                id: 'chicken-toy',
-                name: 'Chicken Toy',
-                icon: '🎀',
-                price: 1,
-                description: 'A fun toy to play with! Less boredom.',
-                effect: { happinessDecayReduction: 0.3 }
-            }
-        };
+      // Shop items
+      const SHOP_ITEMS = {
+        "fake-eggs": {
+          id: "fake-eggs",
+          name: "Fake Chicken Eggs",
+          icon: "🥚",
+          price: 1,
+          description: "Cute decorative eggs! Makes chicken +10 happier.",
+          effect: { happiness: 10 },
+        },
+        "cup-water-set": {
+          id: "cup-water-set",
+          name: "Cup & Water Set",
+          icon: "🥤",
+          price: 1,
+          description: "Fancy drinking set! Water lasts longer.",
+          effect: { thirstDecayReduction: 0.3 },
+        },
+        "fancy-seeds": {
+          id: "fancy-seeds",
+          name: "Fancy Seeds",
+          icon: "🌻",
+          price: 1,
+          description: "Delicious premium seeds! Food lasts longer.",
+          effect: { hungerDecayReduction: 0.3 },
+        },
+        "chicken-toy": {
+          id: "chicken-toy",
+          name: "Chicken Toy",
+          icon: "🎀",
+          price: 1,
+          description: "A fun toy to play with! Less boredom.",
+          effect: { happinessDecayReduction: 0.3 },
+        },
+      };
 
-        // ASCII Art for different stages
-        const ASCII_ART = {
-            egg: `
+      // ASCII Art for different stages
+      const ASCII_ART = {
+        egg: `
       ___
      /   \\
     |     |
@@ -759,7 +859,7 @@
      \\___/
       🥚
 `,
-            hatching: `
+        hatching: `
       ___
      / ^ \\
     | o o |
@@ -767,21 +867,21 @@
      \\___/
     crack!
 `,
-            chick: `
+        chick: `
       __
      (o>
     \\(_\\
       ^^
      peep!
 `,
-            'chick-week': `
+        "chick-week": `
        __
       (o>
     \\\\(_\\
      \` ^^
     chirp!
 `,
-            pullet: `
+        pullet: `
       \\\\
     _  \\\\
    / \\  ||
@@ -790,7 +890,7 @@
     ||//
     ^^
 `,
-            pullet2: `
+        pullet2: `
        \\\\
      _  \\\\
     / \\  ||
@@ -799,7 +899,7 @@
      ||//
      ^^
 `,
-            teenager: `
+        teenager: `
         \\\\
       _  \\\\
      /,\\  ||
@@ -808,7 +908,7 @@
       ||//
       ^^
 `,
-            laying: `
+        laying: `
         \\\\
       _  \\\\
      /,\\  ||
@@ -817,7 +917,7 @@
       ||//
       ^^  🥚
 `,
-            adult: `
+        adult: `
          \\\\
        _  \\\\
       /,\\  ||
@@ -827,7 +927,7 @@
        ^^
       proud!
 `,
-            mature: `
+        mature: `
           \\\\
         _  \\\\
        /,\\  ||
@@ -836,7 +936,7 @@
         ||//
         ^^
 `,
-            sick: `
+        sick: `
       \\\\
     _  \\\\
    / \\  ||
@@ -844,506 +944,907 @@
    \\__///
     ||//  💊
     ^^
-`
+`,
+      };
+
+      // ============= GAME STATE =============
+      let gameState = {
+        chicken: null,
+        friends: [],
+        lastUpdate: null,
+        money: 5,
+        inventory: [],
+      };
+
+      let selectedBreed = null;
+
+      // ============= INITIALIZATION =============
+      function init() {
+        loadGame();
+        if (gameState.chicken) {
+          updateGame();
+          updateMoneyDisplay();
+          showScreen("game-screen");
+        }
+        // Update game every minute
+        setInterval(updateGame, 60000);
+      }
+
+      // ============= SCREEN MANAGEMENT =============
+      function showScreen(screenId) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(screenId).classList.add("active");
+      }
+
+      function showTab(tabName) {
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((t) => t.classList.add("hidden"));
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((n) => n.classList.remove("active"));
+        document.getElementById(tabName + "-tab").classList.remove("hidden");
+        document.getElementById("nav-" + tabName).classList.add("active");
+
+        if (tabName === "share") {
+          generateQRCode();
+        }
+        if (tabName === "shop") {
+          renderShop();
+        }
+      }
+
+      // ============= CHICKEN CREATION =============
+      function selectBreed(element) {
+        document
+          .querySelectorAll(".breed-option")
+          .forEach((b) => b.classList.remove("selected"));
+        element.classList.add("selected");
+        selectedBreed = element.dataset.breed;
+      }
+
+      function createChicken() {
+        const ownerName = document.getElementById("owner-name").value.trim();
+        const chickenName = document
+          .getElementById("chicken-name")
+          .value.trim();
+
+        if (!ownerName) {
+          showPopup("🙈 Please enter your name!");
+          return;
+        }
+        if (!chickenName) {
+          showPopup("🐔 Please name your chicken!");
+          return;
+        }
+        if (!selectedBreed) {
+          showPopup("🐣 Please select a breed!");
+          return;
+        }
+
+        gameState.chicken = {
+          id: generateId(),
+          name: chickenName,
+          owner: ownerName,
+          breed: selectedBreed,
+          birthDate: Date.now(),
+          needs: {
+            hunger: 100,
+            thirst: 100,
+            cleanliness: 100,
+            sleep: 100,
+            happiness: 100,
+            exercise: 100,
+          },
+          totalEggs: 0,
+          isSick: false,
         };
 
-        // ============= GAME STATE =============
-        let gameState = {
-            chicken: null,
-            friends: [],
-            lastUpdate: null,
-            money: 5,
-            inventory: []
+        gameState.lastUpdate = Date.now();
+        saveGame();
+        updateGame();
+        showScreen("game-screen");
+        showPopup(
+          `🎉 Welcome ${chickenName}! 🐣<br>Your egg is about to hatch!`
+        );
+      }
+
+      // ============= GAME LOGIC =============
+      function updateGame() {
+        if (!gameState.chicken) return;
+
+        const now = Date.now();
+        const timePassed = now - gameState.lastUpdate;
+        const minutesPassed = timePassed / 60000;
+
+        // Update needs (decrease over time) - with item effects
+        const decay = minutesPassed * 0.5; // Needs decrease by 0.5 per minute
+
+        // Check for item effects that reduce decay
+        let hungerDecay = decay;
+        let thirstDecay = decay * 1.2;
+        let happinessDecay = decay * 0.2;
+
+        if (gameState.inventory.includes("fancy-seeds")) {
+          hungerDecay *= 0.7; // 30% slower hunger decay
+        }
+        if (gameState.inventory.includes("cup-water-set")) {
+          thirstDecay *= 0.7; // 30% slower thirst decay
+        }
+        if (gameState.inventory.includes("chicken-toy")) {
+          happinessDecay *= 0.7; // 30% slower happiness decay
+        }
+
+        gameState.chicken.needs.hunger = Math.max(
+          0,
+          gameState.chicken.needs.hunger - hungerDecay
+        );
+        gameState.chicken.needs.thirst = Math.max(
+          0,
+          gameState.chicken.needs.thirst - thirstDecay
+        );
+        gameState.chicken.needs.cleanliness = Math.max(
+          0,
+          gameState.chicken.needs.cleanliness - decay * 0.3
+        );
+        gameState.chicken.needs.sleep = Math.max(
+          0,
+          gameState.chicken.needs.sleep - decay * 0.4
+        );
+        gameState.chicken.needs.happiness = Math.max(
+          0,
+          gameState.chicken.needs.happiness - happinessDecay
+        );
+        gameState.chicken.needs.exercise = Math.max(
+          0,
+          gameState.chicken.needs.exercise - decay * 0.3
+        );
+
+        // Check if chicken gets sick (if needs are too low)
+        const avgNeeds =
+          Object.values(gameState.chicken.needs).reduce((a, b) => a + b, 0) / 6;
+        if (avgNeeds < 30 && Math.random() < 0.1) {
+          gameState.chicken.isSick = true;
+        }
+
+        gameState.lastUpdate = now;
+        saveGame();
+        renderChicken();
+      }
+
+      function doAction(action) {
+        if (!gameState.chicken) return;
+
+        let message = "";
+        switch (action) {
+          case "feed":
+            gameState.chicken.needs.hunger = Math.min(
+              100,
+              gameState.chicken.needs.hunger + 40
+            );
+            message = "🌾 Yummy! *peck peck peck*";
+            break;
+          case "water":
+            gameState.chicken.needs.thirst = Math.min(
+              100,
+              gameState.chicken.needs.thirst + 50
+            );
+            message = "💧 *gulp gulp* Refreshing!";
+            break;
+          case "dustbath":
+            gameState.chicken.needs.cleanliness = Math.min(
+              100,
+              gameState.chicken.needs.cleanliness + 60
+            );
+            gameState.chicken.needs.happiness = Math.min(
+              100,
+              gameState.chicken.needs.happiness + 10
+            );
+            message = "🛁 *fluff fluff* So fluffy!";
+            break;
+          case "play":
+            gameState.chicken.needs.happiness = Math.min(
+              100,
+              gameState.chicken.needs.happiness + 30
+            );
+            gameState.chicken.needs.exercise = Math.min(
+              100,
+              gameState.chicken.needs.exercise + 20
+            );
+            message = "🎾 *bawk bawk* So fun!";
+            break;
+          case "sleep":
+            gameState.chicken.needs.sleep = Math.min(
+              100,
+              gameState.chicken.needs.sleep + 50
+            );
+            if (gameState.chicken.isSick && Math.random() < 0.3) {
+              gameState.chicken.isSick = false;
+              message = "😴 Zzz... Feeling better!";
+            } else {
+              message = "😴 Zzz... Good night!";
+            }
+            break;
+          case "flap":
+            gameState.chicken.needs.exercise = Math.min(
+              100,
+              gameState.chicken.needs.exercise + 40
+            );
+            gameState.chicken.needs.happiness = Math.min(
+              100,
+              gameState.chicken.needs.happiness + 15
+            );
+            message = "🪽 *flap flap flap* Wheee!";
+            break;
+        }
+
+        // Earn $1 for taking care of chicken!
+        gameState.money += 1;
+        message += '<br><span class="coin-earn">+$1 💰</span>';
+        updateMoneyDisplay();
+
+        saveGame();
+        renderChicken();
+        showPopup(message);
+      }
+
+      // ============= RENDERING =============
+      function renderChicken() {
+        if (!gameState.chicken) return;
+
+        const chicken = gameState.chicken;
+        const ageInDays = Math.floor(
+          (Date.now() - chicken.birthDate) / (1000 * 60 * 60 * 24)
+        );
+
+        // Get current stage
+        let currentStage = MILESTONES[0];
+        for (const milestone of MILESTONES) {
+          if (ageInDays >= milestone.day) {
+            currentStage = milestone;
+          }
+        }
+
+        // Update display
+        document.getElementById("display-name").textContent = chicken.name;
+        document.getElementById("display-breed").textContent =
+          BREEDS[chicken.breed].name;
+        document.getElementById(
+          "display-owner"
+        ).textContent = `Owner: ${chicken.owner}`;
+        document.getElementById("life-stage").textContent = currentStage.name;
+        document.getElementById("chicken-age").textContent =
+          formatAge(ageInDays);
+
+        // Progress bar
+        const nextMilestone =
+          MILESTONES.find((m) => m.day > ageInDays) ||
+          MILESTONES[MILESTONES.length - 1];
+        const prevMilestone =
+          [...MILESTONES].reverse().find((m) => m.day <= ageInDays) ||
+          MILESTONES[0];
+        const progress =
+          ((ageInDays - prevMilestone.day) /
+            (nextMilestone.day - prevMilestone.day)) *
+          100;
+        const totalProgress =
+          ((MILESTONES.findIndex((m) => m.day === currentStage.day) + 1) /
+            MILESTONES.length) *
+          100;
+        document.getElementById("lifecycle-progress").style.width =
+          Math.min(100, totalProgress) + "%";
+
+        // ASCII art
+        const artStage = chicken.isSick ? "sick" : currentStage.stage;
+        document.getElementById("chicken-ascii").textContent =
+          ASCII_ART[artStage] || ASCII_ART["chick"];
+
+        // Status bar
+        renderStatus();
+
+        // Milestones
+        renderMilestones(ageInDays);
+      }
+
+      function renderStatus() {
+        const chicken = gameState.chicken;
+        const statusBar = document.getElementById("status-bar");
+        const activeStatuses = [];
+
+        if (chicken.isSick) {
+          activeStatuses.push({ ...STATUSES.sick, key: "sick" });
+        }
+        if (chicken.needs.hunger < 40) {
+          activeStatuses.push({ ...STATUSES.hungry, key: "hungry" });
+        }
+        if (chicken.needs.thirst < 40) {
+          activeStatuses.push({ ...STATUSES.thirsty, key: "thirsty" });
+        }
+        if (chicken.needs.cleanliness < 40) {
+          activeStatuses.push({ ...STATUSES.dusty, key: "dusty" });
+        }
+        if (chicken.needs.sleep < 40) {
+          activeStatuses.push({ ...STATUSES.sleepy, key: "sleepy" });
+        }
+        if (chicken.needs.exercise < 40) {
+          activeStatuses.push({ ...STATUSES.wantFlap, key: "wantFlap" });
+        }
+        if (chicken.needs.happiness < 40) {
+          activeStatuses.push({ ...STATUSES.bored, key: "bored" });
+        }
+
+        if (activeStatuses.length === 0) {
+          activeStatuses.push({ ...STATUSES.happy, key: "happy" });
+        }
+
+        statusBar.innerHTML = activeStatuses
+          .map((s) => {
+            let className = "status-item";
+            if (s.priority >= 3) className += " critical";
+            else if (s.priority >= 2) className += " warning";
+            return `<span class="${className}">${s.icon} ${s.text}</span>`;
+          })
+          .join("");
+      }
+
+      function renderMilestones(currentAge) {
+        const list = document.getElementById("milestone-list");
+        list.innerHTML = MILESTONES.map((m) => {
+          let className = "milestone";
+          let icon = "⬜";
+          if (currentAge >= m.day) {
+            className += " achieved";
+            icon = "✅";
+          }
+          const currentMilestone = MILESTONES.filter(
+            (x) => currentAge >= x.day
+          ).pop();
+          if (currentMilestone && m.day === currentMilestone.day) {
+            className += " current";
+          }
+          return `<div class="${className}">${icon} ${m.name} (Day ${m.day})</div>`;
+        }).join("");
+      }
+
+      // ============= QR CODE & SHARING =============
+      function generateQRCode() {
+        const code = encodeChickenData();
+        document.getElementById("chicken-code").value = code;
+
+        // Generate simple visual QR-like pattern
+        const qrDiv = document.getElementById("qrcode");
+        qrDiv.innerHTML = generateVisualCode(code);
+      }
+
+      function encodeChickenData() {
+        const c = gameState.chicken;
+        const ageInDays = Math.floor(
+          (Date.now() - c.birthDate) / (1000 * 60 * 60 * 24)
+        );
+
+        // Get current stage
+        let stage = "egg";
+        for (const milestone of MILESTONES) {
+          if (ageInDays >= milestone.day) {
+            stage = milestone.stage;
+          }
+        }
+
+        const data = {
+          n: c.name,
+          o: c.owner,
+          b: c.breed,
+          a: ageInDays,
+          s: stage,
+          h: Math.round(
+            (c.needs.hunger +
+              c.needs.thirst +
+              c.needs.cleanliness +
+              c.needs.sleep +
+              c.needs.happiness +
+              c.needs.exercise) /
+              6
+          ),
+          i: c.id,
         };
 
-        let selectedBreed = null;
+        return "🐔" + btoa(JSON.stringify(data)) + "🐔";
+      }
 
-        // ============= INITIALIZATION =============
-        function init() {
-            loadGame();
-            if (gameState.chicken) {
-                updateGame();
-                updateMoneyDisplay();
-                showScreen('game-screen');
-            }
-            // Update game every minute
-            setInterval(updateGame, 60000);
+      // ============= QR CODE GENERATOR (based on qrcode-generator, MIT License) =============
+      const QRCode = (function () {
+        const PAD0 = 0xec,
+          PAD1 = 0x11;
+        const G15 =
+          (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | 1;
+        const G18 =
+          (1 << 12) |
+          (1 << 11) |
+          (1 << 10) |
+          (1 << 9) |
+          (1 << 8) |
+          (1 << 5) |
+          (1 << 2) |
+          1;
+        const G15_MASK =
+          (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+        const EXP_TABLE = new Array(256);
+        const LOG_TABLE = new Array(256);
+        for (let i = 0; i < 8; i++) EXP_TABLE[i] = 1 << i;
+        for (let i = 8; i < 256; i++)
+          EXP_TABLE[i] =
+            EXP_TABLE[i - 4] ^
+            EXP_TABLE[i - 5] ^
+            EXP_TABLE[i - 6] ^
+            EXP_TABLE[i - 8];
+        for (let i = 0; i < 255; i++) LOG_TABLE[EXP_TABLE[i]] = i;
+
+        const glog = (n) => LOG_TABLE[n];
+        const gexp = (n) => EXP_TABLE[n % 255];
+
+        const RS_BLOCK = [
+          [1, 26, 19],
+          [1, 26, 16],
+          [1, 26, 13],
+          [1, 26, 9],
+          [1, 44, 34],
+          [1, 44, 28],
+          [1, 44, 22],
+          [1, 44, 16],
+          [1, 70, 55],
+          [1, 70, 44],
+          [2, 35, 17],
+          [2, 35, 13],
+          [1, 100, 80],
+          [2, 50, 32],
+          [2, 50, 24],
+          [4, 25, 9],
+          [1, 134, 108],
+          [2, 67, 43],
+          [2, 33, 15, 2, 34, 16],
+          [2, 33, 11, 2, 34, 12],
+          [2, 86, 68],
+          [4, 43, 27],
+          [4, 43, 19],
+          [4, 43, 15],
+          [2, 98, 78],
+          [4, 49, 31],
+          [2, 32, 14, 4, 33, 15],
+          [4, 39, 13, 1, 40, 14],
+        ];
+        const PATTERN_POS = [
+          [],
+          [6, 18],
+          [6, 22],
+          [6, 26],
+          [6, 30],
+          [6, 34],
+          [6, 22, 38],
+          [6, 24, 42],
+        ];
+
+        function getBCHDigit(d) {
+          let digit = 0;
+          while (d != 0) {
+            digit++;
+            d >>>= 1;
+          }
+          return digit;
+        }
+        function getBCHTypeInfo(data) {
+          let d = data << 10;
+          while (getBCHDigit(d) - getBCHDigit(G15) >= 0)
+            d ^= G15 << (getBCHDigit(d) - getBCHDigit(G15));
+          return ((data << 10) | d) ^ G15_MASK;
+        }
+        function getBCHTypeNumber(data) {
+          let d = data << 12;
+          while (getBCHDigit(d) - getBCHDigit(G18) >= 0)
+            d ^= G18 << (getBCHDigit(d) - getBCHDigit(G18));
+          return (data << 12) | d;
         }
 
-        // ============= SCREEN MANAGEMENT =============
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
+        function getMask(pattern, i, j) {
+          switch (pattern) {
+            case 0:
+              return (i + j) % 2 == 0;
+            case 1:
+              return i % 2 == 0;
+            case 2:
+              return j % 3 == 0;
+            case 3:
+              return (i + j) % 3 == 0;
+            case 4:
+              return (Math.floor(i / 2) + Math.floor(j / 3)) % 2 == 0;
+            case 5:
+              return ((i * j) % 2) + ((i * j) % 3) == 0;
+            case 6:
+              return (((i * j) % 2) + ((i * j) % 3)) % 2 == 0;
+            case 7:
+              return (((i * j) % 3) + ((i + j) % 2)) % 2 == 0;
+          }
         }
 
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(tabName + '-tab').classList.remove('hidden');
-            document.getElementById('nav-' + tabName).classList.add('active');
-            
-            if (tabName === 'share') {
-                generateQRCode();
-            }
-            if (tabName === 'shop') {
-                renderShop();
-            }
+        class Polynomial {
+          constructor(num, shift) {
+            let offset = 0;
+            while (offset < num.length && num[offset] == 0) offset++;
+            this.num = new Array(num.length - offset + shift);
+            for (let i = 0; i < num.length - offset; i++)
+              this.num[i] = num[i + offset];
+          }
+          get(i) {
+            return this.num[i];
+          }
+          getLength() {
+            return this.num.length;
+          }
+          multiply(e) {
+            const num = new Array(this.getLength() + e.getLength() - 1).fill(0);
+            for (let i = 0; i < this.getLength(); i++)
+              for (let j = 0; j < e.getLength(); j++)
+                num[i + j] ^= gexp(glog(this.get(i)) + glog(e.get(j)));
+            return new Polynomial(num, 0);
+          }
+          mod(e) {
+            if (this.getLength() - e.getLength() < 0) return this;
+            const ratio = glog(this.get(0)) - glog(e.get(0));
+            const num = [...this.num];
+            for (let i = 0; i < e.getLength(); i++)
+              num[i] ^= gexp(glog(e.get(i)) + ratio);
+            return new Polynomial(num, 0).mod(e);
+          }
         }
 
-        // ============= CHICKEN CREATION =============
-        function selectBreed(element) {
-            document.querySelectorAll('.breed-option').forEach(b => b.classList.remove('selected'));
-            element.classList.add('selected');
-            selectedBreed = element.dataset.breed;
+        class BitBuffer {
+          constructor() {
+            this.buffer = [];
+            this.length = 0;
+          }
+          get(i) {
+            return (
+              ((this.buffer[Math.floor(i / 8)] >>> (7 - (i % 8))) & 1) == 1
+            );
+          }
+          put(num, len) {
+            for (let i = 0; i < len; i++)
+              this.putBit(((num >>> (len - i - 1)) & 1) == 1);
+          }
+          putBit(bit) {
+            if (this.length == this.buffer.length * 8) this.buffer.push(0);
+            if (bit)
+              this.buffer[Math.floor(this.length / 8)] |=
+                0x80 >>> this.length % 8;
+            this.length++;
+          }
         }
 
-        function createChicken() {
-            const ownerName = document.getElementById('owner-name').value.trim();
-            const chickenName = document.getElementById('chicken-name').value.trim();
-
-            if (!ownerName) {
-                showPopup('🙈 Please enter your name!');
-                return;
-            }
-            if (!chickenName) {
-                showPopup('🐔 Please name your chicken!');
-                return;
-            }
-            if (!selectedBreed) {
-                showPopup('🐣 Please select a breed!');
-                return;
-            }
-
-            gameState.chicken = {
-                id: generateId(),
-                name: chickenName,
-                owner: ownerName,
-                breed: selectedBreed,
-                birthDate: Date.now(),
-                needs: {
-                    hunger: 100,
-                    thirst: 100,
-                    cleanliness: 100,
-                    sleep: 100,
-                    happiness: 100,
-                    exercise: 100
-                },
-                totalEggs: 0,
-                isSick: false
-            };
-
-            gameState.lastUpdate = Date.now();
-            saveGame();
-            updateGame();
-            showScreen('game-screen');
-            showPopup(`🎉 Welcome ${chickenName}! 🐣<br>Your egg is about to hatch!`);
+        function getErrorCorrectPolynomial(len) {
+          let a = new Polynomial([1], 0);
+          for (let i = 0; i < len; i++)
+            a = a.multiply(new Polynomial([1, gexp(i)], 0));
+          return a;
         }
 
-        // ============= GAME LOGIC =============
-        function updateGame() {
-            if (!gameState.chicken) return;
+        function createQR(text, typeNumber) {
+          const errorLevel = 0; // L
+          const moduleCount = typeNumber * 4 + 17;
+          let modules = [];
+          for (let i = 0; i < moduleCount; i++)
+            modules[i] = new Array(moduleCount).fill(null);
 
-            const now = Date.now();
-            const timePassed = now - gameState.lastUpdate;
-            const minutesPassed = timePassed / 60000;
-
-            // Update needs (decrease over time) - with item effects
-            const decay = minutesPassed * 0.5; // Needs decrease by 0.5 per minute
-            
-            // Check for item effects that reduce decay
-            let hungerDecay = decay;
-            let thirstDecay = decay * 1.2;
-            let happinessDecay = decay * 0.2;
-            
-            if (gameState.inventory.includes('fancy-seeds')) {
-                hungerDecay *= 0.7; // 30% slower hunger decay
+          function setupPositionProbe(row, col) {
+            for (let r = -1; r <= 7; r++) {
+              if (row + r < 0 || moduleCount <= row + r) continue;
+              for (let c = -1; c <= 7; c++) {
+                if (col + c < 0 || moduleCount <= col + c) continue;
+                modules[row + r][col + c] =
+                  (0 <= r && r <= 6 && (c == 0 || c == 6)) ||
+                  (0 <= c && c <= 6 && (r == 0 || r == 6)) ||
+                  (2 <= r && r <= 4 && 2 <= c && c <= 4);
+              }
             }
-            if (gameState.inventory.includes('cup-water-set')) {
-                thirstDecay *= 0.7; // 30% slower thirst decay
+          }
+
+          function setupPositionAdjust() {
+            const pos = PATTERN_POS[typeNumber - 1] || [];
+            for (let i = 0; i < pos.length; i++) {
+              for (let j = 0; j < pos.length; j++) {
+                const row = pos[i],
+                  col = pos[j];
+                if (modules[row][col] != null) continue;
+                for (let r = -2; r <= 2; r++)
+                  for (let c = -2; c <= 2; c++)
+                    modules[row + r][col + c] =
+                      r == -2 ||
+                      r == 2 ||
+                      c == -2 ||
+                      c == 2 ||
+                      (r == 0 && c == 0);
+              }
             }
-            if (gameState.inventory.includes('chicken-toy')) {
-                happinessDecay *= 0.7; // 30% slower happiness decay
+          }
+
+          function setupTiming() {
+            for (let r = 8; r < moduleCount - 8; r++) {
+              if (modules[r][6] != null) continue;
+              modules[r][6] = r % 2 == 0;
             }
-            
-            gameState.chicken.needs.hunger = Math.max(0, gameState.chicken.needs.hunger - hungerDecay);
-            gameState.chicken.needs.thirst = Math.max(0, gameState.chicken.needs.thirst - thirstDecay);
-            gameState.chicken.needs.cleanliness = Math.max(0, gameState.chicken.needs.cleanliness - decay * 0.3);
-            gameState.chicken.needs.sleep = Math.max(0, gameState.chicken.needs.sleep - decay * 0.4);
-            gameState.chicken.needs.happiness = Math.max(0, gameState.chicken.needs.happiness - happinessDecay);
-            gameState.chicken.needs.exercise = Math.max(0, gameState.chicken.needs.exercise - decay * 0.3);
+            for (let c = 8; c < moduleCount - 8; c++) {
+              if (modules[6][c] != null) continue;
+              modules[6][c] = c % 2 == 0;
+            }
+          }
 
-            // Check if chicken gets sick (if needs are too low)
-            const avgNeeds = Object.values(gameState.chicken.needs).reduce((a, b) => a + b, 0) / 6;
-            if (avgNeeds < 30 && Math.random() < 0.1) {
-                gameState.chicken.isSick = true;
+          function setupTypeInfo(maskPattern) {
+            const bits = getBCHTypeInfo((errorLevel << 3) | maskPattern);
+            for (let i = 0; i < 15; i++) {
+              const mod = ((bits >> i) & 1) == 1;
+              if (i < 6) modules[i][8] = mod;
+              else if (i < 8) modules[i + 1][8] = mod;
+              else modules[moduleCount - 15 + i][8] = mod;
+              if (i < 8) modules[8][moduleCount - i - 1] = mod;
+              else if (i < 9) modules[8][15 - i] = mod;
+              else modules[8][15 - i - 1] = mod;
+            }
+            modules[moduleCount - 8][8] = true;
+          }
+
+          function setupTypeNumber() {
+            if (typeNumber < 7) return;
+            const bits = getBCHTypeNumber(typeNumber);
+            for (let i = 0; i < 18; i++) {
+              const mod = ((bits >> i) & 1) == 1;
+              modules[Math.floor(i / 3)][(i % 3) + moduleCount - 8 - 3] = mod;
+              modules[(i % 3) + moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+            }
+          }
+
+          function createData() {
+            const rsBlocks = [];
+            const rs = RS_BLOCK[(typeNumber - 1) * 4 + errorLevel];
+            for (let i = 0; i < rs.length; i += 3)
+              for (let j = 0; j < rs[i]; j++)
+                rsBlocks.push({ total: rs[i + 1], data: rs[i + 2] });
+
+            const buffer = new BitBuffer();
+            buffer.put(4, 4); // 8bit mode
+            buffer.put(text.length, 8);
+            for (let i = 0; i < text.length; i++)
+              buffer.put(text.charCodeAt(i), 8);
+
+            let totalData = 0;
+            for (const b of rsBlocks) totalData += b.data;
+
+            if (buffer.length + 4 <= totalData * 8) buffer.put(0, 4);
+            while (buffer.length % 8 != 0) buffer.putBit(false);
+            while (buffer.buffer.length < totalData) {
+              buffer.buffer.push(PAD0);
+              if (buffer.buffer.length < totalData) buffer.buffer.push(PAD1);
             }
 
-            gameState.lastUpdate = now;
-            saveGame();
-            renderChicken();
-        }
+            const dcdata = [],
+              ecdata = [];
+            let offset = 0,
+              maxDc = 0,
+              maxEc = 0;
 
-        function doAction(action) {
-            if (!gameState.chicken) return;
+            for (let r = 0; r < rsBlocks.length; r++) {
+              const dcCount = rsBlocks[r].data;
+              const ecCount = rsBlocks[r].total - dcCount;
+              maxDc = Math.max(maxDc, dcCount);
+              maxEc = Math.max(maxEc, ecCount);
+              dcdata[r] = buffer.buffer.slice(offset, offset + dcCount);
+              offset += dcCount;
 
-            let message = '';
-            switch (action) {
-                case 'feed':
-                    gameState.chicken.needs.hunger = Math.min(100, gameState.chicken.needs.hunger + 40);
-                    message = '🌾 Yummy! *peck peck peck*';
-                    break;
-                case 'water':
-                    gameState.chicken.needs.thirst = Math.min(100, gameState.chicken.needs.thirst + 50);
-                    message = '💧 *gulp gulp* Refreshing!';
-                    break;
-                case 'dustbath':
-                    gameState.chicken.needs.cleanliness = Math.min(100, gameState.chicken.needs.cleanliness + 60);
-                    gameState.chicken.needs.happiness = Math.min(100, gameState.chicken.needs.happiness + 10);
-                    message = '🛁 *fluff fluff* So fluffy!';
-                    break;
-                case 'play':
-                    gameState.chicken.needs.happiness = Math.min(100, gameState.chicken.needs.happiness + 30);
-                    gameState.chicken.needs.exercise = Math.min(100, gameState.chicken.needs.exercise + 20);
-                    message = '🎾 *bawk bawk* So fun!';
-                    break;
-                case 'sleep':
-                    gameState.chicken.needs.sleep = Math.min(100, gameState.chicken.needs.sleep + 50);
-                    if (gameState.chicken.isSick && Math.random() < 0.3) {
-                        gameState.chicken.isSick = false;
-                        message = '😴 Zzz... Feeling better!';
-                    } else {
-                        message = '😴 Zzz... Good night!';
+              const rsPoly = getErrorCorrectPolynomial(ecCount);
+              const rawPoly = new Polynomial(dcdata[r], rsPoly.getLength() - 1);
+              const modPoly = rawPoly.mod(rsPoly);
+              ecdata[r] = new Array(rsPoly.getLength() - 1);
+              for (let i = 0; i < ecdata[r].length; i++) {
+                const modIndex = i + modPoly.getLength() - ecdata[r].length;
+                ecdata[r][i] = modIndex >= 0 ? modPoly.get(modIndex) : 0;
+              }
+            }
+
+            const data = [];
+            for (let i = 0; i < maxDc; i++)
+              for (let r = 0; r < rsBlocks.length; r++)
+                if (i < dcdata[r].length) data.push(dcdata[r][i]);
+            for (let i = 0; i < maxEc; i++)
+              for (let r = 0; r < rsBlocks.length; r++)
+                if (i < ecdata[r].length) data.push(ecdata[r][i]);
+            return data;
+          }
+
+          function mapData(data, maskPattern) {
+            let inc = -1,
+              row = moduleCount - 1,
+              bitIndex = 7,
+              byteIndex = 0;
+            for (let col = moduleCount - 1; col > 0; col -= 2) {
+              if (col == 6) col--;
+              while (true) {
+                for (let c = 0; c < 2; c++) {
+                  if (modules[row][col - c] == null) {
+                    let dark = false;
+                    if (byteIndex < data.length)
+                      dark = ((data[byteIndex] >>> bitIndex) & 1) == 1;
+                    if (getMask(maskPattern, row, col - c)) dark = !dark;
+                    modules[row][col - c] = dark;
+                    bitIndex--;
+                    if (bitIndex == -1) {
+                      byteIndex++;
+                      bitIndex = 7;
                     }
-                    break;
-                case 'flap':
-                    gameState.chicken.needs.exercise = Math.min(100, gameState.chicken.needs.exercise + 40);
-                    gameState.chicken.needs.happiness = Math.min(100, gameState.chicken.needs.happiness + 15);
-                    message = '🪽 *flap flap flap* Wheee!';
-                    break;
-            }
-
-            // Earn $1 for taking care of chicken!
-            gameState.money += 1;
-            message += '<br><span class="coin-earn">+$1 💰</span>';
-            updateMoneyDisplay();
-
-            saveGame();
-            renderChicken();
-            showPopup(message);
-        }
-
-        // ============= RENDERING =============
-        function renderChicken() {
-            if (!gameState.chicken) return;
-
-            const chicken = gameState.chicken;
-            const ageInDays = Math.floor((Date.now() - chicken.birthDate) / (1000 * 60 * 60 * 24));
-            
-            // Get current stage
-            let currentStage = MILESTONES[0];
-            for (const milestone of MILESTONES) {
-                if (ageInDays >= milestone.day) {
-                    currentStage = milestone;
+                  }
                 }
-            }
-
-            // Update display
-            document.getElementById('display-name').textContent = chicken.name;
-            document.getElementById('display-breed').textContent = BREEDS[chicken.breed].name;
-            document.getElementById('display-owner').textContent = `Owner: ${chicken.owner}`;
-            document.getElementById('life-stage').textContent = currentStage.name;
-            document.getElementById('chicken-age').textContent = formatAge(ageInDays);
-
-            // Progress bar
-            const nextMilestone = MILESTONES.find(m => m.day > ageInDays) || MILESTONES[MILESTONES.length - 1];
-            const prevMilestone = [...MILESTONES].reverse().find(m => m.day <= ageInDays) || MILESTONES[0];
-            const progress = ((ageInDays - prevMilestone.day) / (nextMilestone.day - prevMilestone.day)) * 100;
-            const totalProgress = (MILESTONES.findIndex(m => m.day === currentStage.day) + 1) / MILESTONES.length * 100;
-            document.getElementById('lifecycle-progress').style.width = Math.min(100, totalProgress) + '%';
-
-            // ASCII art
-            const artStage = chicken.isSick ? 'sick' : currentStage.stage;
-            document.getElementById('chicken-ascii').textContent = ASCII_ART[artStage] || ASCII_ART['chick'];
-
-            // Status bar
-            renderStatus();
-
-            // Milestones
-            renderMilestones(ageInDays);
-        }
-
-        function renderStatus() {
-            const chicken = gameState.chicken;
-            const statusBar = document.getElementById('status-bar');
-            const activeStatuses = [];
-
-            if (chicken.isSick) {
-                activeStatuses.push({ ...STATUSES.sick, key: 'sick' });
-            }
-            if (chicken.needs.hunger < 40) {
-                activeStatuses.push({ ...STATUSES.hungry, key: 'hungry' });
-            }
-            if (chicken.needs.thirst < 40) {
-                activeStatuses.push({ ...STATUSES.thirsty, key: 'thirsty' });
-            }
-            if (chicken.needs.cleanliness < 40) {
-                activeStatuses.push({ ...STATUSES.dusty, key: 'dusty' });
-            }
-            if (chicken.needs.sleep < 40) {
-                activeStatuses.push({ ...STATUSES.sleepy, key: 'sleepy' });
-            }
-            if (chicken.needs.exercise < 40) {
-                activeStatuses.push({ ...STATUSES.wantFlap, key: 'wantFlap' });
-            }
-            if (chicken.needs.happiness < 40) {
-                activeStatuses.push({ ...STATUSES.bored, key: 'bored' });
-            }
-
-            if (activeStatuses.length === 0) {
-                activeStatuses.push({ ...STATUSES.happy, key: 'happy' });
-            }
-
-            statusBar.innerHTML = activeStatuses.map(s => {
-                let className = 'status-item';
-                if (s.priority >= 3) className += ' critical';
-                else if (s.priority >= 2) className += ' warning';
-                return `<span class="${className}">${s.icon} ${s.text}</span>`;
-            }).join('');
-        }
-
-        function renderMilestones(currentAge) {
-            const list = document.getElementById('milestone-list');
-            list.innerHTML = MILESTONES.map(m => {
-                let className = 'milestone';
-                let icon = '⬜';
-                if (currentAge >= m.day) {
-                    className += ' achieved';
-                    icon = '✅';
+                row += inc;
+                if (row < 0 || moduleCount <= row) {
+                  row -= inc;
+                  inc = -inc;
+                  break;
                 }
-                const currentMilestone = MILESTONES.filter(x => currentAge >= x.day).pop();
-                if (currentMilestone && m.day === currentMilestone.day) {
-                    className += ' current';
-                }
-                return `<div class="${className}">${icon} ${m.name} (Day ${m.day})</div>`;
-            }).join('');
-        }
-
-        // ============= QR CODE & SHARING =============
-        function generateQRCode() {
-            const code = encodeChickenData();
-            document.getElementById('chicken-code').value = code;
-            
-            // Generate simple visual QR-like pattern
-            const qrDiv = document.getElementById('qrcode');
-            qrDiv.innerHTML = generateVisualCode(code);
-        }
-
-        function encodeChickenData() {
-            const c = gameState.chicken;
-            const ageInDays = Math.floor((Date.now() - c.birthDate) / (1000 * 60 * 60 * 24));
-            
-            // Get current stage
-            let stage = 'egg';
-            for (const milestone of MILESTONES) {
-                if (ageInDays >= milestone.day) {
-                    stage = milestone.stage;
-                }
+              }
             }
+          }
 
-            const data = {
-                n: c.name,
-                o: c.owner,
-                b: c.breed,
-                a: ageInDays,
-                s: stage,
-                h: Math.round((
-                    c.needs.hunger + c.needs.thirst + c.needs.cleanliness + 
-                    c.needs.sleep + c.needs.happiness + c.needs.exercise
-                ) / 6),
-                i: c.id
-            };
+          // Build QR
+          setupPositionProbe(0, 0);
+          setupPositionProbe(moduleCount - 7, 0);
+          setupPositionProbe(0, moduleCount - 7);
+          setupPositionAdjust();
+          setupTiming();
+          setupTypeNumber();
 
-            return '🐔' + btoa(JSON.stringify(data)) + '🐔';
+          const data = createData();
+          const maskPattern = 0; // Use pattern 0 for simplicity
+          setupTypeInfo(maskPattern);
+          mapData(data, maskPattern);
+
+          return {
+            modules,
+            moduleCount,
+            isDark: (r, c) => modules[r][c] === true,
+          };
         }
 
-        function generateVisualCode(code) {
-            // Pokemon-style pixel chicken shape!
-            // 0 = empty, 1 = body outline, 2 = body fill, 3 = beak, 4 = comb, 5 = eye, 6 = wing, 7 = feet
-            const chickenShape = [
-                [0,0,0,0,0,4,4,0,0,0,0,0,0,0],
-                [0,0,0,0,4,4,4,4,0,0,0,0,0,0],
-                [0,0,0,1,2,2,2,2,1,0,0,0,0,0],
-                [0,0,1,2,2,5,2,2,2,1,0,0,0,0],
-                [0,0,1,2,2,2,2,2,2,1,3,3,0,0],
-                [0,1,2,2,2,2,2,2,2,2,1,3,3,0],
-                [0,1,2,2,6,6,2,2,2,2,2,1,0,0],
-                [1,2,2,2,6,6,6,2,2,2,2,2,1,0],
-                [1,2,2,2,2,6,6,2,2,2,2,2,1,0],
-                [1,2,2,2,2,2,2,2,2,2,2,2,1,0],
-                [0,1,2,2,2,2,2,2,2,2,2,1,0,0],
-                [0,0,1,2,2,2,2,2,2,2,1,0,0,0],
-                [0,0,0,1,1,2,2,2,1,1,0,0,0,0],
-                [0,0,0,7,7,0,0,0,7,7,0,0,0,0],
-                [0,0,0,7,7,0,0,0,7,7,0,0,0,0],
-            ];
+        return { create: createQR };
+      })();
 
-            // Color palette - varies based on code data
-            const codeSum = code.split('').reduce((sum, c) => sum + c.charCodeAt(0), 0);
-            
-            const palettes = [
-                { body: '#FFD93D', outline: '#E8A317', comb: '#FF6B6B', beak: '#FFA502', eye: '#2C3E50', wing: '#F39C12', feet: '#E8A317' },
-                { body: '#FFB6C1', outline: '#FF69B4', comb: '#FF1493', beak: '#FFA07A', eye: '#4A4A4A', wing: '#FF69B4', feet: '#DDA0DD' },
-                { body: '#98FB98', outline: '#32CD32', comb: '#FF6347', beak: '#FFD700', eye: '#2F4F4F', wing: '#3CB371', feet: '#228B22' },
-                { body: '#87CEEB', outline: '#4169E1', comb: '#FF69B4', beak: '#FFA500', eye: '#191970', wing: '#6495ED', feet: '#4682B4' },
-                { body: '#DDA0DD', outline: '#9932CC', comb: '#FF1493', beak: '#FFB347', eye: '#4B0082', wing: '#BA55D3', feet: '#8B008B' },
-            ];
-            
-            const palette = palettes[codeSum % palettes.length];
-            
-            // Create pattern variations based on code
-            const patternData = [];
-            for (let i = 0; i < code.length * 2; i++) {
-                patternData.push(code.charCodeAt(i % code.length) % 4);
-            }
+      function generateVisualCode(code) {
+        // Auto-select QR version based on data length
+        let qr,
+          version = 2;
+        const dataLen = code.length;
+        if (dataLen <= 14) version = 1;
+        else if (dataLen <= 26) version = 2;
+        else if (dataLen <= 42) version = 3;
+        else if (dataLen <= 62) version = 4;
+        else if (dataLen <= 84) version = 5;
+        else version = 6;
 
-            const pixelSize = 12;
-            let html = `<div style="display: inline-block; padding: 10px; background: linear-gradient(135deg, #FFF9E6 0%, #FFF0F5 100%); border-radius: 15px; border: 3px solid ${palette.outline};">`;
-            html += `<div style="display: grid; grid-template-columns: repeat(14, ${pixelSize}px); gap: 1px; justify-content: center;">`;
-            
-            let dataIndex = 0;
-            for (let row = 0; row < chickenShape.length; row++) {
-                for (let col = 0; col < chickenShape[row].length; col++) {
-                    const cell = chickenShape[row][col];
-                    let color = 'transparent';
-                    let border = 'none';
-                    let pattern = '';
-                    
-                    switch (cell) {
-                        case 1: // outline
-                            color = palette.outline;
-                            break;
-                        case 2: // body fill - with pattern based on data
-                            const variation = patternData[dataIndex++ % patternData.length];
-                            if (variation === 0) {
-                                color = palette.body;
-                            } else if (variation === 1) {
-                                color = palette.body;
-                                pattern = `background: linear-gradient(45deg, ${palette.body} 25%, ${palette.wing}22 25%, ${palette.wing}22 50%, ${palette.body} 50%, ${palette.body} 75%, ${palette.wing}22 75%); background-size: 4px 4px;`;
-                            } else if (variation === 2) {
-                                color = palette.body;
-                                border = `1px dotted ${palette.outline}44`;
-                            } else {
-                                color = palette.body;
-                                pattern = `box-shadow: inset 1px 1px 0 ${palette.wing}33;`;
-                            }
-                            break;
-                        case 3: // beak
-                            color = palette.beak;
-                            break;
-                        case 4: // comb
-                            color = palette.comb;
-                            break;
-                        case 5: // eye
-                            color = palette.eye;
-                            pattern = `border-radius: 50%; box-shadow: inset -1px -1px 0 #FFF;`;
-                            break;
-                        case 6: // wing - with pattern
-                            const wingVar = patternData[dataIndex++ % patternData.length];
-                            color = wingVar % 2 === 0 ? palette.wing : palette.body;
-                            pattern = `border-radius: 2px;`;
-                            break;
-                        case 7: // feet
-                            color = palette.feet;
-                            break;
-                    }
-                    
-                    if (cell === 0) {
-                        html += `<div style="width: ${pixelSize}px; height: ${pixelSize}px;"></div>`;
-                    } else {
-                        html += `<div style="width: ${pixelSize}px; height: ${pixelSize}px; background: ${color}; border: ${border}; ${pattern}"></div>`;
-                    }
-                }
-            }
-            
-            html += '</div>';
-            
-            // Add cute decorations around the chicken
-            const sparkles = ['✨', '💕', '⭐', '🌸', '💫'];
-            const sparkle1 = sparkles[codeSum % sparkles.length];
-            const sparkle2 = sparkles[(codeSum + 2) % sparkles.length];
-            
-            html += `<div style="margin-top: 8px; font-size: 1.2em;">${sparkle1} Chicken Code ${sparkle2}</div>`;
-            html += '</div>';
-            
-            return html;
+        try {
+          qr = QRCode.create(code, version);
+        } catch (e) {
+          version++;
+          qr = QRCode.create(code, version);
         }
 
-        function copyChickenCode() {
-            const code = document.getElementById('chicken-code').value;
-            navigator.clipboard.writeText(code).then(() => {
-                showPopup('📋 Code copied! Share it with friends!');
-            }).catch(() => {
-                showPopup('📋 Select the code and copy manually!');
-            });
+        const size = qr.moduleCount;
+        const pixelSize = Math.max(5, Math.floor(180 / size));
+
+        // Color theme
+        const codeSum = code
+          .split("")
+          .reduce((sum, c) => sum + c.charCodeAt(0), 0);
+        const colors = [
+          { dark: "#000000", light: "#FFF0F5", border: "#FF69B4" },
+          { dark: "#000000", light: "#F8F0FF", border: "#9932CC" },
+          { dark: "#000000", light: "#FFF5F5", border: "#FF6347" },
+          { dark: "#000000", light: "#F0FFF0", border: "#32CD32" },
+          { dark: "#000000", light: "#F0F8FF", border: "#4169E1" },
+        ];
+        const theme = colors[codeSum % colors.length];
+
+        let html = `<div style="display: inline-block; padding: 15px; background: ${theme.light}; border-radius: 15px; border: 3px solid ${theme.border};">`;
+        html += `<div style="text-align: center; margin-bottom: 8px;"><span style="font-size: 1.8em;">🐔</span></div>`;
+        html += `<div style="display: inline-block; padding: 10px; background: white; border-radius: 8px;">`;
+        html += `<div style="display: grid; grid-template-columns: repeat(${size}, ${pixelSize}px); gap: 0;">`;
+
+        for (let row = 0; row < size; row++) {
+          for (let col = 0; col < size; col++) {
+            const color = qr.isDark(row, col) ? theme.dark : "white";
+            html += `<div style="width:${pixelSize}px;height:${pixelSize}px;background:${color};"></div>`;
+          }
         }
 
-        // ============= FRIENDS =============
-        function addFriend() {
-            const input = document.getElementById('friend-code-input').value.trim();
-            
-            if (!input) {
-                showPopup('🙈 Please paste a chicken code!');
-                return;
-            }
+        html += "</div></div>";
+        const sparkles = ["✨", "💕", "⭐", "🌸", "💫"];
+        html += `<div style="text-align:center;margin-top:8px;font-size:0.95em;color:${
+          theme.border
+        };font-weight:500;">${sparkles[codeSum % 5]} Scan Me! ${
+          sparkles[(codeSum + 2) % 5]
+        }</div>`;
+        html += "</div>";
 
-            try {
-                // Extract the code between chicken emojis
-                const match = input.match(/🐔(.+)🐔/);
-                if (!match) throw new Error('Invalid format');
-                
-                const data = JSON.parse(atob(match[1]));
-                
-                // Check if already a friend
-                if (gameState.friends.some(f => f.i === data.i)) {
-                    showPopup('🐔 This chicken is already your friend!');
-                    return;
-                }
+        return html;
+      }
 
-                // Check if it's your own chicken
-                if (data.i === gameState.chicken.id) {
-                    showPopup('🤭 That\'s your own chicken, silly!');
-                    return;
-                }
+      function copyChickenCode() {
+        const code = document.getElementById("chicken-code").value;
+        navigator.clipboard
+          .writeText(code)
+          .then(() => {
+            showPopup("📋 Code copied! Share it with friends!");
+          })
+          .catch(() => {
+            showPopup("📋 Select the code and copy manually!");
+          });
+      }
 
-                gameState.friends.push(data);
-                saveGame();
-                renderFriends();
-                document.getElementById('friend-code-input').value = '';
-                showPopup(`🎉 ${data.n} is now your friend!`);
-            } catch (e) {
-                showPopup('😕 Invalid chicken code. Try again!');
-            }
+      // ============= FRIENDS =============
+      function addFriend() {
+        const input = document.getElementById("friend-code-input").value.trim();
+
+        if (!input) {
+          showPopup("🙈 Please paste a chicken code!");
+          return;
         }
 
-        function renderFriends() {
-            const list = document.getElementById('friends-list');
-            
-            if (gameState.friends.length === 0) {
-                list.innerHTML = `
+        try {
+          // Extract the code between chicken emojis
+          const match = input.match(/🐔(.+)🐔/);
+          if (!match) throw new Error("Invalid format");
+
+          const data = JSON.parse(atob(match[1]));
+
+          // Check if already a friend
+          if (gameState.friends.some((f) => f.i === data.i)) {
+            showPopup("🐔 This chicken is already your friend!");
+            return;
+          }
+
+          // Check if it's your own chicken
+          if (data.i === gameState.chicken.id) {
+            showPopup("🤭 That's your own chicken, silly!");
+            return;
+          }
+
+          gameState.friends.push(data);
+          saveGame();
+          renderFriends();
+          document.getElementById("friend-code-input").value = "";
+          showPopup(`🎉 ${data.n} is now your friend!`);
+        } catch (e) {
+          showPopup("😕 Invalid chicken code. Try again!");
+        }
+      }
+
+      function renderFriends() {
+        const list = document.getElementById("friends-list");
+
+        if (gameState.friends.length === 0) {
+          list.innerHTML = `
                     <p style="text-align: center; color: #888; margin: 20px 0;">
                         No friends yet! 🐣<br>
                         Scan a friend's code to add them!
                     </p>
                 `;
-                return;
-            }
+          return;
+        }
 
-            list.innerHTML = gameState.friends.map(f => {
-                const breedInfo = BREEDS[f.b] || { name: 'Unknown' };
-                const currentMilestone = MILESTONES.filter(m => f.a >= m.day).pop() || MILESTONES[0];
-                const healthEmoji = f.h >= 70 ? '💚' : f.h >= 40 ? '💛' : '❤️';
-                
-                return `
+        list.innerHTML = gameState.friends
+          .map((f) => {
+            const breedInfo = BREEDS[f.b] || { name: "Unknown" };
+            const currentMilestone =
+              MILESTONES.filter((m) => f.a >= m.day).pop() || MILESTONES[0];
+            const healthEmoji = f.h >= 70 ? "💚" : f.h >= 40 ? "💛" : "❤️";
+
+            return `
                     <div class="friend-card">
                         <div class="name">🐔 ${f.n}</div>
                         <div>Owner: ${f.o}</div>
@@ -1352,141 +1853,159 @@
                         <div>Health: ${healthEmoji} ${f.h}%</div>
                     </div>
                 `;
-            }).join('');
-        }
+          })
+          .join("");
+      }
 
-        // ============= UTILITIES =============
-        function generateId() {
-            return 'ck_' + Math.random().toString(36).substr(2, 9);
-        }
+      // ============= UTILITIES =============
+      function generateId() {
+        return "ck_" + Math.random().toString(36).substr(2, 9);
+      }
 
-        function formatAge(days) {
-            if (days === 0) return 'Just born!';
-            if (days === 1) return '1 day old';
-            if (days < 7) return `${days} days old`;
-            if (days < 30) return `${Math.floor(days / 7)} week${days >= 14 ? 's' : ''} old`;
-            if (days < 365) return `${Math.floor(days / 30)} month${days >= 60 ? 's' : ''} old`;
-            return `${Math.floor(days / 365)} year${days >= 730 ? 's' : ''} old`;
-        }
+      function formatAge(days) {
+        if (days === 0) return "Just born!";
+        if (days === 1) return "1 day old";
+        if (days < 7) return `${days} days old`;
+        if (days < 30)
+          return `${Math.floor(days / 7)} week${days >= 14 ? "s" : ""} old`;
+        if (days < 365)
+          return `${Math.floor(days / 30)} month${days >= 60 ? "s" : ""} old`;
+        return `${Math.floor(days / 365)} year${days >= 730 ? "s" : ""} old`;
+      }
 
-        function showPopup(message) {
-            document.getElementById('popup-content').innerHTML = message;
-            document.getElementById('popup').classList.remove('hidden');
-            document.getElementById('overlay').classList.remove('hidden');
-        }
+      function showPopup(message) {
+        document.getElementById("popup-content").innerHTML = message;
+        document.getElementById("popup").classList.remove("hidden");
+        document.getElementById("overlay").classList.remove("hidden");
+      }
 
-        function hidePopup() {
-            document.getElementById('popup').classList.add('hidden');
-            document.getElementById('overlay').classList.add('hidden');
-        }
+      function hidePopup() {
+        document.getElementById("popup").classList.add("hidden");
+        document.getElementById("overlay").classList.add("hidden");
+      }
 
-        function updateMoneyDisplay() {
-            document.getElementById('money-amount').textContent = gameState.money;
-        }
+      function updateMoneyDisplay() {
+        document.getElementById("money-amount").textContent = gameState.money;
+      }
 
-        // ============= SHOP SYSTEM =============
-        function renderShop() {
-            const shopDiv = document.getElementById('shop-items');
-            
-            shopDiv.innerHTML = Object.values(SHOP_ITEMS).map(item => {
-                const owned = gameState.inventory.includes(item.id);
-                return `
-                    <div class="shop-item ${owned ? 'owned' : ''}">
+      // ============= SHOP SYSTEM =============
+      function renderShop() {
+        const shopDiv = document.getElementById("shop-items");
+
+        shopDiv.innerHTML = Object.values(SHOP_ITEMS)
+          .map((item) => {
+            const owned = gameState.inventory.includes(item.id);
+            return `
+                    <div class="shop-item ${owned ? "owned" : ""}">
                         <div class="item-icon">${item.icon}</div>
                         <div class="item-info">
                             <div class="item-name">${item.name}</div>
                             <div class="item-desc">${item.description}</div>
                         </div>
-                        ${owned 
-                            ? '<span class="owned-badge">✓ Owned</span>' 
+                        ${
+                          owned
+                            ? '<span class="owned-badge">✓ Owned</span>'
                             : `<button class="btn small" onclick="buyItem('${item.id}')">$${item.price}</button>`
                         }
                     </div>
                 `;
-            }).join('');
-            
-            renderInventory();
+          })
+          .join("");
+
+        renderInventory();
+      }
+
+      function renderInventory() {
+        const invDiv = document.getElementById("inventory");
+
+        if (gameState.inventory.length === 0) {
+          invDiv.innerHTML =
+            '<p style="text-align: center; color: #888; width: 100%;">No items yet! 🛒</p>';
+          return;
         }
 
-        function renderInventory() {
-            const invDiv = document.getElementById('inventory');
-            
-            if (gameState.inventory.length === 0) {
-                invDiv.innerHTML = '<p style="text-align: center; color: #888; width: 100%;">No items yet! 🛒</p>';
-                return;
-            }
-            
-            invDiv.innerHTML = gameState.inventory.map(itemId => {
-                const item = SHOP_ITEMS[itemId];
-                return `
+        invDiv.innerHTML = gameState.inventory
+          .map((itemId) => {
+            const item = SHOP_ITEMS[itemId];
+            return `
                     <div class="inventory-item">
                         <div class="item-emoji">${item.icon}</div>
-                        <div style="font-size: 0.75em;">${item.name.split(' ')[0]}</div>
+                        <div style="font-size: 0.75em;">${
+                          item.name.split(" ")[0]
+                        }</div>
                     </div>
                 `;
-            }).join('');
+          })
+          .join("");
+      }
+
+      function buyItem(itemId) {
+        const item = SHOP_ITEMS[itemId];
+
+        if (gameState.inventory.includes(itemId)) {
+          showPopup("🛒 You already have this item!");
+          return;
         }
 
-        function buyItem(itemId) {
-            const item = SHOP_ITEMS[itemId];
-            
-            if (gameState.inventory.includes(itemId)) {
-                showPopup('🛒 You already have this item!');
-                return;
-            }
-            
-            if (gameState.money < item.price) {
-                showPopup('💸 Not enough money!<br>Take care of your chicken to earn more!');
-                return;
-            }
-            
-            gameState.money -= item.price;
-            gameState.inventory.push(itemId);
-            
-            // Apply immediate happiness boost for fake eggs
-            if (itemId === 'fake-eggs' && gameState.chicken) {
-                gameState.chicken.needs.happiness = Math.min(100, gameState.chicken.needs.happiness + 10);
-            }
-            
-            updateMoneyDisplay();
-            saveGame();
-            renderShop();
-            showPopup(`🎉 You bought ${item.name}!<br>${item.icon} ${item.description}`);
+        if (gameState.money < item.price) {
+          showPopup(
+            "💸 Not enough money!<br>Take care of your chicken to earn more!"
+          );
+          return;
         }
 
-        // ============= SAVE/LOAD =============
-        function saveGame() {
-            localStorage.setItem('chickenGame', JSON.stringify(gameState));
+        gameState.money -= item.price;
+        gameState.inventory.push(itemId);
+
+        // Apply immediate happiness boost for fake eggs
+        if (itemId === "fake-eggs" && gameState.chicken) {
+          gameState.chicken.needs.happiness = Math.min(
+            100,
+            gameState.chicken.needs.happiness + 10
+          );
         }
 
-        function loadGame() {
-            const saved = localStorage.getItem('chickenGame');
-            if (saved) {
-                const loaded = JSON.parse(saved);
-                gameState = {
-                    ...gameState,
-                    ...loaded,
-                    // Ensure money and inventory exist for old saves
-                    money: loaded.money !== undefined ? loaded.money : 5,
-                    inventory: loaded.inventory || []
-                };
-            }
-        }
+        updateMoneyDisplay();
+        saveGame();
+        renderShop();
+        showPopup(
+          `🎉 You bought ${item.name}!<br>${item.icon} ${item.description}`
+        );
+      }
 
-        function loadExistingChicken() {
-            loadGame();
-            if (gameState.chicken) {
-                updateGame();
-                updateMoneyDisplay();
-                showScreen('game-screen');
-                renderFriends();
-            } else {
-                showPopup('🐣 No saved chicken found!<br>Create a new one!');
-            }
-        }
+      // ============= SAVE/LOAD =============
+      function saveGame() {
+        localStorage.setItem("chickenGame", JSON.stringify(gameState));
+      }
 
-        // Start the game!
-        init();
+      function loadGame() {
+        const saved = localStorage.getItem("chickenGame");
+        if (saved) {
+          const loaded = JSON.parse(saved);
+          gameState = {
+            ...gameState,
+            ...loaded,
+            // Ensure money and inventory exist for old saves
+            money: loaded.money !== undefined ? loaded.money : 5,
+            inventory: loaded.inventory || [],
+          };
+        }
+      }
+
+      function loadExistingChicken() {
+        loadGame();
+        if (gameState.chicken) {
+          updateGame();
+          updateMoneyDisplay();
+          showScreen("game-screen");
+          renderFriends();
+        } else {
+          showPopup("🐣 No saved chicken found!<br>Create a new one!");
+        }
+      }
+
+      // Start the game!
+      init();
     </script>
-</body>
+  </body>
 </html>
