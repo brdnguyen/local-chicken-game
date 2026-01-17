@@ -1719,6 +1719,99 @@
         }
       }
 
+      .health-indicators {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin: 15px 0;
+        padding: 15px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 15px;
+        border: 2px solid #dee2e6;
+      }
+
+      .health-indicator {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .health-indicator-label {
+        font-size: 0.85em;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .health-indicator-bar {
+        height: 10px;
+        background: #e0e0e0;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .health-indicator-fill {
+        height: 100%;
+        border-radius: 5px;
+        transition: width 0.3s ease, background 0.3s ease;
+      }
+
+      .health-indicator-fill.high {
+        background: linear-gradient(90deg, #4caf50, #8bc34a);
+      }
+
+      .health-indicator-fill.medium {
+        background: linear-gradient(90deg, #ff9800, #ffc107);
+      }
+
+      .health-indicator-fill.low {
+        background: linear-gradient(90deg, #f44336, #ff5722);
+        animation: pulse 1s infinite;
+      }
+
+      .overall-health {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 12px;
+        background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        border-radius: 12px;
+        border: 2px solid #81c784;
+        margin-bottom: 5px;
+      }
+
+      .overall-health.warning {
+        background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+        border-color: #ffb74d;
+      }
+
+      .overall-health.critical {
+        background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        border-color: #e57373;
+        animation: pulse 1s infinite;
+      }
+
+      .overall-health-label {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .overall-health-value {
+        font-size: 1.8em;
+        font-weight: 700;
+      }
+
+      .overall-health-value.high {
+        color: #2e7d32;
+      }
+      .overall-health-value.medium {
+        color: #f57c00;
+      }
+      .overall-health-value.low {
+        color: #c62828;
+      }
+
       .shop-categories {
         display: flex;
         gap: 8px;
@@ -2088,6 +2181,93 @@
           <h2>❤️ How's My Chicken?</h2>
           <div class="status-bar" id="status-bar">
             <span class="status-item">😊 Happy</span>
+          </div>
+
+          <div class="health-indicators" id="health-indicators">
+            <div class="overall-health" id="overall-health">
+              <div class="overall-health-label">🏆 Overall Health</div>
+              <div class="overall-health-value high" id="overall-health-value">
+                100%
+              </div>
+            </div>
+            <div class="health-indicator">
+              <div class="health-indicator-label">
+                <span>🌾 Hunger</span>
+                <span id="hunger-percent">100%</span>
+              </div>
+              <div class="health-indicator-bar">
+                <div
+                  class="health-indicator-fill high"
+                  id="hunger-bar"
+                  style="width: 100%"
+                ></div>
+              </div>
+            </div>
+            <div class="health-indicator">
+              <div class="health-indicator-label">
+                <span>💧 Thirst</span>
+                <span id="thirst-percent">100%</span>
+              </div>
+              <div class="health-indicator-bar">
+                <div
+                  class="health-indicator-fill high"
+                  id="thirst-bar"
+                  style="width: 100%"
+                ></div>
+              </div>
+            </div>
+            <div class="health-indicator">
+              <div class="health-indicator-label">
+                <span>🛁 Cleanliness</span>
+                <span id="cleanliness-percent">100%</span>
+              </div>
+              <div class="health-indicator-bar">
+                <div
+                  class="health-indicator-fill high"
+                  id="cleanliness-bar"
+                  style="width: 100%"
+                ></div>
+              </div>
+            </div>
+            <div class="health-indicator">
+              <div class="health-indicator-label">
+                <span>😴 Sleep</span>
+                <span id="sleep-percent">100%</span>
+              </div>
+              <div class="health-indicator-bar">
+                <div
+                  class="health-indicator-fill high"
+                  id="sleep-bar"
+                  style="width: 100%"
+                ></div>
+              </div>
+            </div>
+            <div class="health-indicator">
+              <div class="health-indicator-label">
+                <span>😊 Happiness</span>
+                <span id="happiness-percent">100%</span>
+              </div>
+              <div class="health-indicator-bar">
+                <div
+                  class="health-indicator-fill high"
+                  id="happiness-bar"
+                  style="width: 100%"
+                ></div>
+              </div>
+            </div>
+            <div class="health-indicator">
+              <div class="health-indicator-label">
+                <span>🦶 Exercise</span>
+                <span id="exercise-percent">100%</span>
+              </div>
+              <div class="health-indicator-bar">
+                <div
+                  class="health-indicator-fill high"
+                  id="exercise-bar"
+                  style="width: 100%"
+                ></div>
+              </div>
+            </div>
           </div>
 
           <h2>🎮 Caring Actions</h2>
@@ -3157,6 +3337,73 @@
             return `<span class="${className}">${s.icon} ${s.text}</span>`;
           })
           .join("");
+
+        // Update health indicator bars
+        renderHealthIndicators();
+      }
+
+      function renderHealthIndicators() {
+        const chicken = gameState.chicken;
+        if (!chicken) return;
+
+        const needs = [
+          { key: "hunger", value: chicken.needs.hunger },
+          { key: "thirst", value: chicken.needs.thirst },
+          { key: "cleanliness", value: chicken.needs.cleanliness },
+          { key: "sleep", value: chicken.needs.sleep },
+          { key: "happiness", value: chicken.needs.happiness },
+          { key: "exercise", value: chicken.needs.exercise },
+        ];
+
+        // Calculate overall health (average of all needs)
+        const overallHealth = Math.round(
+          needs.reduce((sum, need) => sum + need.value, 0) / needs.length
+        );
+
+        // Update overall health display
+        const overallEl = document.getElementById("overall-health");
+        const overallValue = document.getElementById("overall-health-value");
+        if (overallValue) {
+          overallValue.textContent = `${overallHealth}%`;
+          overallValue.classList.remove("high", "medium", "low");
+          if (overallHealth >= 60) {
+            overallValue.classList.add("high");
+          } else if (overallHealth >= 40) {
+            overallValue.classList.add("medium");
+          } else {
+            overallValue.classList.add("low");
+          }
+        }
+        if (overallEl) {
+          overallEl.classList.remove("warning", "critical");
+          if (overallHealth < 40) {
+            overallEl.classList.add("critical");
+          } else if (overallHealth < 60) {
+            overallEl.classList.add("warning");
+          }
+        }
+
+        needs.forEach((need) => {
+          const bar = document.getElementById(`${need.key}-bar`);
+          const percent = document.getElementById(`${need.key}-percent`);
+          const value = Math.round(need.value);
+
+          if (bar) {
+            bar.style.width = `${value}%`;
+            bar.classList.remove("high", "medium", "low");
+            if (value >= 60) {
+              bar.classList.add("high");
+            } else if (value >= 40) {
+              bar.classList.add("medium");
+            } else {
+              bar.classList.add("low");
+            }
+          }
+
+          if (percent) {
+            percent.textContent = `${value}%`;
+          }
+        });
       }
 
       function renderMilestones(currentAge) {

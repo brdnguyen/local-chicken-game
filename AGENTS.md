@@ -35,6 +35,22 @@ A cute virtual chicken game for kids (8-12 year old) that runs as a local HTML f
 - 🤒 Sick (random chance when needs are low)
 - 😐 Bored (happiness < 40%)
 
+### Health Indicators Display
+Visual progress bars show real-time percentages for each need:
+| Indicator | Icon | Description |
+|-----------|------|-------------|
+| Hunger | 🌾 | How full your chicken is |
+| Thirst | 💧 | Hydration level |
+| Cleanliness | 🛁 | How clean (needs dust bath when low) |
+| Sleep | 😴 | Energy/rest level |
+| Happiness | 😊 | Overall mood |
+| Exercise | 🦶 | Physical activity needs |
+
+**Color coding:**
+- 🟢 Green (60-100%): Healthy
+- 🟡 Yellow (40-59%): Warning
+- 🔴 Red (0-39%): Critical (pulsing animation)
+
 ### Breeds Available
 - ISA Brown
 - Silkie
