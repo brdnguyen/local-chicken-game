@@ -1407,6 +1407,32 @@
         line-height: 1.6;
       }
 
+      .tips-section {
+        background: linear-gradient(135deg, #fff8e1, #ffecb3);
+        border: 1px dashed #ffc107;
+        border-radius: 8px;
+        padding: 8px 10px;
+        margin: 0 0 10px 0;
+        font-size: 0.8em;
+        line-height: 1.4;
+        text-align: center;
+      }
+
+      .tips-section .tip-icon {
+        font-size: 1em;
+        margin-right: 3px;
+      }
+
+      .tips-section .tip-title {
+        font-weight: 700;
+        color: #f57c00;
+        margin-right: 5px;
+      }
+
+      .tips-section .tip-text {
+        color: #5d4037;
+      }
+
       .lifecycle-bar {
         background: #e0e0e0;
         border-radius: 10px;
@@ -2140,6 +2166,13 @@
 
         <!-- Chicken Tab -->
         <div id="chicken-tab" class="tab-content">
+          <div class="tips-section" id="tips-section">
+            <span class="tip-icon">💡</span><span class="tip-title">TIP:</span>
+            <span class="tip-text"
+              >Use <strong>Caring Actions</strong> below to advance time!</span
+            >
+          </div>
+
           <div class="chicken-display">
             <div class="chicken-accessories" id="chicken-accessories"></div>
             <div class="chicken-mood" id="chicken-mood"></div>
