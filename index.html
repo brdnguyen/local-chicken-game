@@ -1710,8 +1710,13 @@
       }
 
       @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
       }
 
       .shop-categories {
@@ -1980,7 +1985,9 @@
             <div class="daily-actions-display" id="daily-actions-display">
               ⚡ <span id="daily-actions-remaining">10</span>/10 today
             </div>
-            <div class="daily-actions-legend">remaining allowed actions today</div>
+            <div class="daily-actions-legend">
+              remaining allowed actions today
+            </div>
           </div>
         </div>
 
@@ -2641,7 +2648,7 @@
 
       // ============= DAILY QUOTA MANAGEMENT =============
       function getTodayDateString() {
-        return new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        return new Date().toISOString().split("T")[0]; // YYYY-MM-DD
       }
 
       function checkAndResetDailyQuota() {
@@ -2677,17 +2684,17 @@
 
       function updateDailyActionsDisplay() {
         const remaining = getRemainingDailyActions();
-        const display = document.getElementById('daily-actions-display');
-        const amount = document.getElementById('daily-actions-remaining');
-        
+        const display = document.getElementById("daily-actions-display");
+        const amount = document.getElementById("daily-actions-remaining");
+
         if (amount) amount.textContent = remaining;
-        
+
         if (display) {
-          display.classList.remove('low', 'empty');
+          display.classList.remove("low", "empty");
           if (remaining === 0) {
-            display.classList.add('empty');
+            display.classList.add("empty");
           } else if (remaining <= 3) {
-            display.classList.add('low');
+            display.classList.add("low");
           }
         }
       }
@@ -2878,7 +2885,9 @@
 
         // Check daily quota
         if (!canPerformAction()) {
-          showPopup("⏰ You've used all 10 actions for today!<br>Come back tomorrow to play more! 🌅");
+          showPopup(
+            "⏰ You've used all 10 actions for today!<br>Come back tomorrow to play more! 🌅"
+          );
           return;
         }
 
@@ -3705,7 +3714,9 @@
 
         // Check daily quota
         if (!canPerformAction()) {
-          showPopup("⏰ You've used all 10 actions for today!<br>Come back tomorrow to shop more! 🌅");
+          showPopup(
+            "⏰ You've used all 10 actions for today!<br>Come back tomorrow to shop more! 🌅"
+          );
           return;
         }
 
