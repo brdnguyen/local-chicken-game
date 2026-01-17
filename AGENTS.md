@@ -120,6 +120,12 @@ Visual progress bars show real-time percentages for each need:
 - Service Worker registered for app-like behavior
 - Persistent storage API requested
 
+### Secret Reset
+- **Tap the QR code in the Share tab 5 times** to trigger a complete game reset
+- Confirmation dialog prevents accidental resets
+- Resets: chicken, inventory, friends list, and money back to $5
+- Tap counter resets after 3 seconds of inactivity
+
 ### Friend System
 - QR code generated with chicken data (encoded as base64)
 - Format: `CHKN` + URL-safe base64 encoded JSON

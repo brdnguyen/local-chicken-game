@@ -2433,7 +2433,11 @@
           </p>
 
           <div class="qr-container">
-            <div id="qrcode"></div>
+            <div
+              id="qrcode"
+              onclick="handleQRTap()"
+              style="cursor: pointer"
+            ></div>
             <p style="margin-top: 10px; font-size: 0.8em; color: #888">
               Scan with camera or copy the code below
             </p>
@@ -2853,7 +2857,7 @@
       };
 
       // ============= GAME STATE =============
-      const GAME_VERSION = "0.13.0";
+      const GAME_VERSION = "0.14.0";
       const DAILY_ACTION_LIMIT = 10;
 
       let gameState = {
@@ -2868,6 +2872,67 @@
       };
 
       let selectedBreed = null;
+
+      // ============= SECRET RESET =============
+      let qrTapCount = 0;
+      let qrTapTimer = null;
+
+      function handleQRTap() {
+        qrTapCount++;
+
+        // Reset counter after 3 seconds of no taps
+        clearTimeout(qrTapTimer);
+        qrTapTimer = setTimeout(() => {
+          qrTapCount = 0;
+        }, 3000);
+
+        if (qrTapCount >= 5) {
+          qrTapCount = 0;
+          clearTimeout(qrTapTimer);
+          showResetConfirmation();
+        }
+      }
+
+      function showResetConfirmation() {
+        const popupContent = `
+          <div style="text-align: center;">
+            <div style="font-size: 2em; margin-bottom: 10px;">🔄 Secret Reset</div>
+            <p style="color: #666; margin-bottom: 15px;">Are you SURE you want to reset everything?<br>Your chicken, items, and friends will be deleted!</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+              <button class="btn small" onclick="hidePopup()" style="background: #95a5a6;">Cancel</button>
+              <button class="btn small" onclick="performSecretReset()" style="background: #e74c3c;">🗑️ Reset All</button>
+            </div>
+          </div>
+        `;
+        document.getElementById("popup-content").innerHTML = popupContent;
+        document.getElementById("popup").classList.remove("hidden");
+        document.getElementById("overlay").classList.remove("hidden");
+        // Remove the default onclick from overlay for this popup
+        document.getElementById("overlay").onclick = null;
+      }
+
+      function performSecretReset() {
+        // Clear all game data
+        localStorage.removeItem("chickenGame");
+        gameState = {
+          chicken: null,
+          friends: [],
+          lastUpdate: null,
+          money: 5,
+          inventory: [],
+          actionCount: 0,
+          dailyActions: 0,
+          dailyActionsDate: null,
+        };
+        hidePopup();
+        // Restore overlay onclick
+        document.getElementById("overlay").onclick = hidePopup;
+        showPopup("🐣 Game reset complete!<br>Starting fresh...");
+        setTimeout(() => {
+          hidePopup();
+          showScreen("setup-screen");
+        }, 1500);
+      }
 
       // ============= DAILY QUOTA MANAGEMENT =============
       function getTodayDateString() {
