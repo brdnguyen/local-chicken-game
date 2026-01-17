@@ -52,11 +52,41 @@ Visual progress bars show real-time percentages for each need:
 - 🔴 Red (0-39%): Critical (pulsing animation)
 
 ### Breeds Available
-- ISA Brown
-- Silkie
-- Leghorn
-- Plymouth Rock
-- Orpington
+Each breed has unique custom SVG graphics with breed-specific colors:
+
+| Breed | Body Color | Special Features |
+|-------|------------|------------------|
+| ISA Brown | Warm brown (#8B4513) | Classic farm chicken look |
+| Silkie | Cream/Beige (#F5F5DC) | Fluffy texture, purple comb |
+| Leghorn | Pure white (#FFFFFF) | Bright red comb |
+| Plymouth Rock | Grey (#606060) | Barred pattern stripes |
+| Orpington | Golden buff (#DAA520) | Rich golden feathers |
+
+### Graphics System
+The game uses **custom SVG graphics** that combine:
+- **Breed-specific coloring**: Each breed has unique body, wing, comb, wattle, beak, and feet colors
+- **Life stage rendering**: Different SVG artwork for egg, hatching, chick, and adult stages
+- **Wearable decorations**: Shop items visually appear ON the chicken
+- **Expressive eyes**: Happy (curved), sick (spiral), or normal based on health
+- **Smooth animations**: Bounce, wobble, and sleep animations via CSS
+
+#### Wearable Decorations (rendered on chicken)
+| Item | Visual Effect |
+|------|---------------|
+| 🌸 Flower Headband | Flower crown with pink blooms |
+| 👑 Royal Crown | Golden crown with gems |
+| 🧥 Cozy Jumper | Knitted sweater pattern |
+| 📿 Pearl Necklace | String of white pearls |
+| 🎀 Bow Tie | Pink bow at neck |
+| 🦸 Superhero Cape | Red flowing cape |
+| 🦄 Unicorn Horn | Rainbow horn with sparkles |
+| 🏴‍☠️ Pirate Eye Patch | Black eye patch |
+| 👒 Fancy Fascinator | Purple hat with feathers |
+| 🦆 Duck Disguise | Orange duck bill |
+| 🐼 Panda Mask | Black and white panda face |
+| 🤨 Silly Eyebrows | Wavy curved brows |
+| 😠 Angry Eyebrows | V-shaped angry brows |
+| 🥰 Cute Face Kit | Rosy cheeks, sparkly eyes |
 
 ### Shop Categories & Items
 

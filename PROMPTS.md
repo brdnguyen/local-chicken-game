@@ -68,7 +68,14 @@ auto create the commit with the right commit message + push + capture change log
     11. DONE - if an Action increases health (display the "going up" arrow in the health indicator. Display "money earned as my Health improves. Thanks for caring for me!!!")
 
 
-    -   BUG: fix graphics (Hatching should show a baby from the egg, then one week old, then baby chick (both showing the chickens only)
+    12. DONE: fix graphics (Hatching stage should show a baby from the egg, then one week old, then baby chick (both showing the chickens only)
+
+    -   Make beautiful graphics!!! (chicken + decoration, I want to have custom graphics,
+    not just discrete emoji.
+
+        For example, if a chicken at 20 weeks old , is ISA BROWN + have head band, I want to
+        custom-draw it.
+
 
     -   Various UI fix:
             -   make Days More prominent!!!
@@ -76,6 +83,10 @@ auto create the commit with the right commit message + push + capture change log
             -   secret to reset all stats to 0 (start again!)
 
     -   Allow multiple users on the same app (each having unique name locally)
+
+    -   control / Improve / review the lifecycle of health (how does it deteriorate? Especially
+    to take into account constraint only. 10 actions per day. ideally should be
+    able to backto green after 4-5 caring actions per day)
 
 
 

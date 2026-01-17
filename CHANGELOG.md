@@ -8,8 +8,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.15.0] - 2026-01-17
 
 ### Added
+- **Beautiful custom SVG graphics** replacing emoji-based chicken display!
+- Breed-specific appearance with unique colors:
+  - ISA Brown: Warm brown tones
+  - Silkie: Fluffy cream/beige with purple comb
+  - Leghorn: Clean white with red comb
+  - Plymouth Rock: Barred grey pattern
+  - Orpington: Golden buff coloring
+- Stage-based chicken rendering:
+  - Egg: Beautiful shaded egg with spots
+  - Hatching: Chick emerging from cracked shell
+  - Chick stages: Adorable fluffy baby chickens
+  - Adult stages: Full-grown chickens with combs and wattles
+- **Wearable decorations** now appear ON the chicken SVG:
+  - 🌸 Flower Headband: Colorful flower crown
+  - 👑 Royal Crown: Golden crown with gems
+  - 🧥 Cozy Jumper: Knitted sweater pattern
+  - 📿 Pearl Necklace: String of pearls
+  - 🎀 Bow Tie: Fancy pink bow
+  - 🦸 Superhero Cape: Flowing red cape
+  - 🦄 Unicorn Horn: Magical rainbow horn with sparkles
+  - 🏴‍☠️ Pirate Eye Patch: Eye patch accessory
+  - 👒 Fancy Fascinator: Elegant hat with feathers
+  - 🦆 Duck Disguise: Duck bill overlay
+  - 🐼 Panda Mask: Cute panda face
+  - 🤨 Silly Eyebrows: Wavy eyebrows
+  - 😠 Angry Eyebrows: V-shaped angry brows
+  - 🥰 Cute Face Kit: Rosy cheeks and sparkly eyes
+- Expression-based eye rendering:
+  - Happy eyes (curved) when happiness > 70%
+  - Sick spiral eyes when chicken is ill
+  - Normal eyes otherwise
+- Drop shadows and smooth animations for SVG graphics
+
+### Changed
 - Tips section at the top of the main screen (Chicken tab)
-- Helpful tip for first-time users: "Interact with your chicken in Caring Actions to advance time"
+- Helpful tip for first-time users about caring actions
 - Animated glow effect on tips to draw attention
 - Cute styling with dashed yellow border
 
