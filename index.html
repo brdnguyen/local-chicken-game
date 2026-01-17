@@ -1971,6 +1971,16 @@
         <h1>🐔 My Virtual Chicken 🐔</h1>
         <div
           style="
+            text-align: center;
+            color: #999;
+            font-size: 0.8em;
+            margin-top: -10px;
+          "
+        >
+          v<span id="version-display">0.8.0</span>
+        </div>
+        <div
+          style="
             font-size: 80px;
             text-align: center;
             margin: 20px 0;
@@ -2827,6 +2837,7 @@
       };
 
       // ============= GAME STATE =============
+      const GAME_VERSION = "0.8.0";
       const DAILY_ACTION_LIMIT = 10;
 
       let gameState = {
