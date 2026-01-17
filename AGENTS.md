@@ -84,6 +84,16 @@ A cute virtual chicken game for kids (8-12 year old) that runs as a local HTML f
 - Start with $5
 - Earn $1 per action (taking care of chicken)
 
+### Daily Usage Quota
+- **Maximum 10 actions per calendar day** (to prevent excessive use by kids!)
+- Actions include: caring actions (feed, water, etc.) and shop purchases
+- Counter resets at midnight (local time)
+- Display shows remaining actions: ⚡ X/10 today
+- Visual indicators:
+  - Blue: Normal (4+ actions remaining)
+  - Red/pulsing: Low (1-3 actions remaining)
+  - Grey: Empty (0 actions - come back tomorrow!)
+
 ## Technical Features
 
 ### Data Persistence

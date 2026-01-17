@@ -1665,6 +1665,55 @@
         border: 2px solid #ff8c00;
       }
 
+      .status-bar {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 5px;
+      }
+
+      .daily-actions-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .daily-actions-display {
+        background: linear-gradient(135deg, #87ceeb 0%, #4169e1 100%);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 1.1em;
+        display: inline-block;
+        margin: 10px 0 2px 0;
+        box-shadow: 0 3px 10px rgba(65, 105, 225, 0.3);
+        border: 2px solid #1e90ff;
+      }
+
+      .daily-actions-legend {
+        font-size: 0.7em;
+        color: #888;
+        margin-bottom: 5px;
+      }
+
+      .daily-actions-display.low {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+        border-color: #dc3545;
+        animation: pulse 1s infinite;
+      }
+
+      .daily-actions-display.empty {
+        background: linear-gradient(135deg, #808080 0%, #696969 100%);
+        border-color: #555;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+
       .shop-categories {
         display: flex;
         gap: 8px;
@@ -1925,8 +1974,14 @@
 
       <!-- Main Game Screen -->
       <div id="game-screen" class="screen">
-        <div style="text-align: center">
+        <div class="status-bar">
           <div class="money-display">💰 $<span id="money-amount">5</span></div>
+          <div class="daily-actions-wrapper">
+            <div class="daily-actions-display" id="daily-actions-display">
+              ⚡ <span id="daily-actions-remaining">10</span>/10 today
+            </div>
+            <div class="daily-actions-legend">remaining allowed actions today</div>
+          </div>
         </div>
 
         <div class="nav-bar">
@@ -2569,6 +2624,8 @@
       };
 
       // ============= GAME STATE =============
+      const DAILY_ACTION_LIMIT = 10;
+
       let gameState = {
         chicken: null,
         friends: [],
@@ -2576,20 +2633,82 @@
         money: 5,
         inventory: [],
         actionCount: 0, // Track actions for time passing
+        dailyActions: 0, // Track daily actions for quota
+        dailyActionsDate: null, // The date of last action (YYYY-MM-DD)
       };
 
       let selectedBreed = null;
 
+      // ============= DAILY QUOTA MANAGEMENT =============
+      function getTodayDateString() {
+        return new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      }
+
+      function checkAndResetDailyQuota() {
+        const today = getTodayDateString();
+        if (gameState.dailyActionsDate !== today) {
+          // New day - reset the counter!
+          gameState.dailyActions = 0;
+          gameState.dailyActionsDate = today;
+          saveGame();
+        }
+      }
+
+      function canPerformAction() {
+        checkAndResetDailyQuota();
+        return gameState.dailyActions < DAILY_ACTION_LIMIT;
+      }
+
+      function consumeDailyAction() {
+        checkAndResetDailyQuota();
+        if (gameState.dailyActions < DAILY_ACTION_LIMIT) {
+          gameState.dailyActions++;
+          saveGame();
+          updateDailyActionsDisplay();
+          return true;
+        }
+        return false;
+      }
+
+      function getRemainingDailyActions() {
+        checkAndResetDailyQuota();
+        return DAILY_ACTION_LIMIT - gameState.dailyActions;
+      }
+
+      function updateDailyActionsDisplay() {
+        const remaining = getRemainingDailyActions();
+        const display = document.getElementById('daily-actions-display');
+        const amount = document.getElementById('daily-actions-remaining');
+        
+        if (amount) amount.textContent = remaining;
+        
+        if (display) {
+          display.classList.remove('low', 'empty');
+          if (remaining === 0) {
+            display.classList.add('empty');
+          } else if (remaining <= 3) {
+            display.classList.add('low');
+          }
+        }
+      }
+
       // ============= INITIALIZATION =============
       function init() {
         loadGame();
+        checkAndResetDailyQuota();
         if (gameState.chicken) {
           updateGame();
           updateMoneyDisplay();
+          updateDailyActionsDisplay();
           showScreen("game-screen");
         }
         // Update game every minute
         setInterval(updateGame, 60000);
+        // Check for day change every minute
+        setInterval(() => {
+          checkAndResetDailyQuota();
+          updateDailyActionsDisplay();
+        }, 60000);
       }
 
       // ============= SCREEN MANAGEMENT =============
@@ -2756,6 +2875,15 @@
 
       function doAction(action) {
         if (!gameState.chicken) return;
+
+        // Check daily quota
+        if (!canPerformAction()) {
+          showPopup("⏰ You've used all 10 actions for today!<br>Come back tomorrow to play more! 🌅");
+          return;
+        }
+
+        // Consume a daily action
+        consumeDailyAction();
 
         // Track actions for time passing
         gameState.actionCount = (gameState.actionCount || 0) + 1;
@@ -3575,6 +3703,12 @@
           return;
         }
 
+        // Check daily quota
+        if (!canPerformAction()) {
+          showPopup("⏰ You've used all 10 actions for today!<br>Come back tomorrow to shop more! 🌅");
+          return;
+        }
+
         if (gameState.inventory.includes(itemId)) {
           showPopup("🛒 You already have this item!");
           return;
@@ -3586,6 +3720,9 @@
           );
           return;
         }
+
+        // Consume a daily action for the purchase
+        consumeDailyAction();
 
         gameState.money -= item.price;
         gameState.inventory.push(itemId);
