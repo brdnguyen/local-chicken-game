@@ -42,11 +42,43 @@ A cute virtual chicken game for kids (8-12 year old) that runs as a local HTML f
 - Plymouth Rock
 - Orpington
 
-### Shop Items ($1 each)
-- 🥚 Fake Chicken Eggs - +10 happiness
-- 🥤 Cup & Water Set - 30% slower thirst decay
-- 🌻 Fancy Seeds - 30% slower hunger decay
-- 🎀 Chicken Toy - 30% slower happiness decay
+### Shop Categories & Items
+
+#### ✨ Decorations (Make your chicken pretty!)
+| Item | Price | Effect |
+|------|-------|--------|
+| 🌸 Flower Headband | $2 | +5 happiness |
+| 🧥 Cozy Jumper | $3 | +5 happiness |
+| 📿 Pearl Necklace | $2 | +5 happiness |
+| 🏷️ Custom Nametag | $1 | +3 happiness |
+| 🦆 Duck Disguise Kit | $3 | +8 happiness |
+| 🐼 Panda Face Mask | $3 | +8 happiness |
+| 🏴‍☠️ Pirate Eye Patch | $2 | +6 happiness |
+| 🤨 Silly Eyebrows | $1 | +4 happiness |
+| 😠 Angry Eyebrows | $1 | +4 happiness |
+| 👒 Fancy Fascinator | $3 | +7 happiness |
+| 🥰 Cute Face Kit | $2 | +6 happiness |
+| 🦄 Unicorn Horn | $4 | +10 happiness |
+| 🦸 Superhero Cape | $3 | +8 happiness |
+| 🎀 Fancy Bow Tie | $2 | +5 happiness |
+| 👑 Royal Crown | $5 | +12 happiness |
+
+#### 💊 Health (Keep your chicken healthy!)
+| Item | Price | Effect |
+|------|-------|--------|
+| 💊 Daily Vitamins | $2 | 30% slower hunger decay |
+| ✨ Feather Polish | $2 | 30% slower cleanliness decay |
+| 🌱 Growth Vitamin | $3 | +10 happiness |
+| 💉 De-worm Tablets | $2 | 50% reduced sickness |
+
+#### 🎮 Toys (Fun stuff to play with!)
+| Item | Price | Effect |
+|------|-------|--------|
+| 🪱 Fake Worm | $1 | +5 happiness |
+| 🤖 Robot Chicken Friend | $4 | 30% slower boredom |
+| 📻 Chicken Walky-Talky | $3 | +8 happiness |
+| 🖼️ Photo of Itself | $2 | +6 happiness |
+| 🪞 Chicken Mirror | $2 | 20% slower boredom |
 
 ### Economy
 - Start with $5

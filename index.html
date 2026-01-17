@@ -1665,6 +1665,52 @@
         border: 2px solid #ff8c00;
       }
 
+      .shop-categories {
+        display: flex;
+        gap: 8px;
+        margin: 15px 0;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .category-btn {
+        padding: 10px 15px;
+        border: 3px solid #ddd;
+        border-radius: 20px;
+        background: white;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .category-btn:active {
+        transform: scale(0.95);
+      }
+
+      .category-btn.active {
+        border-color: #ff69b4;
+        background: linear-gradient(135deg, #fff0f5, #ffe4ec);
+        color: #d63384;
+      }
+
+      #cat-decorations.active {
+        border-color: #ff69b4;
+        background: linear-gradient(135deg, #fff0f5, #ffe4ec);
+      }
+
+      #cat-health.active {
+        border-color: #32cd32;
+        background: linear-gradient(135deg, #f0fff0, #e0ffe0);
+        color: #228b22;
+      }
+
+      #cat-toys.active {
+        border-color: #4169e1;
+        background: linear-gradient(135deg, #f0f8ff, #e0ecff);
+        color: #1e40af;
+      }
+
       .shop-item {
         background: #fff9e6;
         border: 3px solid #ffd700;
@@ -1676,9 +1722,25 @@
         gap: 12px;
       }
 
+      .shop-item.decorations {
+        background: #fff0f5;
+        border-color: #ff69b4;
+      }
+
+      .shop-item.health {
+        background: #f0fff0;
+        border-color: #32cd32;
+      }
+
+      .shop-item.toys {
+        background: #f0f8ff;
+        border-color: #4169e1;
+      }
+
       .shop-item.owned {
         background: #e8f5e9;
         border-color: #81c784;
+        opacity: 0.8;
       }
 
       .shop-item .item-icon {
@@ -1999,6 +2061,30 @@
             Buy cute stuff for your chicken! 🎁
           </p>
 
+          <div class="shop-categories">
+            <button
+              class="category-btn active"
+              onclick="showShopCategory('decorations')"
+              id="cat-decorations"
+            >
+              ✨ Decorations
+            </button>
+            <button
+              class="category-btn"
+              onclick="showShopCategory('health')"
+              id="cat-health"
+            >
+              💊 Health
+            </button>
+            <button
+              class="category-btn"
+              onclick="showShopCategory('toys')"
+              id="cat-toys"
+            >
+              🎮 Toys
+            </button>
+          </div>
+
           <div id="shop-items"></div>
 
           <h2>🎒 My Items</h2>
@@ -2132,39 +2218,268 @@
         bored: { icon: "😐", text: "Bored", priority: 1 },
       };
 
-      // Shop items
+      // Shop items organized by category
+      const SHOP_CATEGORIES = {
+        decorations: {
+          name: "✨ Decorations",
+          description: "Make your chicken pretty!",
+          color: "#ff69b4",
+        },
+        health: {
+          name: "💊 Health",
+          description: "Keep your chicken healthy!",
+          color: "#32cd32",
+        },
+        toys: {
+          name: "🎮 Toys",
+          description: "Fun stuff to play with!",
+          color: "#4169e1",
+        },
+      };
+
       const SHOP_ITEMS = {
-        "fake-eggs": {
-          id: "fake-eggs",
-          name: "Fake Chicken Eggs",
-          icon: "🥚",
+        // === DECORATIONS ===
+        headband: {
+          id: "headband",
+          name: "Flower Headband",
+          icon: "🌸",
+          price: 2,
+          category: "decorations",
+          description: "A cute flower crown for your chicken!",
+          effect: { happiness: 5 },
+          displayIcon: "🌸",
+        },
+        jumper: {
+          id: "jumper",
+          name: "Cozy Jumper",
+          icon: "🧥",
+          price: 3,
+          category: "decorations",
+          description: "A warm knitted sweater. So stylish!",
+          effect: { happiness: 5 },
+          displayIcon: "🧶",
+        },
+        necklace: {
+          id: "necklace",
+          name: "Pearl Necklace",
+          icon: "📿",
+          price: 2,
+          category: "decorations",
+          description: "Elegant pearls for a fancy chicken!",
+          effect: { happiness: 5 },
+          displayIcon: "💎",
+        },
+        nametag: {
+          id: "nametag",
+          name: "Custom Nametag",
+          icon: "🏷️",
           price: 1,
-          description: "Cute decorative eggs! Makes chicken +10 happier.",
+          category: "decorations",
+          description: "Everyone will know your chicken's name!",
+          effect: { happiness: 3 },
+          displayIcon: "🏷️",
+        },
+        "duck-kit": {
+          id: "duck-kit",
+          name: "Duck Disguise Kit",
+          icon: "🦆",
+          price: 3,
+          category: "decorations",
+          description: "Quack quack! Pretend to be a duck!",
+          effect: { happiness: 8 },
+          displayIcon: "🦆",
+        },
+        "panda-face": {
+          id: "panda-face",
+          name: "Panda Face Mask",
+          icon: "🐼",
+          price: 3,
+          category: "decorations",
+          description: "The cutest panda-chicken ever!",
+          effect: { happiness: 8 },
+          displayIcon: "🐼",
+        },
+        "eye-patch": {
+          id: "eye-patch",
+          name: "Pirate Eye Patch",
+          icon: "🏴‍☠️",
+          price: 2,
+          category: "decorations",
+          description: "Arrr! A fearsome pirate chicken!",
+          effect: { happiness: 6 },
+          displayIcon: "☠️",
+        },
+        "fake-eyebrows": {
+          id: "fake-eyebrows",
+          name: "Silly Eyebrows",
+          icon: "🤨",
+          price: 1,
+          category: "decorations",
+          description: "Bushy funny eyebrows! So goofy!",
+          effect: { happiness: 4 },
+          displayIcon: "🥸",
+        },
+        "angry-eyebrows": {
+          id: "angry-eyebrows",
+          name: "Angry Eyebrows",
+          icon: "😠",
+          price: 1,
+          category: "decorations",
+          description: "Grrrr! Look tough and serious!",
+          effect: { happiness: 4 },
+          displayIcon: "😤",
+        },
+        "fascinator-hat": {
+          id: "fascinator-hat",
+          name: "Fancy Fascinator",
+          icon: "👒",
+          price: 3,
+          category: "decorations",
+          description: "An elegant hat with feathers! So fancy!",
+          effect: { happiness: 7 },
+          displayIcon: "🎩",
+        },
+        "cute-face-kit": {
+          id: "cute-face-kit",
+          name: "Cute Face Kit",
+          icon: "🥰",
+          price: 2,
+          category: "decorations",
+          description: "Rosy cheeks, sparkly eyes, so kawaii!",
+          effect: { happiness: 6 },
+          displayIcon: "✨",
+        },
+        "unicorn-horn": {
+          id: "unicorn-horn",
+          name: "Unicorn Horn",
+          icon: "🦄",
+          price: 4,
+          category: "decorations",
+          description: "A magical sparkly horn! So majestic!",
           effect: { happiness: 10 },
+          displayIcon: "🦄",
         },
-        "cup-water-set": {
-          id: "cup-water-set",
-          name: "Cup & Water Set",
-          icon: "🥤",
-          price: 1,
-          description: "Fancy drinking set! Water lasts longer.",
-          effect: { thirstDecayReduction: 0.3 },
+        "superhero-cape": {
+          id: "superhero-cape",
+          name: "Superhero Cape",
+          icon: "🦸",
+          price: 3,
+          category: "decorations",
+          description: "Up, up and away! Super Chicken!",
+          effect: { happiness: 8 },
+          displayIcon: "🦸",
         },
-        "fancy-seeds": {
-          id: "fancy-seeds",
-          name: "Fancy Seeds",
-          icon: "🌻",
-          price: 1,
-          description: "Delicious premium seeds! Food lasts longer.",
-          effect: { hungerDecayReduction: 0.3 },
-        },
-        "chicken-toy": {
-          id: "chicken-toy",
-          name: "Chicken Toy",
+        "bow-tie": {
+          id: "bow-tie",
+          name: "Fancy Bow Tie",
           icon: "🎀",
+          price: 2,
+          category: "decorations",
+          description: "Looking dapper and sophisticated!",
+          effect: { happiness: 5 },
+          displayIcon: "🎀",
+        },
+        crown: {
+          id: "crown",
+          name: "Royal Crown",
+          icon: "👑",
+          price: 5,
+          category: "decorations",
+          description: "All hail the Chicken Queen/King!",
+          effect: { happiness: 12 },
+          displayIcon: "👑",
+        },
+        // === HEALTH ===
+        vitamins: {
+          id: "vitamins",
+          name: "Daily Vitamins",
+          icon: "💊",
+          price: 2,
+          category: "health",
+          description: "Boosts overall health! Slower hunger decay.",
+          effect: { hungerDecayReduction: 0.3 },
+          displayIcon: "💊",
+        },
+        "feather-polish": {
+          id: "feather-polish",
+          name: "Feather Polish",
+          icon: "✨",
+          price: 2,
+          category: "health",
+          description: "Shiny feathers! Slower cleanliness decay.",
+          effect: { cleanlinessDecayReduction: 0.3 },
+          displayIcon: "✨",
+        },
+        "growth-vitamin": {
+          id: "growth-vitamin",
+          name: "Growth Vitamin",
+          icon: "🌱",
+          price: 3,
+          category: "health",
+          description: "Helps your chicken grow strong!",
+          effect: { happiness: 10 },
+          displayIcon: "🌱",
+        },
+        "deworm-tablets": {
+          id: "deworm-tablets",
+          name: "De-worm Tablets",
+          icon: "💉",
+          price: 2,
+          category: "health",
+          description: "Keeps parasites away! Reduces sickness.",
+          effect: { sickReduction: 0.5 },
+          displayIcon: "🩺",
+        },
+        // === TOYS ===
+        "fake-worm": {
+          id: "fake-worm",
+          name: "Fake Worm",
+          icon: "🪱",
           price: 1,
-          description: "A fun toy to play with! Less boredom.",
+          category: "toys",
+          description: "A wiggly toy worm! +5 happiness.",
+          effect: { happiness: 5 },
+          displayIcon: "🪱",
+        },
+        "robot-friend": {
+          id: "robot-friend",
+          name: "Robot Chicken Friend",
+          icon: "🤖",
+          price: 4,
+          category: "toys",
+          description: "A robot buddy! Slower boredom.",
           effect: { happinessDecayReduction: 0.3 },
+          displayIcon: "🤖",
+        },
+        "walky-talky": {
+          id: "walky-talky",
+          name: "Chicken Walky-Talky",
+          icon: "📻",
+          price: 3,
+          category: "toys",
+          description: "Bawk bawk into the microphone!",
+          effect: { happiness: 8 },
+          displayIcon: "📻",
+        },
+        "chicken-photo": {
+          id: "chicken-photo",
+          name: "Photo of Itself",
+          icon: "🖼️",
+          price: 2,
+          category: "toys",
+          description: "A framed selfie! Your chicken loves it.",
+          effect: { happiness: 6 },
+          displayIcon: "📸",
+        },
+        mirror: {
+          id: "mirror",
+          name: "Chicken Mirror",
+          icon: "🪞",
+          price: 2,
+          category: "toys",
+          description: "Who's that pretty chicken? Less boredom!",
+          effect: { happinessDecayReduction: 0.2 },
+          displayIcon: "🪞",
         },
       };
 
@@ -2382,15 +2697,24 @@
         let hungerDecay = decay;
         let thirstDecay = decay * 1.2;
         let happinessDecay = decay * 0.2;
+        let cleanlinessDecay = decay * 0.3;
+        let sickChance = 0.1;
 
-        if (gameState.inventory.includes("fancy-seeds")) {
+        // Apply item effects
+        if (gameState.inventory.includes("vitamins")) {
           hungerDecay *= 0.7; // 30% slower hunger decay
         }
-        if (gameState.inventory.includes("cup-water-set")) {
-          thirstDecay *= 0.7; // 30% slower thirst decay
+        if (gameState.inventory.includes("feather-polish")) {
+          cleanlinessDecay *= 0.7; // 30% slower cleanliness decay
         }
-        if (gameState.inventory.includes("chicken-toy")) {
+        if (gameState.inventory.includes("robot-friend")) {
           happinessDecay *= 0.7; // 30% slower happiness decay
+        }
+        if (gameState.inventory.includes("mirror")) {
+          happinessDecay *= 0.8; // 20% slower happiness decay
+        }
+        if (gameState.inventory.includes("deworm-tablets")) {
+          sickChance *= 0.5; // 50% less chance of sickness
         }
 
         gameState.chicken.needs.hunger = Math.max(
@@ -2403,7 +2727,7 @@
         );
         gameState.chicken.needs.cleanliness = Math.max(
           0,
-          gameState.chicken.needs.cleanliness - decay * 0.3
+          gameState.chicken.needs.cleanliness - cleanlinessDecay
         );
         gameState.chicken.needs.sleep = Math.max(
           0,
@@ -2421,7 +2745,7 @@
         // Check if chicken gets sick (if needs are too low)
         const avgNeeds =
           Object.values(gameState.chicken.needs).reduce((a, b) => a + b, 0) / 6;
-        if (avgNeeds < 30 && Math.random() < 0.1) {
+        if (avgNeeds < 30 && Math.random() < sickChance) {
           gameState.chicken.isSick = true;
         }
 
@@ -3165,14 +3489,35 @@
       }
 
       // ============= SHOP SYSTEM =============
+      let currentShopCategory = "decorations";
+
+      function showShopCategory(category) {
+        currentShopCategory = category;
+
+        // Update category button states
+        document.querySelectorAll(".category-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        document.getElementById("cat-" + category).classList.add("active");
+
+        renderShop();
+      }
+
       function renderShop() {
         const shopDiv = document.getElementById("shop-items");
 
-        shopDiv.innerHTML = Object.values(SHOP_ITEMS)
+        // Filter items by current category
+        const categoryItems = Object.values(SHOP_ITEMS).filter(
+          (item) => item.category === currentShopCategory
+        );
+
+        shopDiv.innerHTML = categoryItems
           .map((item) => {
             const owned = gameState.inventory.includes(item.id);
             return `
-                    <div class="shop-item ${owned ? "owned" : ""}">
+                    <div class="shop-item ${item.category} ${
+              owned ? "owned" : ""
+            }">
                         <div class="item-icon">${item.icon}</div>
                         <div class="item-info">
                             <div class="item-name">${item.name}</div>
@@ -3194,19 +3539,26 @@
       function renderInventory() {
         const invDiv = document.getElementById("inventory");
 
-        if (gameState.inventory.length === 0) {
+        // Filter out any old items that no longer exist in shop
+        const validItems = gameState.inventory.filter(
+          (itemId) => SHOP_ITEMS[itemId]
+        );
+
+        if (validItems.length === 0) {
           invDiv.innerHTML =
             '<p style="text-align: center; color: #888; width: 100%;">No items yet! 🛒</p>';
           return;
         }
 
-        invDiv.innerHTML = gameState.inventory
+        invDiv.innerHTML = validItems
           .map((itemId) => {
             const item = SHOP_ITEMS[itemId];
             return `
-                    <div class="inventory-item">
-                        <div class="item-emoji">${item.icon}</div>
-                        <div style="font-size: 0.75em;">${
+                    <div class="inventory-item" title="${item.name}">
+                        <div class="item-emoji">${
+                          item.displayIcon || item.icon
+                        }</div>
+                        <div style="font-size: 0.7em; text-align: center;">${
                           item.name.split(" ")[0]
                         }</div>
                     </div>
@@ -3217,6 +3569,11 @@
 
       function buyItem(itemId) {
         const item = SHOP_ITEMS[itemId];
+
+        if (!item) {
+          showPopup("🙈 Item not found!");
+          return;
+        }
 
         if (gameState.inventory.includes(itemId)) {
           showPopup("🛒 You already have this item!");
@@ -3233,11 +3590,11 @@
         gameState.money -= item.price;
         gameState.inventory.push(itemId);
 
-        // Apply immediate happiness boost for fake eggs
-        if (itemId === "fake-eggs" && gameState.chicken) {
+        // Apply immediate happiness boost if item has happiness effect
+        if (item.effect && item.effect.happiness && gameState.chicken) {
           gameState.chicken.needs.happiness = Math.min(
             100,
-            gameState.chicken.needs.happiness + 10
+            gameState.chicken.needs.happiness + item.effect.happiness
           );
         }
 
