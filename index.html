@@ -1921,21 +1921,36 @@
               </div>
               <div
                 style="
-                  background: #fff3e0;
-                  padding: 5px 12px;
+                  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+                  padding: 8px 15px;
                   border-radius: 15px;
-                  font-weight: 600;
+                  font-weight: 700;
+                  font-size: 1.1em;
+                  border: 2px solid #ffb74d;
+                  box-shadow: 0 2px 8px rgba(255, 183, 77, 0.3);
                 "
               >
-                📅 <span id="chicken-age">0 days</span>
+                📅 Day <span id="chicken-age">0</span>
               </div>
             </div>
             <div
-              style="font-size: 0.85em; color: #888; margin-bottom: 8px"
+              style="
+                font-size: 0.9em;
+                color: #666;
+                margin: 10px 0;
+                padding: 10px;
+                background: #f5f5f5;
+                border-radius: 10px;
+                text-align: center;
+              "
               id="action-progress"
             >
-              ⏰ Next time skip: <span id="actions-until-skip">2</span> more
-              actions
+              ⏰
+              <strong
+                ><span id="actions-until-skip">2</span> more caring
+                actions</strong
+              >
+              to advance time (+10 days)
             </div>
             <div class="lifecycle-bar">
               <div
@@ -1951,7 +1966,7 @@
             <span class="status-item">😊 Happy</span>
           </div>
 
-          <h2>🎮 Actions</h2>
+          <h2>🎮 Caring Actions</h2>
           <div class="action-buttons">
             <button class="btn small green" onclick="doAction('feed')">
               🌾 Feed
@@ -2549,8 +2564,7 @@
           "display-owner"
         ).textContent = `Owner: ${chicken.owner}`;
         document.getElementById("life-stage").textContent = currentStage.name;
-        document.getElementById("chicken-age").textContent =
-          formatAge(ageInDays);
+        document.getElementById("chicken-age").textContent = ageInDays;
 
         // Update action counter display
         const actionsUntilSkip = 2 - (gameState.actionCount || 0);
