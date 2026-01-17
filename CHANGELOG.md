@@ -5,6 +5,18 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.1] - 2026-01-17
+
+### Added
+- **Debug gallery page** (`index-debug.html`) for viewing all SVG graphics
+  - Breeds section: All 5 breeds at adult stage with color palettes
+  - Life Stages section: Complete lifecycle from egg to mature chicken
+  - Wearable Decorations section: All 14 decoration items on chickens
+  - Expressions section: Happy, Normal, and Sick eye states
+  - Silkie Special section: Fluffy breed through stages
+  - Plymouth Rock section: Barred pattern breed through stages
+  - Combination Examples section: Creative breed + decoration combos
+
 ## [0.15.0] - 2026-01-17
 
 ### Added
