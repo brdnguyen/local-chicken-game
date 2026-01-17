@@ -2364,11 +2364,30 @@
       }
 
       function generateVisualCode(code) {
-        // Use qrcode-generator library (loaded from CDN)
-        // Type 0 = auto-detect version based on data length
-        const qr = qrcode(0, "L");
-        qr.addData(code);
-        qr.make();
+        // Use qrcode-generator library (embedded for offline use)
+        // Calculate appropriate type number based on data length
+        // Type 4 with L error correction can hold up to 78 characters
+        let typeNumber = 4;
+        if (code.length > 78) typeNumber = 6;
+        if (code.length > 134) typeNumber = 8;
+        if (code.length > 192) typeNumber = 10;
+        
+        let qr;
+        try {
+          qr = qrcode(typeNumber, "L");
+          qr.addData(code);
+          qr.make();
+        } catch (e) {
+          // If it fails, try a larger type
+          try {
+            qr = qrcode(typeNumber + 2, "L");
+            qr.addData(code);
+            qr.make();
+          } catch (e2) {
+            console.error("QR code generation failed:", e2);
+            return '<div style="padding: 20px; color: #666;">QR code unavailable</div>';
+          }
+        }
 
         const size = qr.getModuleCount();
         const pixelSize = Math.max(5, Math.floor(180 / size));
