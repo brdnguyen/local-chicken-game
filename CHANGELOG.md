@@ -5,6 +5,24 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.0] - 2026-01-17
+
+### Changed
+- **Cuter kawaii-style chicken graphics** with Sanrio-inspired facial expressions!
+  - Bigger oval eyes with multiple sparkle highlights for that "kawaii look"
+  - Always-visible rosy cheeks on all chickens (pink blush gradient)
+  - Rounded ellipse beaks instead of angular polygons
+  - Enhanced happy expression with wider ∪ curves
+  - Improved sick spiral eyes with proper swirl animation paths
+  - Added eye gradient for depth and life
+
+### Refactored
+- **SVG code deduplication**: Moved all chicken SVG generation code to shared `chicken-svg.js`
+  - Reduced index.html by ~940 lines of code
+  - Reduced index-debug.html by ~470 lines of code
+  - Both files now import shared code via `<script src="chicken-svg.js">`
+  - Easier maintenance: update graphics in one place
+
 ## [0.15.1] - 2026-01-17
 
 ### Added
