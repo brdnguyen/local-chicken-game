@@ -1089,24 +1089,146 @@
       }
 
       .chicken-display {
-        background: #fffacd;
+        background: linear-gradient(180deg, #fffacd 0%, #fff8dc 100%);
         border: 3px solid #ffd700;
-        border-radius: 15px;
-        padding: 15px;
+        border-radius: 20px;
+        padding: 20px;
         margin: 10px 0;
         text-align: center;
+        position: relative;
+        overflow: hidden;
       }
 
-      .ascii-art {
-        font-family: "Courier New", monospace;
-        font-size: 12px;
-        line-height: 1.2;
-        white-space: pre;
-        background: #fff8dc;
-        padding: 10px;
-        border-radius: 10px;
-        display: inline-block;
-        margin: 10px 0;
+      .chicken-display::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 215, 0, 0.1) 0%,
+          transparent 70%
+        );
+        animation: shimmer 3s ease-in-out infinite;
+      }
+
+      @keyframes shimmer {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(180deg);
+        }
+      }
+
+      .chicken-art {
+        font-size: 80px;
+        line-height: 1;
+        margin: 15px 0;
+        position: relative;
+        z-index: 1;
+        animation: bounce 2s ease-in-out infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      .chicken-art.sleeping {
+        animation: sleep 3s ease-in-out infinite;
+      }
+
+      @keyframes sleep {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-5deg);
+        }
+        50% {
+          transform: translateY(2px) rotate(5deg);
+        }
+      }
+
+      .chicken-art.sick {
+        animation: wobble 1s ease-in-out infinite;
+        filter: saturate(0.7);
+      }
+
+      @keyframes wobble {
+        0%,
+        100% {
+          transform: rotate(-3deg);
+        }
+        50% {
+          transform: rotate(3deg);
+        }
+      }
+
+      .chicken-art.happy {
+        animation: happy-bounce 0.5s ease-in-out infinite;
+      }
+
+      @keyframes happy-bounce {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-12px) scale(1.05);
+        }
+      }
+
+      .chicken-stage-label {
+        font-size: 0.9em;
+        color: #888;
+        margin-top: 5px;
+        font-weight: 500;
+      }
+
+      .chicken-accessories {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        display: flex;
+        gap: 5px;
+        z-index: 2;
+      }
+
+      .chicken-mood {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        font-size: 28px;
+        animation: float 2s ease-in-out infinite;
+        z-index: 2;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(-50%) translateX(0);
+          opacity: 1;
+        }
+        50% {
+          transform: translateY(-60%) translateX(5px);
+          opacity: 0.8;
+        }
+      }
+
+      .ground-decoration {
+        margin-top: 10px;
+        font-size: 20px;
+        opacity: 0.7;
       }
 
       .status-bar {
@@ -1638,7 +1760,19 @@
       <!-- Welcome Screen -->
       <div id="welcome-screen" class="screen active">
         <h1>🐔 My Virtual Chicken 🐔</h1>
-        <div class="ascii-art">\\ _ \\ / \ || ( @ > || \__/ // ||// ^^</div>
+        <div
+          style="
+            font-size: 80px;
+            text-align: center;
+            margin: 20px 0;
+            animation: bounce 2s ease-in-out infinite;
+          "
+        >
+          🐔
+        </div>
+        <div style="text-align: center; font-size: 20px; margin-bottom: 15px">
+          🌾🌿🌾🌿🌾
+        </div>
         <p style="text-align: center; margin: 15px 0; color: #666">
           Welcome to the cutest chicken game ever! 🌸<br />
           Raise your own virtual chicken!
@@ -1759,7 +1893,13 @@
         <!-- Chicken Tab -->
         <div id="chicken-tab" class="tab-content">
           <div class="chicken-display">
-            <div id="chicken-ascii" class="ascii-art"></div>
+            <div class="chicken-accessories" id="chicken-accessories"></div>
+            <div class="chicken-mood" id="chicken-mood"></div>
+            <div id="chicken-art" class="chicken-art">🐣</div>
+            <div class="chicken-stage-label" id="chicken-stage-label">
+              Baby Chick
+            </div>
+            <div class="ground-decoration">🌿🌾🌿🌾🌿</div>
             <h2 id="display-name">Clucky</h2>
             <p id="display-breed" style="color: #888">ISA Brown</p>
             <p id="display-owner" style="color: #666; font-size: 0.9em">
@@ -1986,102 +2126,89 @@
         },
       };
 
-      // ASCII Art for different stages
-      const ASCII_ART = {
-        egg: `
-      ___
-     /   \\
-    |     |
-    |     |
-     \\___/
-      🥚
-`,
-        hatching: `
-      ___
-     / ^ \\
-    | o o |
-    |  >  |
-     \\___/
-    crack!
-`,
-        chick: `
-      __
-     (o>
-    \\(_\\
-      ^^
-     peep!
-`,
-        "chick-week": `
-       __
-      (o>
-    \\\\(_\\
-     \` ^^
-    chirp!
-`,
-        pullet: `
-      \\\\
-    _  \\\\
-   / \\  ||
-  ( @ > ||
-   \\__///
-    ||//
-    ^^
-`,
-        pullet2: `
-       \\\\
-     _  \\\\
-    / \\  ||
-   ( @)> ||
-    \\__///
-     ||//
-     ^^
-`,
-        teenager: `
-        \\\\
-      _  \\\\
-     /,\\  ||
-    ( @)> ||
-     \\__///
-      ||//
-      ^^
-`,
-        laying: `
-        \\\\
-      _  \\\\
-     /,\\  ||
-    ( @)> ||
-     \\__///
-      ||//
-      ^^  🥚
-`,
-        adult: `
-         \\\\
-       _  \\\\
-      /,\\  ||
-     ( @)> ||
-      \\__///
-       ||//
-       ^^
-      proud!
-`,
-        mature: `
-          \\\\
-        _  \\\\
-       /,\\  ||
-      ( @)> ||  ⭐
-       \\__///
-        ||//
-        ^^
-`,
-        sick: `
-      \\\\
-    _  \\\\
-   / \\  ||
-  ( x > ||
-   \\__///
-    ||//  💊
-    ^^
-`,
+      // Cute emoji graphics for different stages
+      const CHICKEN_GRAPHICS = {
+        egg: {
+          emoji: "🥚",
+          label: "Egg",
+          size: "70px",
+          ground: "🌾🪹🌾",
+        },
+        hatching: {
+          emoji: "🥚✨",
+          label: "Hatching!",
+          size: "70px",
+          ground: "🌾✨🌾",
+          animation: "wobble",
+        },
+        chick: {
+          emoji: "🐣",
+          label: "Baby Chick",
+          size: "80px",
+          ground: "🌿🌾🌿",
+        },
+        "chick-week": {
+          emoji: "🐤",
+          label: "1 Week Old Chick",
+          size: "80px",
+          ground: "🌿🌾🌿🌾",
+        },
+        pullet: {
+          emoji: "🐥",
+          label: "Growing Chick",
+          size: "85px",
+          ground: "🌾🌿🌾🌿",
+        },
+        pullet2: {
+          emoji: "🐥",
+          label: "Young Pullet",
+          size: "90px",
+          ground: "🌿🌾🌿🌾🌿",
+        },
+        teenager: {
+          emoji: "🐔",
+          label: "Teenage Chicken",
+          size: "95px",
+          ground: "🌾🌿🌾🌿🌾",
+        },
+        laying: {
+          emoji: "🐔",
+          label: "Laying Hen",
+          size: "100px",
+          ground: "🌿🥚🌿🥚🌿",
+          accessory: "🥚",
+        },
+        adult: {
+          emoji: "🐔",
+          label: "Adult Chicken",
+          size: "100px",
+          ground: "🌾🌿🌾🌿🌾🌿",
+        },
+        mature: {
+          emoji: "🐔",
+          label: "Mature Chicken ⭐",
+          size: "105px",
+          ground: "🌿⭐🌾⭐🌿",
+          accessory: "🏆",
+        },
+        rooster: {
+          emoji: "🐓",
+          label: "Proud Rooster",
+          size: "105px",
+          ground: "🌾🌿🌾🌿🌾",
+        },
+      };
+
+      // Mood indicators
+      const MOOD_EMOJIS = {
+        happy: ["💕", "✨", "🌟", "💖"],
+        hungry: ["💨", "🌾", "❓"],
+        thirsty: ["💧", "💦"],
+        sleepy: ["💤", "🌙", "⭐"],
+        sick: ["🩹", "💨"],
+        dusty: ["💨", "🏝️"],
+        bored: ["💨", "❓"],
+        wantFlap: ["👥", "🪶"],
       };
 
       // ============= GAME STATE =============
@@ -2378,16 +2505,67 @@
         document.getElementById("lifecycle-progress").style.width =
           Math.min(100, totalProgress) + "%";
 
-        // ASCII art
+        // Emoji chicken graphics
         const artStage = chicken.isSick ? "sick" : currentStage.stage;
-        document.getElementById("chicken-ascii").textContent =
-          ASCII_ART[artStage] || ASCII_ART["chick"];
+        const graphics =
+          CHICKEN_GRAPHICS[artStage] || CHICKEN_GRAPHICS["chick"];
+        const chickenArt = document.getElementById("chicken-art");
+        const stageLabel = document.getElementById("chicken-stage-label");
+        const groundDecor = document.querySelector(".ground-decoration");
+        const moodEl = document.getElementById("chicken-mood");
+        const accessoriesEl = document.getElementById("chicken-accessories");
+
+        // Set the chicken emoji
+        chickenArt.textContent = graphics.emoji;
+        chickenArt.style.fontSize = graphics.size || "80px";
+        stageLabel.textContent = graphics.label;
+
+        // Set ground decoration
+        if (groundDecor) {
+          groundDecor.textContent = graphics.ground || "🌿🌾🌿";
+        }
+
+        // Set animation class based on state
+        chickenArt.className = "chicken-art";
+        if (chicken.isSick) {
+          chickenArt.classList.add("sick");
+        } else if (chicken.needs.sleep < 30) {
+          chickenArt.classList.add("sleeping");
+        } else if (chicken.needs.happiness > 70) {
+          chickenArt.classList.add("happy");
+        }
+
+        // Show mood indicator
+        const mainStatus = getMainStatus(chicken);
+        const moodEmojis = MOOD_EMOJIS[mainStatus] || MOOD_EMOJIS.happy;
+        moodEl.textContent =
+          moodEmojis[Math.floor(Math.random() * moodEmojis.length)];
+
+        // Show accessories from inventory
+        let accessories = [];
+        if (graphics.accessory) accessories.push(graphics.accessory);
+        if (gameState.inventory.includes("fake-eggs")) accessories.push("🥚");
+        if (gameState.inventory.includes("cup-water-set"))
+          accessories.push("🥤");
+        if (gameState.inventory.includes("chicken-toy")) accessories.push("🎀");
+        accessoriesEl.textContent = accessories.slice(0, 3).join("");
 
         // Status bar
         renderStatus();
 
         // Milestones
         renderMilestones(ageInDays);
+      }
+
+      function getMainStatus(chicken) {
+        if (chicken.isSick) return "sick";
+        if (chicken.needs.hunger < 40) return "hungry";
+        if (chicken.needs.thirst < 40) return "thirsty";
+        if (chicken.needs.sleep < 40) return "sleepy";
+        if (chicken.needs.cleanliness < 40) return "dusty";
+        if (chicken.needs.exercise < 40) return "wantFlap";
+        if (chicken.needs.happiness < 40) return "bored";
+        return "happy";
       }
 
       function renderStatus() {
