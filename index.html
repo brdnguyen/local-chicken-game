@@ -7,6 +7,8 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>🐔 My Virtual Chicken 🐔</title>
+    <!-- QR Code Scanner library (jsQR) -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <!-- QR Code library (qrcode-generator 1.4.4, MIT License, embedded for offline use) -->
     <script>
       var qrcode = (function () {
@@ -1177,6 +1179,10 @@
         background: linear-gradient(180deg, #87ceeb, #4169e1);
       }
 
+      .btn.red {
+        background: linear-gradient(180deg, #ff6b6b, #ee4444);
+      }
+
       .btn.orange {
         background: linear-gradient(180deg, #ffb347, #ff8c00);
       }
@@ -1404,6 +1410,95 @@
         padding: 20px;
         margin: 10px 0;
         text-align: center;
+      }
+
+      .qr-scanner-container {
+        position: relative;
+        width: 100%;
+        max-width: 300px;
+        margin: 15px auto;
+        border-radius: 15px;
+        overflow: hidden;
+        background: #000;
+      }
+
+      .qr-scanner-container video {
+        width: 100%;
+        display: block;
+        border-radius: 15px;
+      }
+
+      .qr-scanner-container canvas {
+        display: none;
+      }
+
+      .scanner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      .scanner-frame {
+        width: 70%;
+        height: 70%;
+        border: 3px solid #00ff00;
+        border-radius: 15px;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+        animation: pulse-scanner 2s infinite;
+      }
+
+      @keyframes pulse-scanner {
+        0%,
+        100% {
+          border-color: #00ff00;
+        }
+        50% {
+          border-color: #90ee90;
+        }
+      }
+
+      .scanner-status {
+        text-align: center;
+        padding: 10px;
+        font-weight: 600;
+        color: #666;
+      }
+
+      .scanner-status.scanning {
+        color: #32cd32;
+      }
+
+      .scanner-status.success {
+        color: #00c851;
+      }
+
+      .scanner-status.error {
+        color: #ff4444;
+      }
+
+      .scan-divider {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        color: #888;
+      }
+
+      .scan-divider::before,
+      .scan-divider::after {
+        content: "";
+        flex: 1;
+        border-bottom: 2px dashed #ddd;
+      }
+
+      .scan-divider span {
+        padding: 0 15px;
+        font-size: 0.9em;
       }
 
       textarea {
@@ -1721,7 +1816,30 @@
           <h2>👥 My Chicken Friends</h2>
 
           <div class="scan-area">
-            <p>📸 Paste your friend's chicken code below:</p>
+            <p>📸 Scan a friend's QR code with your camera:</p>
+
+            <div
+              class="qr-scanner-container"
+              id="scanner-container"
+              style="display: none"
+            >
+              <video id="scanner-video" playsinline></video>
+              <canvas id="scanner-canvas"></canvas>
+              <div class="scanner-overlay">
+                <div class="scanner-frame"></div>
+              </div>
+            </div>
+            <div id="scanner-status" class="scanner-status"></div>
+
+            <button class="btn blue" id="scan-btn" onclick="toggleQRScanner()">
+              📷 Start Camera Scan
+            </button>
+
+            <div class="scan-divider"><span>OR</span></div>
+
+            <p style="margin-top: 10px; font-size: 0.9em; color: #888">
+              Paste your friend's code manually:
+            </p>
             <textarea
               id="friend-code-input"
               placeholder="Paste chicken code here..."
@@ -1982,6 +2100,11 @@
       }
 
       function showTab(tabName) {
+        // Cleanup QR scanner when leaving friends tab
+        if (tabName !== "friends") {
+          cleanupScanner();
+        }
+
         document
           .querySelectorAll(".tab-content")
           .forEach((t) => t.classList.add("hidden"));
@@ -2371,7 +2494,7 @@
         if (code.length > 78) typeNumber = 6;
         if (code.length > 134) typeNumber = 8;
         if (code.length > 192) typeNumber = 10;
-        
+
         let qr;
         try {
           qr = qrcode(typeNumber, "L");
@@ -2525,6 +2648,190 @@
                 `;
           })
           .join("");
+      }
+
+      // ============= QR CODE SCANNER =============
+      let scannerStream = null;
+      let scannerAnimationId = null;
+      let isScanning = false;
+
+      function toggleQRScanner() {
+        // Check if jsQR library is available
+        if (typeof jsQR === "undefined") {
+          showPopup(
+            "📷 Camera scanning requires internet connection.\n\nPlease paste the code manually instead!"
+          );
+          return;
+        }
+
+        if (isScanning) {
+          stopQRScanner();
+        } else {
+          startQRScanner();
+        }
+      }
+
+      async function startQRScanner() {
+        const video = document.getElementById("scanner-video");
+        const canvas = document.getElementById("scanner-canvas");
+        const container = document.getElementById("scanner-container");
+        const statusEl = document.getElementById("scanner-status");
+        const scanBtn = document.getElementById("scan-btn");
+
+        try {
+          // Request camera permission
+          statusEl.textContent = "📷 Requesting camera access...";
+          statusEl.className = "scanner-status";
+
+          scannerStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" }, // Prefer back camera
+          });
+
+          video.srcObject = scannerStream;
+          video.setAttribute("playsinline", true);
+          await video.play();
+
+          container.style.display = "block";
+          scanBtn.textContent = "⏹️ Stop Scanning";
+          scanBtn.className = "btn red";
+          statusEl.textContent = "🔍 Point camera at QR code...";
+          statusEl.className = "scanner-status scanning";
+          isScanning = true;
+
+          // Start scanning loop
+          const ctx = canvas.getContext("2d");
+          scanFrame(video, canvas, ctx, statusEl);
+        } catch (err) {
+          console.error("Camera error:", err);
+          statusEl.textContent =
+            "❌ Could not access camera. Please allow camera permission.";
+          statusEl.className = "scanner-status error";
+          container.style.display = "none";
+        }
+      }
+
+      function scanFrame(video, canvas, ctx, statusEl) {
+        if (!isScanning) return;
+
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          canvas.height = video.videoHeight;
+          canvas.width = video.videoWidth;
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+          // Use jsQR to detect QR code
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: "dontInvert",
+          });
+
+          if (code) {
+            // QR code detected!
+            const scannedData = code.data;
+
+            // Check if it's a valid chicken code
+            if (scannedData.startsWith("CHKN") || scannedData.includes("🐔")) {
+              statusEl.textContent = "✅ QR Code detected! Adding friend...";
+              statusEl.className = "scanner-status success";
+
+              // Stop scanner and process the code
+              stopQRScanner();
+              processScannedCode(scannedData);
+              return;
+            }
+          }
+        }
+
+        // Continue scanning
+        scannerAnimationId = requestAnimationFrame(() =>
+          scanFrame(video, canvas, ctx, statusEl)
+        );
+      }
+
+      function stopQRScanner() {
+        isScanning = false;
+
+        if (scannerAnimationId) {
+          cancelAnimationFrame(scannerAnimationId);
+          scannerAnimationId = null;
+        }
+
+        if (scannerStream) {
+          scannerStream.getTracks().forEach((track) => track.stop());
+          scannerStream = null;
+        }
+
+        const video = document.getElementById("scanner-video");
+        if (video) {
+          video.srcObject = null;
+        }
+
+        const container = document.getElementById("scanner-container");
+        const scanBtn = document.getElementById("scan-btn");
+        const statusEl = document.getElementById("scanner-status");
+
+        if (container) container.style.display = "none";
+        if (scanBtn) {
+          scanBtn.textContent = "📷 Start Camera Scan";
+          scanBtn.className = "btn blue";
+        }
+        if (statusEl) {
+          statusEl.textContent = "";
+          statusEl.className = "scanner-status";
+        }
+      }
+
+      function processScannedCode(scannedData) {
+        try {
+          // Parse the scanned code (same logic as addFriend)
+          let base64Data;
+          const emojiMatch = scannedData.match(/🐔(.+)🐔/);
+          const colonMatch = scannedData.match(/CHKN:(.+)/);
+          const newMatch = scannedData.match(/^CHKN([A-Za-z0-9_-]+)$/);
+
+          if (emojiMatch) {
+            base64Data = emojiMatch[1];
+          } else if (colonMatch) {
+            base64Data = colonMatch[1];
+          } else if (newMatch) {
+            base64Data = newMatch[1].replace(/-/g, "+").replace(/_/g, "/");
+            while (base64Data.length % 4) base64Data += "=";
+          } else {
+            throw new Error("Invalid format");
+          }
+
+          const data = JSON.parse(atob(base64Data));
+
+          // Check if already a friend
+          if (gameState.friends.some((f) => f.i === data.i)) {
+            showPopup("🐔 This chicken is already your friend!");
+            return;
+          }
+
+          // Check if it's your own chicken
+          if (data.i === gameState.chicken.id) {
+            showPopup("🤭 That's your own chicken, silly!");
+            return;
+          }
+
+          // Add the friend
+          gameState.friends.push(data);
+          saveGame();
+          renderFriends();
+          showPopup(
+            `🎉 ${data.n} is now your friend!\n\nScanned successfully via camera! 📸`
+          );
+        } catch (e) {
+          console.error("Failed to process scanned code:", e);
+          showPopup("😕 Invalid QR code. Make sure it's a valid chicken code!");
+        }
+      }
+
+      // Stop scanner when navigating away from friends tab
+      function cleanupScanner() {
+        if (isScanning) {
+          stopQRScanner();
+        }
       }
 
       // ============= UTILITIES =============
