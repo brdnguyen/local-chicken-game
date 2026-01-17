@@ -7,6 +7,22 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>🐔 My Virtual Chicken 🐔</title>
+
+    <!-- PWA Support for persistent storage -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="My Chicken" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#ff69b4" />
+    <link
+      rel="apple-touch-icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐔</text></svg>"
+    />
+    <link
+      rel="manifest"
+      href="data:application/json,%7B%22name%22%3A%22My%20Virtual%20Chicken%22%2C%22short_name%22%3A%22Chicken%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fff0f5%22%2C%22theme_color%22%3A%22%23ff69b4%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%2520viewBox%3D'0%25200%2520100%2520100'%253E%253Ctext%2520y%3D'.9em'%2520font-size%3D'90'%253E%25F0%259F%2590%2594%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D"
+    />
+
     <!-- QR Code Scanner library (jsQR) -->
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <!-- QR Code library (qrcode-generator 1.4.4, MIT License, embedded for offline use) -->
@@ -2952,20 +2968,29 @@
 
       // ============= SAVE/LOAD =============
       function saveGame() {
-        localStorage.setItem("chickenGame", JSON.stringify(gameState));
+        try {
+          localStorage.setItem("chickenGame", JSON.stringify(gameState));
+        } catch (e) {
+          console.error("Failed to save game:", e);
+          // Storage might be full or in private mode
+        }
       }
 
       function loadGame() {
-        const saved = localStorage.getItem("chickenGame");
-        if (saved) {
-          const loaded = JSON.parse(saved);
-          gameState = {
-            ...gameState,
-            ...loaded,
-            // Ensure money and inventory exist for old saves
-            money: loaded.money !== undefined ? loaded.money : 5,
-            inventory: loaded.inventory || [],
-          };
+        try {
+          const saved = localStorage.getItem("chickenGame");
+          if (saved) {
+            const loaded = JSON.parse(saved);
+            gameState = {
+              ...gameState,
+              ...loaded,
+              // Ensure money and inventory exist for old saves
+              money: loaded.money !== undefined ? loaded.money : 5,
+              inventory: loaded.inventory || [],
+            };
+          }
+        } catch (e) {
+          console.error("Failed to load game:", e);
         }
       }
 
@@ -2980,6 +3005,36 @@
           showPopup("🐣 No saved chicken found!<br>Create a new one!");
         }
       }
+
+      // Request persistent storage to prevent eviction on iOS Safari
+      async function requestPersistentStorage() {
+        if (navigator.storage && navigator.storage.persist) {
+          try {
+            const isPersisted = await navigator.storage.persist();
+            console.log(
+              `Persistent storage ${isPersisted ? "granted" : "not granted"}`
+            );
+          } catch (e) {
+            console.log("Persistent storage not available");
+          }
+        }
+      }
+
+      // Register service worker for PWA (helps with storage persistence)
+      if ("serviceWorker" in navigator) {
+        // Create a minimal service worker inline
+        const swCode = `
+          self.addEventListener('install', e => self.skipWaiting());
+          self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+          self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+        `;
+        const swBlob = new Blob([swCode], { type: "application/javascript" });
+        const swUrl = URL.createObjectURL(swBlob);
+        navigator.serviceWorker.register(swUrl).catch(() => {});
+      }
+
+      // Request persistent storage on load
+      requestPersistentStorage();
 
       // Start the game!
       init();
