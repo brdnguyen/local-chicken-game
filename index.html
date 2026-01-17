@@ -1908,8 +1908,35 @@
           </div>
 
           <div class="info-box">
-            <strong>🌟 Life Stage:</strong> <span id="life-stage">Egg</span>
-            <br /><strong>📅 Age:</strong> <span id="chicken-age">0 days</span>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+              "
+            >
+              <div>
+                <strong>🌟 Life Stage:</strong> <span id="life-stage">Egg</span>
+              </div>
+              <div
+                style="
+                  background: #fff3e0;
+                  padding: 5px 12px;
+                  border-radius: 15px;
+                  font-weight: 600;
+                "
+              >
+                📅 <span id="chicken-age">0 days</span>
+              </div>
+            </div>
+            <div
+              style="font-size: 0.85em; color: #888; margin-bottom: 8px"
+              id="action-progress"
+            >
+              ⏰ Next time skip: <span id="actions-until-skip">2</span> more
+              actions
+            </div>
             <div class="lifecycle-bar">
               <div
                 class="lifecycle-progress"
@@ -2068,12 +2095,12 @@
 
       const MILESTONES = [
         { day: 0, name: "🥚 Egg", stage: "egg" },
-        { day: 1, name: "🐣 Hatching!", stage: "hatching" },
-        { day: 2, name: "🐥 Fluffy Chick", stage: "chick" },
-        { day: 7, name: "🐤 One Week Old", stage: "chick-week" },
-        { day: 30, name: "🐔 One Month Old", stage: "pullet" },
-        { day: 60, name: "🐔 Two Months Old", stage: "pullet2" },
-        { day: 90, name: "🐔 Three Months Old", stage: "teenager" },
+        { day: 20, name: "🐣 Hatching!", stage: "hatching" },
+        { day: 27, name: "🐤 One Week Old", stage: "chick-week" },
+        { day: 40, name: "🐥 Fluffy Chick", stage: "chick" },
+        { day: 50, name: "🐔 One Month Old", stage: "pullet" },
+        { day: 80, name: "🐔 Two Months Old", stage: "pullet2" },
+        { day: 110, name: "🐔 Three Months Old", stage: "teenager" },
         { day: 150, name: "🥚 First Egg!", stage: "laying" },
         { day: 180, name: "🐓 Six Months Old", stage: "adult" },
         { day: 365, name: "🎂 One Year Old!", stage: "mature" },
@@ -2218,6 +2245,7 @@
         lastUpdate: null,
         money: 5,
         inventory: [],
+        actionCount: 0, // Track actions for time passing
       };
 
       let selectedBreed = null;
@@ -2299,6 +2327,7 @@
           owner: ownerName,
           breed: selectedBreed,
           birthDate: Date.now(),
+          virtualDays: 0, // Virtual age in days (increases with actions)
           needs: {
             hunger: 100,
             thirst: 100,
@@ -2386,6 +2415,28 @@
       function doAction(action) {
         if (!gameState.chicken) return;
 
+        // Track actions for time passing
+        gameState.actionCount = (gameState.actionCount || 0) + 1;
+
+        // Every 2 actions = 10 days pass
+        let daysAdded = 0;
+        if (gameState.actionCount >= 2) {
+          daysAdded = 10;
+          gameState.chicken.virtualDays =
+            (gameState.chicken.virtualDays || 0) + daysAdded;
+          gameState.actionCount = 0;
+        }
+
+        // Check for milestone reached
+        const oldAge = (gameState.chicken.virtualDays || 0) - daysAdded;
+        const newAge = gameState.chicken.virtualDays || 0;
+        let milestoneReached = null;
+        for (const milestone of MILESTONES) {
+          if (oldAge < milestone.day && newAge >= milestone.day) {
+            milestoneReached = milestone;
+          }
+        }
+
         let message = "";
         switch (action) {
           case "feed":
@@ -2452,6 +2503,17 @@
         // Earn $1 for taking care of chicken!
         gameState.money += 1;
         message += '<br><span class="coin-earn">+$1 💰</span>';
+
+        // Show time passing message
+        if (daysAdded > 0) {
+          message += `<br><span style="color: #888; font-size: 0.9em;">⏰ ${daysAdded} days passed...</span>`;
+        }
+
+        // Show milestone notification
+        if (milestoneReached) {
+          message += `<br><br>🎉 <strong>Milestone!</strong><br>${milestoneReached.name}`;
+        }
+
         updateMoneyDisplay();
 
         saveGame();
@@ -2464,9 +2526,12 @@
         if (!gameState.chicken) return;
 
         const chicken = gameState.chicken;
-        const ageInDays = Math.floor(
+        // Use virtualDays for age (accelerated time), fallback to real days for old saves
+        const realDays = Math.floor(
           (Date.now() - chicken.birthDate) / (1000 * 60 * 60 * 24)
         );
+        const ageInDays =
+          chicken.virtualDays !== undefined ? chicken.virtualDays : realDays;
 
         // Get current stage
         let currentStage = MILESTONES[0];
@@ -2486,6 +2551,13 @@
         document.getElementById("life-stage").textContent = currentStage.name;
         document.getElementById("chicken-age").textContent =
           formatAge(ageInDays);
+
+        // Update action counter display
+        const actionsUntilSkip = 2 - (gameState.actionCount || 0);
+        const actionsEl = document.getElementById("actions-until-skip");
+        if (actionsEl) {
+          actionsEl.textContent = actionsUntilSkip;
+        }
 
         // Progress bar
         const nextMilestone =
@@ -2640,9 +2712,12 @@
 
       function encodeChickenData() {
         const c = gameState.chicken;
-        const ageInDays = Math.floor(
+        // Use virtualDays for age
+        const realDays = Math.floor(
           (Date.now() - c.birthDate) / (1000 * 60 * 60 * 24)
         );
+        const ageInDays =
+          c.virtualDays !== undefined ? c.virtualDays : realDays;
 
         // Get current stage
         let stage = "egg";
@@ -3165,7 +3240,19 @@
               // Ensure money and inventory exist for old saves
               money: loaded.money !== undefined ? loaded.money : 5,
               inventory: loaded.inventory || [],
+              actionCount: loaded.actionCount || 0,
             };
+            // Ensure virtualDays exists for old saves - calculate from real time
+            if (
+              gameState.chicken &&
+              gameState.chicken.virtualDays === undefined
+            ) {
+              const realDays = Math.floor(
+                (Date.now() - gameState.chicken.birthDate) /
+                  (1000 * 60 * 60 * 24)
+              );
+              gameState.chicken.virtualDays = realDays;
+            }
           }
         } catch (e) {
           console.error("Failed to load game:", e);
