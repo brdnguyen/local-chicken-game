@@ -100,6 +100,7 @@ Visual progress bars show real-time percentages for each need:
 - Start with $5
 - Earn $1 per action **only if health improves** (needs must not be at 100%)
 - Visual feedback: ⬆️ arrow on improved health bars, encouraging message displayed
+- Money awarded when color status changes: Red→Yellow or Yellow→Green
 
 ### Daily Usage Quota
 - **Maximum 10 actions per calendar day** (to prevent excessive use by kids!)

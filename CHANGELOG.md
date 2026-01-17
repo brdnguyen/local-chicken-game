@@ -5,6 +5,15 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-01-17
+
+### Changed
+- Money reward logic: $1 only awarded when health status COLOR changes
+  - Red (<40%) → Yellow (≥40%)
+  - Yellow (<60%) → Green (≥60%)
+- Up arrow ⬆️ now appears in Overall Health box (not individual bars)
+- Encouraging message when no color upgrade: "Keep caring to improve my health status!"
+
 ## [0.10.0] - 2026-01-17
 
 ### Changed

@@ -1777,8 +1777,13 @@
       }
 
       @keyframes bounce-up {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-3px); }
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-3px);
+        }
       }
 
       .overall-health {
@@ -1988,7 +1993,7 @@
             margin-top: -10px;
           "
         >
-          v<span id="version-display">0.10.0</span>
+          v<span id="version-display">0.11.0</span>
         </div>
         <div
           style="
@@ -2843,7 +2848,7 @@
       };
 
       // ============= GAME STATE =============
-      const GAME_VERSION = "0.10.0";
+      const GAME_VERSION = "0.11.0";
       const DAILY_ACTION_LIMIT = 10;
 
       let gameState = {
@@ -3166,11 +3171,12 @@
 
         // Store old needs to check if health improved
         const oldNeeds = { ...gameState.chicken.needs };
-        const oldOverallHealth = Object.values(oldNeeds).reduce((a, b) => a + b, 0) / 6;
+        const oldOverallHealth =
+          Object.values(oldNeeds).reduce((a, b) => a + b, 0) / 6;
 
         let message = "";
         let improvedNeeds = []; // Track which needs improved
-        
+
         switch (action) {
           case "feed":
             if (gameState.chicken.needs.hunger < 100) {
@@ -3260,21 +3266,52 @@
             break;
         }
 
-        // Check if overall health improved
-        const newOverallHealth = Object.values(gameState.chicken.needs).reduce((a, b) => a + b, 0) / 6;
-        const healthImproved = newOverallHealth > oldOverallHealth;
+        // Helper function to get color status
+        function getColorStatus(value) {
+          if (value >= 60) return "green";
+          if (value >= 40) return "yellow";
+          return "red";
+        }
 
-        // Only earn money if health actually improved
-        if (healthImproved) {
+        // Check if any need changed color status (red->yellow or yellow->green)
+        let colorUpgradeHappened = false;
+        const needKeys = [
+          "hunger",
+          "thirst",
+          "cleanliness",
+          "sleep",
+          "happiness",
+          "exercise",
+        ];
+
+        for (const key of needKeys) {
+          const oldColor = getColorStatus(oldNeeds[key]);
+          const newColor = getColorStatus(gameState.chicken.needs[key]);
+
+          // Check for color upgrade: red->yellow or yellow->green
+          if (
+            (oldColor === "red" && newColor === "yellow") ||
+            (oldColor === "red" && newColor === "green") ||
+            (oldColor === "yellow" && newColor === "green")
+          ) {
+            colorUpgradeHappened = true;
+            break;
+          }
+        }
+
+        // Only earn money if a color status improved (red->yellow or yellow->green)
+        if (colorUpgradeHappened) {
           gameState.money += 1;
           message += '<br><span class="coin-earn">+$1 💰</span>';
-          message += '<br><span style="color: #2e7d32; font-size: 0.85em;">📈 My health improves! Thanks for caring for me! 💕</span>';
-          
-          // Store improved needs for visual indicator
-          gameState.lastImprovedNeeds = improvedNeeds;
+          message +=
+            '<br><span style="color: #2e7d32; font-size: 0.85em;">📈 My health improves! Thanks for caring for me! 💕</span>';
+
+          // Flag to show up arrow in Overall Health box
+          gameState.showOverallHealthUpgrade = true;
         } else {
-          message += '<br><span style="color: #888; font-size: 0.85em;">Already at max! No money earned.</span>';
-          gameState.lastImprovedNeeds = [];
+          message +=
+            '<br><span style="color: #888; font-size: 0.85em;">Keep caring to improve my health status! 🐔</span>';
+          gameState.showOverallHealthUpgrade = false;
         }
 
         // Show remaining daily actions
@@ -3475,7 +3512,18 @@
         const overallEl = document.getElementById("overall-health");
         const overallValue = document.getElementById("overall-health-value");
         if (overallValue) {
-          overallValue.textContent = `${overallHealth}%`;
+          // Check if we should show the up arrow (color status improved)
+          if (gameState.showOverallHealthUpgrade) {
+            overallValue.innerHTML = `${overallHealth}% <span class="health-up-arrow">⬆️</span>`;
+            // Clear the arrow after 2.5 seconds
+            setTimeout(() => {
+              if (overallValue) overallValue.textContent = `${overallHealth}%`;
+              gameState.showOverallHealthUpgrade = false;
+            }, 2500);
+          } else {
+            overallValue.textContent = `${overallHealth}%`;
+          }
+          
           overallValue.classList.remove("high", "medium", "low");
           if (overallHealth >= 60) {
             overallValue.classList.add("high");
@@ -3512,26 +3560,9 @@
           }
 
           if (percent) {
-            // Check if this need just improved
-            const improved = gameState.lastImprovedNeeds && gameState.lastImprovedNeeds.includes(need.key);
-            if (improved) {
-              percent.innerHTML = `${value}% <span class="health-up-arrow">⬆️</span>`;
-              // Clear the arrow after 2 seconds
-              setTimeout(() => {
-                if (percent) percent.textContent = `${value}%`;
-              }, 2000);
-            } else {
-              percent.textContent = `${value}%`;
-            }
+            percent.textContent = `${value}%`;
           }
         });
-
-        // Clear the improved needs tracker after rendering
-        if (gameState.lastImprovedNeeds && gameState.lastImprovedNeeds.length > 0) {
-          setTimeout(() => {
-            gameState.lastImprovedNeeds = [];
-          }, 2100);
-        }
       }
 
       function renderMilestones(currentAge) {
