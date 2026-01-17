@@ -2306,6 +2306,9 @@
         if (tabName === "shop") {
           renderShop();
         }
+        if (tabName === "friends") {
+          renderFriends();
+        }
       }
 
       // ============= CHICKEN CREATION =============
@@ -2856,6 +2859,11 @@
           return;
         }
 
+        // Ensure friends array exists
+        if (!Array.isArray(gameState.friends)) {
+          gameState.friends = [];
+        }
+
         try {
           // Support old format (🐔...🐔), middle format (CHKN:...), and new format (CHKN...)
           let base64Data;
@@ -2881,6 +2889,7 @@
           // Check if already a friend
           if (gameState.friends.some((f) => f.i === data.i)) {
             showPopup("🐔 This chicken is already your friend!");
+            renderFriends(); // Re-render to ensure list is displayed
             return;
           }
 
@@ -2896,6 +2905,7 @@
           document.getElementById("friend-code-input").value = "";
           showPopup(`🎉 ${data.n} is now your friend!`);
         } catch (e) {
+          console.error("Error adding friend:", e);
           showPopup("😕 Invalid chicken code. Try again!");
         }
       }
@@ -3065,6 +3075,11 @@
       }
 
       function processScannedCode(scannedData) {
+        // Ensure friends array exists
+        if (!Array.isArray(gameState.friends)) {
+          gameState.friends = [];
+        }
+
         try {
           // Parse the scanned code (same logic as addFriend)
           let base64Data;
@@ -3088,6 +3103,7 @@
           // Check if already a friend
           if (gameState.friends.some((f) => f.i === data.i)) {
             showPopup("🐔 This chicken is already your friend!");
+            renderFriends(); // Re-render to ensure list is displayed
             return;
           }
 
@@ -3251,9 +3267,12 @@
             gameState = {
               ...gameState,
               ...loaded,
-              // Ensure money and inventory exist for old saves
+              // Ensure arrays and values exist for old saves
               money: loaded.money !== undefined ? loaded.money : 5,
-              inventory: loaded.inventory || [],
+              inventory: Array.isArray(loaded.inventory)
+                ? loaded.inventory
+                : [],
+              friends: Array.isArray(loaded.friends) ? loaded.friends : [],
               actionCount: loaded.actionCount || 0,
             };
             // Ensure virtualDays exists for old saves - calculate from real time
@@ -3270,6 +3289,9 @@
           }
         } catch (e) {
           console.error("Failed to load game:", e);
+          // Reset to safe defaults on error
+          gameState.friends = [];
+          gameState.inventory = [];
         }
       }
 
