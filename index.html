@@ -2184,7 +2184,11 @@
           </div>
 
           <div class="health-indicators" id="health-indicators">
-            <div class="overall-health" id="overall-health">
+            <div
+              class="overall-health"
+              id="overall-health"
+              onclick="secretResetTap()"
+            >
               <div class="overall-health-label">🏆 Overall Health</div>
               <div class="overall-health-value high" id="overall-health-value">
                 100%
@@ -2290,6 +2294,18 @@
             <button class="btn small blue" onclick="doAction('flap')">
               🪽 Let Flap
             </button>
+          </div>
+
+          <div class="daily-actions-wrapper" style="margin-top: 15px">
+            <div
+              class="daily-actions-display"
+              id="daily-actions-display-bottom"
+            >
+              ⚡ <span id="daily-actions-remaining-bottom">10</span>/10 today
+            </div>
+            <div class="daily-actions-legend">
+              remaining allowed actions today
+            </div>
           </div>
 
           <h2>🏆 Milestones</h2>
@@ -2865,10 +2881,18 @@
       function updateDailyActionsDisplay() {
         const remaining = getRemainingDailyActions();
         const display = document.getElementById("daily-actions-display");
+        const displayBottom = document.getElementById(
+          "daily-actions-display-bottom"
+        );
         const amount = document.getElementById("daily-actions-remaining");
+        const amountBottom = document.getElementById(
+          "daily-actions-remaining-bottom"
+        );
 
         if (amount) amount.textContent = remaining;
+        if (amountBottom) amountBottom.textContent = remaining;
 
+        // Update top tracker
         if (display) {
           display.classList.remove("low", "empty");
           if (remaining === 0) {
@@ -2876,6 +2900,41 @@
           } else if (remaining <= 3) {
             display.classList.add("low");
           }
+        }
+
+        // Update bottom tracker
+        if (displayBottom) {
+          displayBottom.classList.remove("low", "empty");
+          if (remaining === 0) {
+            displayBottom.classList.add("empty");
+          } else if (remaining <= 3) {
+            displayBottom.classList.add("low");
+          }
+        }
+      }
+
+      // Secret reset for testing - tap Overall Health 5 times
+      let secretTapCount = 0;
+      let secretTapTimer = null;
+
+      function secretResetTap() {
+        secretTapCount++;
+
+        // Reset counter after 3 seconds of no taps
+        if (secretTapTimer) clearTimeout(secretTapTimer);
+        secretTapTimer = setTimeout(() => {
+          secretTapCount = 0;
+        }, 3000);
+
+        if (secretTapCount >= 5) {
+          // Secret code activated!
+          gameState.dailyActions = 0;
+          saveGame();
+          updateDailyActionsDisplay();
+          secretTapCount = 0;
+          showPopup(
+            "🔓 Secret Reset!<br>Daily actions have been reset for testing! 🧪"
+          );
         }
       }
 
@@ -3162,6 +3221,10 @@
         // Earn $1 for taking care of chicken!
         gameState.money += 1;
         message += '<br><span class="coin-earn">+$1 💰</span>';
+
+        // Show remaining daily actions
+        const remaining = getRemainingDailyActions();
+        message += `<br><span style="color: #4169e1; font-size: 0.85em;">⚡ ${remaining}/10 actions left today</span>`;
 
         // Show time passing message
         if (daysAdded > 0) {
