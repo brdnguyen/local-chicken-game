@@ -1977,7 +1977,7 @@
             margin-top: -10px;
           "
         >
-          v<span id="version-display">0.8.0</span>
+          v<span id="version-display">0.9.0</span>
         </div>
         <div
           style="
@@ -2172,12 +2172,7 @@
               "
               id="action-progress"
             >
-              ⏰
-              <strong
-                ><span id="actions-until-skip">2</span> more caring
-                actions</strong
-              >
-              to advance time (+10 days)
+              ✨ Each caring action advances time by <strong>+5 days</strong>
             </div>
             <div class="lifecycle-bar">
               <div
@@ -2837,7 +2832,7 @@
       };
 
       // ============= GAME STATE =============
-      const GAME_VERSION = "0.8.0";
+      const GAME_VERSION = "0.9.0";
       const DAILY_ACTION_LIMIT = 10;
 
       let gameState = {
@@ -3144,21 +3139,13 @@
         // Consume a daily action
         consumeDailyAction();
 
-        // Track actions for time passing
-        gameState.actionCount = (gameState.actionCount || 0) + 1;
-
-        // Every 2 actions = 10 days pass
-        let daysAdded = 0;
-        if (gameState.actionCount >= 2) {
-          daysAdded = 10;
-          gameState.chicken.virtualDays =
-            (gameState.chicken.virtualDays || 0) + daysAdded;
-          gameState.actionCount = 0;
-        }
+        // Each action = 5 days pass
+        const daysAdded = 5;
+        const oldAge = gameState.chicken.virtualDays || 0;
+        gameState.chicken.virtualDays = oldAge + daysAdded;
+        const newAge = gameState.chicken.virtualDays;
 
         // Check for milestone reached
-        const oldAge = (gameState.chicken.virtualDays || 0) - daysAdded;
-        const newAge = gameState.chicken.virtualDays || 0;
         let milestoneReached = null;
         for (const milestone of MILESTONES) {
           if (oldAge < milestone.day && newAge >= milestone.day) {
@@ -3283,13 +3270,6 @@
         ).textContent = `Owner: ${chicken.owner}`;
         document.getElementById("life-stage").textContent = currentStage.name;
         document.getElementById("chicken-age").textContent = ageInDays;
-
-        // Update action counter display
-        const actionsUntilSkip = 2 - (gameState.actionCount || 0);
-        const actionsEl = document.getElementById("actions-until-skip");
-        if (actionsEl) {
-          actionsEl.textContent = actionsUntilSkip;
-        }
 
         // Progress bar
         const nextMilestone =

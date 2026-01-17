@@ -7,7 +7,7 @@ A cute virtual chicken game for kids (8-12 year old) that runs as a local HTML f
 
 ### Time System
 - **Virtual Days**: Time passes through actions, not real time
-- **Every 2 actions = 10 virtual days pass**
+- **Each caring action = 5 virtual days pass**
 - Actions: Feed, Water, Dust Bath, Play, Sleep, Flap
 
 ### Chicken Lifecycle Milestones

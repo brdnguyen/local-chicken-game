@@ -36,19 +36,35 @@ Each of the item costs 1$. You need to use money to buy. You can earn money by t
 
 ******
 WISHLIST
-    1.  (DONE with PWA) Prevent:  ⚠️ iOS 13.4+ WebKit changes - After 7 days without visiting, Safari may evict localStorage data for sites that aren't added to home screen
+    1.  DONE with PWA) Prevent:  ⚠️ iOS 13.4+ WebKit changes - After 7 days without visiting, Safari may evict localStorage data for sites that aren't added to home screen
     2.  DONE Better cute graphics (emonticons? not ascii art)
     3.  DONE Add passing time
-    4.  Add caps (10 maximum clicks (i.e. any actions, like caring actions, or buying from shops) allowed per actual calendar day (this is to prevent kids from using too much!))
-    5. DONE - [BUG] when I add a "friend" that I have added before, the friend list becomes empty, even though it says "the friend has already been added".
+    4.  DONE - [BUG] when I add a "friend" that I have added before, the friend list becomes empty, even though it says "the friend has already been added".
             fix this bug. Also check that the friend list gets persisted correctly.
 
-    6. Revamp shops:
+    5.  DONE Revamp shops:
         -   Divide into categories:
             -   Decorations: making the chickens looking pretty and more interesting (headband, jumper, necklace, nametag)
             -   Health: vitamins, feather polish shiner, growth vitamin, de-worm tablets
             -   Toys: fake worm, robot chicken friend, walky talky with chicken voice, photo of itself, mirror for chickens
             -
+
+    6.  DONE    Display key health indicators % (needs, cleanliness, sleep etc). Update AGENTS.md to reflect this.
+    7.  Implement change log + versioning + prompt AI to auto commit + push + capture change log + increase version
+    8  DONE Add caps (10 maximum clicks (i.e. any actions, like caring actions, or buying from shops) allowed per actual calendar day (this is to prevent kids from using too much!))
+            -   Also, duplicate the tracker of 10/10 actions left below the "Caring Actions" so that it's easier to see (keep the one at the top).
+            ALso display the remaining quota in the pop up message shown after each caring action (like Feed)...
+
+    -    Fix the logic that user earns money (1$) ONLY IFF their caring actions improve the health of the chicken.
+
+    -   BUG: fix graphics (Hatching should show a baby from the egg, then one week old, then baby chick (both showing the chickens only)
+
+    -   Allow multiple
+
+
+
+
+
 
     7.  ALlow each player to customize the look of their chickens (via shopping for items)
         -   buying toys -> chicken looking more happy (facial expression)
@@ -56,3 +72,7 @@ WISHLIST
         -   buying health: chicken appearance improve (bigger size, feather more shiny, change in colours (more vibrant), stronger muscle etc
 
     8.  Add more to lifecycle: matured chickens can have chicks, become a mom!
+
+    9.  [CHECK] - think about releasing process. Should all user items be purged, or can we make it backward compatible (new states / items are additional?)
+
+    *   Allow to delete and start from scratch (with confirmation)

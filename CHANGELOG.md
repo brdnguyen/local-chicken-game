@@ -5,6 +5,13 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-01-17
+
+### Changed
+- Simplified time passing: each caring action now adds 5 virtual days directly
+- Removed complex "2 actions = 10 days" counter system
+- Updated UI to show "✨ Each caring action advances time by +5 days"
+
 ## [0.8.0] - 2026-01-17
 
 ### Added
