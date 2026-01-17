@@ -5,6 +5,17 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2026-01-17
+
+### Changed
+- Money (+$1) is now only earned when caring actions actually improve health
+- If a need is already at 100%, no money is awarded
+
+### Added
+- Bouncing ⬆️ arrow indicator on health bars when needs improve
+- Encouraging message: "📈 My health improves! Thanks for caring for me! 💕"
+- Message when no improvement: "Already at max! No money earned."
+
 ## [0.9.0] - 2026-01-17
 
 ### Changed
