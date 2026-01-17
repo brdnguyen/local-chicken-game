@@ -1195,12 +1195,17 @@
 
       .chicken-accessories {
         position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 24px;
+        top: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
         display: flex;
-        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 3px;
+        max-width: 140px;
         z-index: 2;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
       }
 
       .chicken-mood {
@@ -2771,33 +2776,33 @@
           ground: "🌾🪹🌾",
         },
         hatching: {
-          emoji: "🥚✨",
+          emoji: "🐣",
           label: "Hatching!",
-          size: "70px",
+          size: "75px",
           ground: "🌾✨🌾",
           animation: "wobble",
-        },
-        chick: {
-          emoji: "🐣",
-          label: "Baby Chick",
-          size: "80px",
-          ground: "🌿🌾🌿",
         },
         "chick-week": {
           emoji: "🐤",
           label: "1 Week Old Chick",
           size: "80px",
+          ground: "🌿🌾🌿",
+        },
+        chick: {
+          emoji: "🐥",
+          label: "Fluffy Chick",
+          size: "80px",
           ground: "🌿🌾🌿🌾",
         },
         pullet: {
           emoji: "🐥",
-          label: "Growing Chick",
+          label: "Young Pullet",
           size: "85px",
           ground: "🌾🌿🌾🌿",
         },
         pullet2: {
-          emoji: "🐥",
-          label: "Young Pullet",
+          emoji: "🐔",
+          label: "Growing Pullet",
           size: "90px",
           ground: "🌿🌾🌿🌾🌿",
         },
@@ -2848,7 +2853,7 @@
       };
 
       // ============= GAME STATE =============
-      const GAME_VERSION = "0.11.0";
+      const GAME_VERSION = "0.13.0";
       const DAILY_ACTION_LIMIT = 10;
 
       let gameState = {
@@ -3419,14 +3424,27 @@
         moodEl.textContent =
           moodEmojis[Math.floor(Math.random() * moodEmojis.length)];
 
-        // Show accessories from inventory
+        // Show accessories from inventory (decorations from shop)
         let accessories = [];
         if (graphics.accessory) accessories.push(graphics.accessory);
+
+        // Add all decoration items from inventory
+        Object.values(SHOP_ITEMS).forEach((item) => {
+          if (
+            item.category === "decorations" &&
+            gameState.inventory.includes(item.id)
+          ) {
+            accessories.push(item.displayIcon);
+          }
+        });
+
+        // Legacy items support
         if (gameState.inventory.includes("fake-eggs")) accessories.push("🥚");
         if (gameState.inventory.includes("cup-water-set"))
           accessories.push("🥤");
-        if (gameState.inventory.includes("chicken-toy")) accessories.push("🎀");
-        accessoriesEl.textContent = accessories.slice(0, 3).join("");
+
+        // Display up to 8 accessories (decorations shown above chicken)
+        accessoriesEl.textContent = accessories.slice(0, 8).join(" ");
 
         // Status bar
         renderStatus();
@@ -3523,7 +3541,7 @@
           } else {
             overallValue.textContent = `${overallHealth}%`;
           }
-          
+
           overallValue.classList.remove("high", "medium", "low");
           if (overallHealth >= 60) {
             overallValue.classList.add("high");

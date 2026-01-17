@@ -5,6 +5,27 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] - 2026-01-17
+
+### Fixed
+- Chicken lifecycle graphics now show correct progression:
+  - 🥚 Egg (Day 0) - Plain egg
+  - 🐣 Hatching (Day 20) - Chick breaking out of shell
+  - 🐤 One Week Old (Day 27) - Baby chick
+  - 🐥 Fluffy Chick (Day 40) - Growing chick
+  - Then 🐔 stages for older chickens
+
+## [0.12.0] - 2026-01-17
+
+### Added
+- Decorations now display visually on the chicken when purchased!
+- Up to 8 decoration emojis appear above the chicken
+- Decorations include: 🌸🧶💎🏷️🦆🐼☠️🥸😤🎩✨🦄🦸🎀👑
+
+### Changed
+- Accessories display repositioned to top-center above chicken
+- Improved decoration emoji layout with wrapping support
+
 ## [0.11.0] - 2026-01-17
 
 ### Changed

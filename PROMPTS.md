@@ -36,6 +36,12 @@ Each of the item costs 1$. You need to use money to buy. You can earn money by t
 
 ******
 WISHLIST
+
+After each change: PROMPT AI:
+
+auto create the commit with the right commit message + push + capture change log + increase version + update AGENTS.md
+
+
     1.  DONE with PWA) Prevent:  ⚠️ iOS 13.4+ WebKit changes - After 7 days without visiting, Safari may evict localStorage data for sites that aren't added to home screen
     2.  DONE Better cute graphics (emonticons? not ascii art)
     3.  DONE Add passing time
@@ -50,16 +56,28 @@ WISHLIST
             -
 
     6.  DONE    Display key health indicators % (needs, cleanliness, sleep etc). Update AGENTS.md to reflect this.
-    7.  Implement change log + versioning + prompt AI to auto commit + push + capture change log + increase version
+    7.  DONE Implement change log + versioning + prompt AI to:  auto commit with the right commit message + push + capture change log + increase version + update AGENTS.md
     8  DONE Add caps (10 maximum clicks (i.e. any actions, like caring actions, or buying from shops) allowed per actual calendar day (this is to prevent kids from using too much!))
             -   Also, duplicate the tracker of 10/10 actions left below the "Caring Actions" so that it's easier to see (keep the one at the top).
             ALso display the remaining quota in the pop up message shown after each caring action (like Feed)...
 
-    -    Fix the logic that user earns money (1$) ONLY IFF their caring actions improve the health of the chicken.
+    9.  DONE - Fix the logic that user earns money (1$) ONLY IFF their caring actions improve the health of the chicken.
+
+    10. DONE - fix so that each caring action incrases by 5 days immeidately (not 2 actions)
+
+    11. DONE - if an Action increases health (display the "going up" arrow in the health indicator. Display "money earned as my Health improves. Thanks for caring for me!!!")
+
 
     -   BUG: fix graphics (Hatching should show a baby from the egg, then one week old, then baby chick (both showing the chickens only)
 
-    -   Allow multiple
+    -   Various UI fix:
+            -   make Days More prominent!!!
+            -   when buying fro shops, make sure to update the appearance of the chicken!
+            -   secret to reset all stats to 0 (start again!)
+
+    -   Allow multiple users on the same app (each having unique name locally)
+
+
 
 
 

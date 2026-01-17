@@ -15,15 +15,15 @@ A cute virtual chicken game for kids (8-12 year old) that runs as a local HTML f
 | Day | Stage | Emoji | Description |
 |-----|-------|-------|-------------|
 | 0 | Egg | 🥚 | Starting stage |
-| 20 | Hatching! | 🐣 | Egg is cracking |
-| 27 | One Week Old | 🐤 | Baby chick emerges |
+| 20 | Hatching! | 🐣 | Chick breaking out of shell |
+| 27 | One Week Old | 🐤 | Baby chick |
 | 40 | Fluffy Chick | 🐥 | Growing chick |
 | 50 | One Month Old | 🐔 | Young pullet |
-| 80 | Two Months Old | 🐔 | Adolescent |
+| 80 | Two Months Old | 🐔 | Growing pullet |
 | 110 | Three Months Old | 🐔 | Teenager |
-| 150 | First Egg! | 🐔🥚 | Laying hen |
+| 150 | First Egg! | 🥚 | Laying hen |
 | 180 | Six Months Old | 🐓 | Adult chicken |
-| 365 | One Year Old! | 🐔⭐ | Mature chicken |
+| 365 | One Year Old! | 🎂 | Mature chicken |
 
 ### Health Statuses
 - 😊 Happy
