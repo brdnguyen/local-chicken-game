@@ -16,17 +16,20 @@ const BREED_COLORS = {
     eye: "#2F1810",
   },
   silkie: {
-    body: "#F5F5DC",
-    bodyLight: "#FFFAF0",
-    bodyDark: "#D2C8B4",
-    wing: "#E8E4D0",
-    wingDark: "#C8C0A8",
-    beak: "#4A4A4A",
-    comb: "#8B4789",
-    wattle: "#6B3569",
-    feet: "#4A4A4A",
-    eye: "#2F2F2F",
+    body: "#F5F5F0",
+    bodyLight: "#FFFFFF",
+    bodyDark: "#E8E4DC",
+    wing: "#F0EDE5",
+    wingDark: "#D8D4C8",
+    beak: "#3A3A4A",
+    comb: "#6B3569",
+    wattle: "#5A2858",
+    feet: "#2A2A3A",
+    eye: "#1A1A2A",
     fluffy: true,
+    silkie: true,
+    skinColor: "#4A4A5A",
+    earlobe: "#6BA3C9",
   },
   leghorn: {
     body: "#FFFFFF",
@@ -230,6 +233,7 @@ function generateChickSVG(colors, size, stage, opts) {
   const h = size * 1.1;
   const isWeekOld = stage === "chick-week";
   const fluffiness = colors.fluffy ? 1.3 : 1;
+  const isSilkie = colors.silkie || false;
   const uid = Math.random().toString(36).substr(2, 9);
 
   // Eye expression based on state
@@ -247,8 +251,8 @@ function generateChickSVG(colors, size, stage, opts) {
         <stop offset="100%" style="stop-color:${colors.body};stop-opacity:1" />
       </linearGradient>
       <filter id="chickFluff${uid}" x="-10%" y="-10%" width="120%" height="120%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise"/>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+        <feTurbulence type="fractalNoise" baseFrequency="${isSilkie ? '0.08' : '0.05'}" numOctaves="${isSilkie ? '4' : '2'}" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="${isSilkie ? '4' : '2'}" xChannelSelector="R" yChannelSelector="G"/>
       </filter>
       <radialGradient id="chickBlush${uid}" cx="50%" cy="50%" r="50%">
         <stop offset="0%" style="stop-color:#FF91A4;stop-opacity:0.7" />
@@ -275,11 +279,22 @@ function generateChickSVG(colors, size, stage, opts) {
     <ellipse cx="${w * 0.35}" cy="${h * 0.65}" rx="${w * 0.12}" ry="${h * 0.12}" fill="${colors.wing}" transform="rotate(-15 ${w * 0.35} ${h * 0.65})"/>
 
     <!-- Head -->
-    <circle cx="${w / 2}" cy="${h * 0.35}" r="${w * 0.26 * fluffiness}" fill="url(#chickBodyGrad${uid})" ${colors.fluffy ? `filter="url(#chickFluff${uid})"` : ""}/>
+    ${isSilkie ? `
+    <!-- Silkie chick smaller head (mostly hidden by fluff) -->
+    <circle cx="${w / 2}" cy="${h * 0.38}" r="${w * 0.2}" fill="url(#chickBodyGrad${uid})" filter="url(#chickFluff${uid})"/>
+    ` : `
+    <circle cx="${w / 2}" cy="${h * 0.35}" r="${w * 0.26 * fluffiness}" fill="url(#chickBodyGrad${uid})" ${colors.fluffy ? `filter="url(#chickFluff${uid})"` : ''}/>
+    `}
 
     <!-- Sanrio-style rosy cheeks (always visible) -->
+    ${!isSilkie ? `
     <ellipse cx="${w * 0.3}" cy="${h * 0.4}" rx="9" ry="6" fill="url(#chickBlush${uid})"/>
     <ellipse cx="${w * 0.7}" cy="${h * 0.4}" rx="9" ry="6" fill="url(#chickBlush${uid})"/>
+    ` : `
+    <!-- Silkie tiny cheek blush -->
+    <ellipse cx="${w * 0.38}" cy="${h * 0.42}" rx="5" ry="3" fill="url(#chickBlush${uid})"/>
+    <ellipse cx="${w * 0.62}" cy="${h * 0.42}" rx="5" ry="3" fill="url(#chickBlush${uid})"/>
+    `}
     ${opts.hasCuteFace ? `
     <!-- Extra sparkle marks for cute face -->
     <text x="${w * 0.22}" y="${h * 0.28}" font-size="8" opacity="0.7">✦</text>
@@ -287,6 +302,17 @@ function generateChickSVG(colors, size, stage, opts) {
     ` : ""}
 
     <!-- Eyes (Sanrio kawaii style) -->
+    ${isSilkie ? `
+    <!-- Silkie cute small happy eyes (∪ shape) -->
+    ${eyeStyle === "swirl" ? `
+    <circle cx="${w * 0.46}" cy="${h * 0.37}" r="3" fill="none" stroke="#1A1A1A" stroke-width="1.5"/>
+    <circle cx="${w * 0.54}" cy="${h * 0.37}" r="3" fill="none" stroke="#1A1A1A" stroke-width="1.5"/>
+    ` : `
+    <!-- Small happy curved eyes -->
+    <path d="M ${w * 0.43} ${h * 0.38} Q ${w * 0.46} ${h * 0.35} ${w * 0.49} ${h * 0.38}" stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M ${w * 0.51} ${h * 0.38} Q ${w * 0.54} ${h * 0.35} ${w * 0.57} ${h * 0.38}" stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round"/>
+    `}
+    ` : `
     ${eyeStyle === "happy" ? `
     <!-- Happy curved eyes (∪ shape) -->
     <path d="M ${w * 0.36} ${h * 0.34} Q ${w * 0.42} ${h * 0.28} ${w * 0.48} ${h * 0.34}" stroke="#1A1A1A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
@@ -311,6 +337,7 @@ function generateChickSVG(colors, size, stage, opts) {
     <circle cx="${w * 0.44}" cy="${h * 0.35}" r="2" fill="white" opacity="0.7"/>
     <circle cx="${w * 0.60}" cy="${h * 0.35}" r="2" fill="white" opacity="0.7"/>
     `}
+    `}
 
     ${opts.hasSillyEyebrows ? `
     <!-- Silly wavy eyebrows -->
@@ -328,8 +355,20 @@ function generateChickSVG(colors, size, stage, opts) {
     <ellipse cx="${w * 0.5}" cy="${h * 0.44}" rx="6" ry="4" fill="${colors.beak}"/>
     <ellipse cx="${w * 0.5}" cy="${h * 0.43}" rx="4" ry="2" fill="#FFE4B5" opacity="0.4"/>
 
-    <!-- Tiny comb -->
+    <!-- Comb/Topknot -->
+    ${isSilkie ? `
+    <!-- Silkie fluffy topknot/crest -->
+    <g filter="url(#chickFluff${uid})">
+      <circle cx="${w * 0.5}" cy="${h * 0.12}" r="${isWeekOld ? 12 : 16}" fill="${colors.bodyLight}"/>
+      <circle cx="${w * 0.45}" cy="${h * 0.1}" r="${isWeekOld ? 8 : 10}" fill="${colors.body}"/>
+      <circle cx="${w * 0.55}" cy="${h * 0.1}" r="${isWeekOld ? 8 : 10}" fill="${colors.body}"/>
+      <circle cx="${w * 0.5}" cy="${h * 0.06}" r="${isWeekOld ? 6 : 8}" fill="${colors.bodyLight}"/>
+    </g>
+    <!-- Tiny purple comb peeking through -->
+    <ellipse cx="${w * 0.5}" cy="${h * 0.18}" rx="3" ry="2" fill="${colors.comb}" opacity="0.7"/>
+    ` : `
     <ellipse cx="${w * 0.5}" cy="${h * 0.12}" rx="5" ry="${isWeekOld ? 6 : 8}" fill="${colors.comb}"/>
+    `}
 
     ${opts.hasHeadband ? `
     <!-- Flower headband -->
@@ -356,6 +395,7 @@ function generateGrownChickenSVG(colors, size, stage, opts) {
   const w = size;
   const h = size * 1.2;
   const fluffiness = colors.fluffy ? 1.15 : 1;
+  const isSilkie = colors.silkie || false;
   const isLayingOrOlder = ["laying", "adult", "mature"].includes(stage);
   const isMature = stage === "mature";
   const uid = Math.random().toString(36).substr(2, 9);
@@ -408,10 +448,17 @@ function generateGrownChickenSVG(colors, size, stage, opts) {
         <stop offset="0%" style="stop-color:#3A3A3A;stop-opacity:1" />
         <stop offset="100%" style="stop-color:#1A1A1A;stop-opacity:1" />
       </radialGradient>
-      <filter id="fluff${uid}" x="-5%" y="-5%" width="110%" height="110%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise"/>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+      <filter id="fluff${uid}" x="-8%" y="-8%" width="116%" height="116%">
+        <feTurbulence type="fractalNoise" baseFrequency="${isSilkie ? '0.06' : '0.04'}" numOctaves="${isSilkie ? '4' : '3'}" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="${isSilkie ? '5' : '3'}" xChannelSelector="R" yChannelSelector="G"/>
       </filter>
+      ${isSilkie ? `
+      <!-- Extra fluffy filter for Silkie pom-pom effect -->
+      <filter id="silkieFluff${uid}" x="-15%" y="-15%" width="130%" height="130%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="5" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      ` : ''}
       ${barredPattern}
     </defs>
 
@@ -425,20 +472,57 @@ function generateGrownChickenSVG(colors, size, stage, opts) {
     ` : ""}
 
     <!-- Feet -->
+    ${isSilkie ? `
+    <!-- Silkie feathered feet with fluffy leg feathers -->
+    <g>
+      <!-- Fluffy leg feathers -->
+      <ellipse cx="${w * 0.38}" cy="${h * 0.82}" rx="10" ry="8" fill="${colors.body}" filter="url(#silkieFluff${uid})"/>
+      <ellipse cx="${w * 0.62}" cy="${h * 0.82}" rx="10" ry="8" fill="${colors.body}" filter="url(#silkieFluff${uid})"/>
+      <!-- Dark Silkie feet showing underneath -->
+      <g stroke="${colors.feet}" stroke-width="3" fill="none" stroke-linecap="round">
+        <path d="M ${w * 0.38} ${h * 0.88} L ${w * 0.32} ${h * 0.96} M ${w * 0.38} ${h * 0.88} L ${w * 0.38} ${h * 0.97} M ${w * 0.38} ${h * 0.88} L ${w * 0.44} ${h * 0.96}"/>
+        <path d="M ${w * 0.62} ${h * 0.88} L ${w * 0.56} ${h * 0.96} M ${w * 0.62} ${h * 0.88} L ${w * 0.62} ${h * 0.97} M ${w * 0.62} ${h * 0.88} L ${w * 0.68} ${h * 0.96}"/>
+      </g>
+      <!-- Extra toe (Silkies have 5 toes) -->
+      <path d="M ${w * 0.38} ${h * 0.88} L ${w * 0.35} ${h * 0.93}" stroke="${colors.feet}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M ${w * 0.62} ${h * 0.88} L ${w * 0.65} ${h * 0.93}" stroke="${colors.feet}" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    ` : `
     <g stroke="${colors.feet}" stroke-width="3" fill="none" stroke-linecap="round">
       <path d="M ${w * 0.38} ${h * 0.85} L ${w * 0.3} ${h * 0.95} M ${w * 0.38} ${h * 0.85} L ${w * 0.38} ${h * 0.97} M ${w * 0.38} ${h * 0.85} L ${w * 0.46} ${h * 0.95}"/>
       <path d="M ${w * 0.62} ${h * 0.85} L ${w * 0.54} ${h * 0.95} M ${w * 0.62} ${h * 0.85} L ${w * 0.62} ${h * 0.97} M ${w * 0.62} ${h * 0.85} L ${w * 0.7} ${h * 0.95}"/>
     </g>
+    `}
 
     <!-- Tail feathers -->
+    ${isSilkie ? `
+    <!-- Silkie fluffy rear/tail poof -->
+    <g filter="url(#silkieFluff${uid})">
+      <circle cx="${w * 0.2}" cy="${h * 0.55}" r="${w * 0.15}" fill="${colors.body}"/>
+      <circle cx="${w * 0.15}" cy="${h * 0.52}" r="${w * 0.1}" fill="${colors.bodyLight}"/>
+      <circle cx="${w * 0.25}" cy="${h * 0.58}" r="${w * 0.08}" fill="${colors.bodyDark}"/>
+    </g>
+    ` : `
     <g fill="url(#wingGrad${uid})">
       <ellipse cx="${w * 0.22}" cy="${h * 0.52}" rx="${w * 0.08}" ry="${h * 0.15}" transform="rotate(-30 ${w * 0.22} ${h * 0.52})"/>
       <ellipse cx="${w * 0.18}" cy="${h * 0.48}" rx="${w * 0.06}" ry="${h * 0.12}" transform="rotate(-45 ${w * 0.18} ${h * 0.48})"/>
       <ellipse cx="${w * 0.25}" cy="${h * 0.55}" rx="${w * 0.07}" ry="${h * 0.13}" transform="rotate(-20 ${w * 0.25} ${h * 0.55})"/>
     </g>
+    `}
 
     <!-- Body -->
-    <ellipse cx="${w * 0.52}" cy="${h * 0.62}" rx="${w * 0.32 * ageScale * fluffiness}" ry="${h * 0.22 * ageScale * fluffiness}" fill="${bodyFill}" ${colors.fluffy ? `filter="url(#fluff${uid})"` : ""}/>
+    ${isSilkie ? `
+    <!-- Silkie puffball body - rounder and fluffier -->
+    <g filter="url(#silkieFluff${uid})">
+      <ellipse cx="${w * 0.52}" cy="${h * 0.6}" rx="${w * 0.36 * ageScale}" ry="${h * 0.26 * ageScale}" fill="${bodyFill}"/>
+      <!-- Extra fluff puffs around body -->
+      <circle cx="${w * 0.3}" cy="${h * 0.65}" r="${w * 0.1}" fill="${colors.bodyLight}"/>
+      <circle cx="${w * 0.7}" cy="${h * 0.55}" r="${w * 0.08}" fill="${colors.bodyLight}"/>
+      <circle cx="${w * 0.55}" cy="${h * 0.75}" r="${w * 0.12}" fill="${colors.body}"/>
+    </g>
+    ` : `
+    <ellipse cx="${w * 0.52}" cy="${h * 0.62}" rx="${w * 0.32 * ageScale * fluffiness}" ry="${h * 0.22 * ageScale * fluffiness}" fill="${bodyFill}" ${colors.fluffy ? `filter="url(#fluff${uid})"` : ''}/>
+    `}
 
     ${opts.hasJumper ? `
     <!-- Cozy jumper/sweater -->
@@ -450,18 +534,50 @@ function generateGrownChickenSVG(colors, size, stage, opts) {
     ` : ""}
 
     <!-- Wing -->
-    <ellipse cx="${w * 0.38}" cy="${h * 0.6}" rx="${w * 0.14 * ageScale}" ry="${h * 0.14 * ageScale}" fill="url(#wingGrad${uid})" transform="rotate(-10 ${w * 0.38} ${h * 0.6})" ${colors.fluffy ? `filter="url(#fluff${uid})"` : ""}/>
+    ${isSilkie ? `
+    <!-- Silkie fluffy wing puff -->
+    <g filter="url(#silkieFluff${uid})">
+      <ellipse cx="${w * 0.36}" cy="${h * 0.58}" rx="${w * 0.16 * ageScale}" ry="${h * 0.15 * ageScale}" fill="url(#wingGrad${uid})" transform="rotate(-5 ${w * 0.36} ${h * 0.58})"/>
+      <circle cx="${w * 0.32}" cy="${h * 0.55}" r="${w * 0.06}" fill="${colors.bodyLight}"/>
+    </g>
+    ` : `
+    <ellipse cx="${w * 0.38}" cy="${h * 0.6}" rx="${w * 0.14 * ageScale}" ry="${h * 0.14 * ageScale}" fill="url(#wingGrad${uid})" transform="rotate(-10 ${w * 0.38} ${h * 0.6})" ${colors.fluffy ? `filter="url(#fluff${uid})"` : ''}/>
+    `}
 
     <!-- Neck -->
+    ${isSilkie ? `
+    <!-- Silkie fluffy neck with beard/muff -->
+    <g filter="url(#silkieFluff${uid})">
+      <ellipse cx="${w * 0.62}" cy="${h * 0.42}" rx="${w * 0.14}" ry="${h * 0.12}" fill="${bodyFill}"/>
+      <!-- Beard/muff feathers -->
+      <circle cx="${w * 0.68}" cy="${h * 0.4}" r="${w * 0.06}" fill="${colors.bodyLight}"/>
+      <circle cx="${w * 0.72}" cy="${h * 0.38}" r="${w * 0.05}" fill="${colors.body}"/>
+    </g>
+    ` : `
     <ellipse cx="${w * 0.62}" cy="${h * 0.42}" rx="${w * 0.12 * fluffiness}" ry="${h * 0.1 * fluffiness}" fill="${bodyFill}"/>
+    `}
 
     <!-- Head -->
-    <ellipse cx="${w * 0.65}" cy="${h * 0.28}" rx="${w * 0.18 * fluffiness}" ry="${h * 0.14 * fluffiness}" fill="${bodyFill}" ${colors.fluffy ? `filter="url(#fluff${uid})"` : ""}/>
+    ${isSilkie ? `
+    <!-- Silkie smaller head (mostly hidden by fluffy topknot) -->
+    <g filter="url(#silkieFluff${uid})">
+      <ellipse cx="${w * 0.65}" cy="${h * 0.3}" rx="${w * 0.14}" ry="${h * 0.1}" fill="${bodyFill}"/>
+    </g>
+    <!-- Blue earlobes (characteristic of Silkies) -->
+    <ellipse cx="${w * 0.76}" cy="${h * 0.32}" rx="3" ry="4" fill="${colors.earlobe}" opacity="0.8"/>
+    ` : `
+    <ellipse cx="${w * 0.65}" cy="${h * 0.28}" rx="${w * 0.18 * fluffiness}" ry="${h * 0.14 * fluffiness}" fill="${bodyFill}" ${colors.fluffy ? `filter="url(#fluff${uid})"` : ''}/>
+    `}
 
     <!-- Sanrio-style rosy cheeks (always visible) -->
-    ${!opts.hasPandaMask ? `
+    ${!opts.hasPandaMask && !isSilkie ? `
     <ellipse cx="${w * 0.54}" cy="${h * 0.32}" rx="7" ry="5" fill="url(#blush${uid})"/>
     <ellipse cx="${w * 0.76}" cy="${h * 0.32}" rx="7" ry="5" fill="url(#blush${uid})"/>
+    ` : ''}
+    ${isSilkie ? `
+    <!-- Silkie smaller cheek blush -->
+    <ellipse cx="${w * 0.58}" cy="${h * 0.33}" rx="4" ry="3" fill="url(#blush${uid})"/>
+    <ellipse cx="${w * 0.72}" cy="${h * 0.33}" rx="4" ry="3" fill="url(#blush${uid})"/>
     ` : ""}
     ${opts.hasCuteFace && !opts.hasPandaMask ? `
     <!-- Extra kawaii sparkles for cute face -->
@@ -493,7 +609,17 @@ function generateGrownChickenSVG(colors, size, stage, opts) {
     `}
 
     <!-- Eyes (Sanrio kawaii style) -->
-    ${opts.hasPandaMask ? "" : eyeStyle === "happy" ? `
+    ${opts.hasPandaMask ? '' : isSilkie ? `
+    <!-- Silkie cute small happy eyes (∪ shape) -->
+    ${eyeStyle === 'sick' ? `
+    <circle cx="${w * 0.63}" cy="${h * 0.29}" r="3" fill="none" stroke="${colors.eye}" stroke-width="1.5"/>
+    <circle cx="${w * 0.71}" cy="${h * 0.29}" r="3" fill="none" stroke="${colors.eye}" stroke-width="1.5"/>
+    ` : `
+    <!-- Small happy curved eyes -->
+    <path d="M ${w * 0.60} ${h * 0.30} Q ${w * 0.63} ${h * 0.27} ${w * 0.66} ${h * 0.30}" stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M ${w * 0.68} ${h * 0.30} Q ${w * 0.71} ${h * 0.27} ${w * 0.74} ${h * 0.30}" stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round"/>
+    `}
+    ` : eyeStyle === 'happy' ? `
     <!-- Happy curved eyes (∪ shape) -->
     <path d="M ${w * 0.55} ${h * 0.27} Q ${w * 0.60} ${h * 0.21} ${w * 0.65} ${h * 0.27}" stroke="#1A1A1A" stroke-width="3" fill="none" stroke-linecap="round"/>
     <path d="M ${w * 0.66} ${h * 0.27} Q ${w * 0.71} ${h * 0.21} ${w * 0.76} ${h * 0.27}" stroke="#1A1A1A" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -538,7 +664,22 @@ function generateGrownChickenSVG(colors, size, stage, opts) {
     <line x1="${w * 0.78}" y1="${h * 0.21}" x2="${w * 0.67}" y2="${h * 0.17}" stroke="#5D4037" stroke-width="3" stroke-linecap="round"/>
     ` : ""}
 
-    <!-- Comb -->
+    <!-- Comb/Topknot -->
+    ${isSilkie ? `
+    <!-- Silkie signature fluffy topknot/crest (pom-pom on head) -->
+    <g filter="url(#silkieFluff${uid})">
+      <!-- Main topknot puff ball -->
+      <circle cx="${w * 0.65}" cy="${h * 0.1}" r="${isLayingOrOlder ? w * 0.16 : w * 0.13}" fill="${colors.bodyLight}"/>
+      <circle cx="${w * 0.6}" cy="${h * 0.08}" r="${isLayingOrOlder ? w * 0.11 : w * 0.09}" fill="${colors.body}"/>
+      <circle cx="${w * 0.72}" cy="${h * 0.09}" r="${isLayingOrOlder ? w * 0.1 : w * 0.08}" fill="${colors.body}"/>
+      <circle cx="${w * 0.65}" cy="${h * 0.03}" r="${isLayingOrOlder ? w * 0.08 : w * 0.06}" fill="${colors.bodyLight}"/>
+      <!-- Small extra fluff puffs -->
+      <circle cx="${w * 0.55}" cy="${h * 0.11}" r="${w * 0.05}" fill="${colors.bodyDark}"/>
+      <circle cx="${w * 0.75}" cy="${h * 0.12}" r="${w * 0.04}" fill="${colors.bodyDark}"/>
+    </g>
+    <!-- Small purple comb hidden in fluff -->
+    <ellipse cx="${w * 0.65}" cy="${h * 0.16}" rx="4" ry="3" fill="${colors.comb}" opacity="0.6"/>
+    ` : `
     <g fill="${colors.comb}">
       ${isLayingOrOlder ? `
       <!-- Larger comb for adult -->
@@ -551,9 +692,15 @@ function generateGrownChickenSVG(colors, size, stage, opts) {
       <ellipse cx="${w * 0.69}" cy="${h * 0.14}" rx="4" ry="8"/>
       `}
     </g>
+    `}
 
     <!-- Wattle -->
+    ${isSilkie ? `
+    <!-- Silkie small dark wattle -->
+    <ellipse cx="${w * 0.72}" cy="${h * 0.36}" rx="3" ry="${isLayingOrOlder ? 5 : 3}" fill="${colors.wattle}"/>
+    ` : `
     <ellipse cx="${w * 0.7}" cy="${h * 0.36}" rx="4" ry="${isLayingOrOlder ? 8 : 5}" fill="${colors.wattle}"/>
+    `}
 
     ${opts.hasHeadband ? `
     <!-- Flower headband -->
