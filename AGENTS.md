@@ -51,6 +51,33 @@ Visual progress bars show real-time percentages for each need:
 - 🟡 Yellow (40-59%): Warning
 - 🔴 Red (0-39%): Critical (pulsing animation)
 
+### Health Decay System
+Needs decrease in **real-time** based on minutes passed since last update.
+
+**Base decay rate:** 0.5 per real minute
+
+| Need | Multiplier | Rate/minute | Notes |
+|------|------------|-------------|-------|
+| Hunger | 1.0x | 0.5 | Standard rate |
+| Thirst | 1.2x | 0.6 | Fastest decay! |
+| Sleep | 0.4x | 0.2 | Slow decay |
+| Happiness | 0.2x | 0.1 | Slowest decay |
+| Cleanliness | 0.3x | 0.15 | Slow decay |
+| Exercise | 0.3x | 0.15 | Slow decay |
+
+**Shop items that reduce decay:**
+| Item | Effect |
+|------|--------|
+| 💊 Daily Vitamins | 30% slower hunger decay |
+| ✨ Feather Polish | 30% slower cleanliness decay |
+| 🤖 Robot Chicken Friend | 30% slower happiness decay |
+| 🪞 Chicken Mirror | 20% slower happiness decay |
+
+**Sickness mechanic:**
+- When average of all needs < 30%, there's a 10% chance of getting sick
+- 💉 De-worm Tablets reduce sickness chance by 50%
+- Sleep action has 30% chance to cure sickness
+
 ### Breeds Available
 Each breed has unique custom SVG graphics with breed-specific colors:
 
