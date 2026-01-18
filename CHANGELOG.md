@@ -5,6 +5,25 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.1] - 2026-01-18
+
+### Changed
+- **Session-based decay system** - Health only decreases while actively on the page
+  - Time stops when tab is hidden, window loses focus, or app is quit
+  - Maximum session time: 10 minutes, then decay pauses
+  - Timer resets fresh on each page load (no "catch-up" decay)
+
+### Added
+- **Session timer display** near Overall Health showing real-time MM:SS counter
+  - Red pulsing clock (00:00-02:00): Fast decay period
+  - Blue clock (02:00-10:00): Normal decay period
+  - Grey clock (10:00): Stopped - come back later!
+- **Fast decay period** - First 2 minutes have 3x faster decay for visible feedback
+- **Visual effects on decay**:
+  - Brightness flash animation on health bars when values drop
+  - Shake animation on indicator rows
+- **Audio feedback** - Soft descending tone plays when health drops (throttled to every 3 seconds)
+
 ## [0.16.0] - 2026-01-17
 
 ### Changed

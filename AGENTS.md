@@ -52,18 +52,32 @@ Visual progress bars show real-time percentages for each need:
 - 🔴 Red (0-39%): Critical (pulsing animation)
 
 ### Health Decay System
-Needs decrease in **real-time** based on minutes passed since last update.
+Needs decrease in **real-time** only while the user is **actively on the page**.
 
-**Base decay rate:** 0.5 per real minute
+#### Session-Based Decay
+- **Time only counts when page is visible** (uses Page Visibility API)
+- **Maximum session: 10 minutes** - timer stops after 10 mins, decay pauses
+- **Timer resets on page load** - leaving and returning starts fresh
+- **Pauses when**: tab is hidden, window loses focus, app is quit
 
-| Need | Multiplier | Rate/minute | Notes |
-|------|------------|-------------|-------|
-| Hunger | 1.0x | 0.5 | Standard rate |
-| Thirst | 1.2x | 0.6 | Fastest decay! |
-| Sleep | 0.4x | 0.2 | Slow decay |
-| Happiness | 0.2x | 0.1 | Slowest decay |
-| Cleanliness | 0.3x | 0.15 | Slow decay |
-| Exercise | 0.3x | 0.15 | Slow decay |
+#### Session Timer Display
+A real-time clock (MM:SS format) is shown near Overall Health:
+- ⏱️ **Red pulsing** (00:00-02:00): Fast decay period
+- ⏱️ **Blue** (02:00-10:00): Normal decay period  
+- ⏱️ **Grey** (10:00): Stopped - come back later!
+
+#### Decay Rates
+
+**Fast period (first 2 minutes):** 3x normal speed for visible feedback
+
+| Need | Base Rate/sec | Fast Rate/sec | Notes |
+|------|---------------|---------------|-------|
+| Hunger | 0.05 | 0.15 | Standard rate |
+| Thirst | 0.06 | 0.18 | Fastest decay! |
+| Sleep | 0.02 | 0.06 | Slow decay |
+| Happiness | 0.01 | 0.03 | Slowest decay |
+| Cleanliness | 0.015 | 0.045 | Slow decay |
+| Exercise | 0.015 | 0.045 | Slow decay |
 
 **Shop items that reduce decay:**
 | Item | Effect |
@@ -73,8 +87,14 @@ Needs decrease in **real-time** based on minutes passed since last update.
 | 🤖 Robot Chicken Friend | 30% slower happiness decay |
 | 🪞 Chicken Mirror | 20% slower happiness decay |
 
+#### Visual & Audio Feedback
+When decay causes a visible change:
+- 🔊 **Sound effect**: Soft descending tone (throttled to every 3 seconds)
+- ✨ **Bar flash animation**: Brightness pulse on the health bar
+- 📳 **Shake animation**: Indicator row shakes briefly
+
 **Sickness mechanic:**
-- When average of all needs < 30%, there's a 10% chance of getting sick
+- When average of all needs < 30%, there's a small chance of getting sick
 - 💉 De-worm Tablets reduce sickness chance by 50%
 - Sleep action has 30% chance to cure sickness
 

@@ -1871,6 +1871,88 @@
         color: #c62828;
       }
 
+      .session-timer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 8px;
+        font-size: 0.85em;
+        color: #666;
+      }
+
+      .session-timer-clock {
+        font-family: ui-monospace, 'SF Mono', Menlo, Monaco, monospace;
+        font-size: 1.1em;
+        font-weight: 600;
+        color: #4169e1;
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        padding: 4px 10px;
+        border-radius: 8px;
+        border: 2px solid #64b5f6;
+        min-width: 60px;
+        text-align: center;
+      }
+
+      .session-timer-clock.fast {
+        color: #d32f2f;
+        background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        border-color: #ef9a9a;
+        animation: timer-pulse 1s ease-in-out infinite;
+      }
+
+      .session-timer-clock.stopped {
+        color: #757575;
+        background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+        border-color: #bdbdbd;
+      }
+
+      @keyframes timer-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+
+      .session-timer-label {
+        font-size: 0.85em;
+      }
+
+      .health-indicator-fill.decaying {
+        animation: decay-flash 0.5s ease-out;
+      }
+
+      @keyframes decay-flash {
+        0% { filter: brightness(1); }
+        25% { filter: brightness(1.5); box-shadow: 0 0 10px rgba(255, 152, 0, 0.8); }
+        50% { filter: brightness(0.8); }
+        100% { filter: brightness(1); }
+      }
+
+      .health-indicator.decay-alert {
+        animation: shake-alert 0.4s ease-out;
+      }
+
+      @keyframes shake-alert {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-3px); }
+        40% { transform: translateX(3px); }
+        60% { transform: translateX(-2px); }
+        80% { transform: translateX(2px); }
+      }
+
+      .decay-indicator {
+        display: inline-block;
+        color: #ff5722;
+        font-size: 0.8em;
+        margin-left: 4px;
+        animation: decay-drop 0.5s ease-out;
+      }
+
+      @keyframes decay-drop {
+        0% { opacity: 0; transform: translateY(-5px); }
+        50% { opacity: 1; }
+        100% { opacity: 0; transform: translateY(5px); }
+      }
+
       .shop-categories {
         display: flex;
         gap: 8px;
@@ -2263,6 +2345,10 @@
               <div class="overall-health-label">🏆 Overall Health</div>
               <div class="overall-health-value high" id="overall-health-value">
                 100%
+              </div>
+              <div class="session-timer">
+                <span class="session-timer-label">⏱️ Session:</span>
+                <span class="session-timer-clock fast" id="session-timer-clock">00:00</span>
               </div>
             </div>
             <div class="health-indicator">
@@ -2861,8 +2947,10 @@
       };
 
       // ============= GAME STATE =============
-      const GAME_VERSION = "0.15.0";
+      const GAME_VERSION = "0.16.0";
       const DAILY_ACTION_LIMIT = 10;
+      const SESSION_MAX_SECONDS = 600; // 10 minutes max
+      const FAST_DECAY_SECONDS = 120; // First 2 minutes = fast decay
 
       let gameState = {
         chicken: null,
@@ -2874,6 +2962,41 @@
         dailyActions: 0, // Track daily actions for quota
         dailyActionsDate: null, // The date of last action (YYYY-MM-DD)
       };
+
+      // Session timer state (not persisted - resets on page load)
+      let sessionState = {
+        startTime: null,
+        elapsedSeconds: 0,
+        isActive: true,
+        timerInterval: null,
+        decayInterval: null,
+        lastDecayCheck: null,
+      };
+
+      // Create decay sound effect (soft notification sound)
+      const decaySound = (function() {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return function playDecaySound() {
+          try {
+            // Resume audio context if suspended (needed for mobile)
+            if (audioCtx.state === 'suspended') {
+              audioCtx.resume();
+            }
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.15);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + 0.15);
+          } catch(e) {
+            // Audio not supported, fail silently
+          }
+        };
+      })();
 
       let selectedBreed = null;
 
@@ -3044,18 +3167,199 @@
         loadGame();
         checkAndResetDailyQuota();
         if (gameState.chicken) {
-          updateGame();
+          // Don't run old updateGame on load - start fresh session
           updateMoneyDisplay();
           updateDailyActionsDisplay();
+          renderChicken();
           showScreen("game-screen");
+          startSessionTimer();
         }
-        // Update game every minute
-        setInterval(updateGame, 60000);
         // Check for day change every minute
         setInterval(() => {
           checkAndResetDailyQuota();
           updateDailyActionsDisplay();
         }, 60000);
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        
+        // Handle page unload/blur
+        window.addEventListener('blur', () => pauseSession());
+        window.addEventListener('focus', () => resumeSession());
+      }
+
+      // ============= SESSION TIMER SYSTEM =============
+      function startSessionTimer() {
+        sessionState.startTime = Date.now();
+        sessionState.elapsedSeconds = 0;
+        sessionState.isActive = true;
+        sessionState.lastDecayCheck = Date.now();
+        
+        // Update timer display every second
+        sessionState.timerInterval = setInterval(updateSessionTimer, 1000);
+        
+        // Run decay check every 5 seconds for smoother updates
+        sessionState.decayInterval = setInterval(processSessionDecay, 5000);
+        
+        updateSessionTimerDisplay();
+      }
+
+      function updateSessionTimer() {
+        if (!sessionState.isActive) return;
+        if (sessionState.elapsedSeconds >= SESSION_MAX_SECONDS) {
+          // Stop at 10 minutes
+          pauseSession();
+          return;
+        }
+        
+        sessionState.elapsedSeconds++;
+        updateSessionTimerDisplay();
+      }
+
+      function updateSessionTimerDisplay() {
+        const clockEl = document.getElementById('session-timer-clock');
+        if (!clockEl) return;
+        
+        const mins = Math.floor(sessionState.elapsedSeconds / 60);
+        const secs = sessionState.elapsedSeconds % 60;
+        clockEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        
+        // Update styling based on state
+        clockEl.classList.remove('fast', 'stopped');
+        if (sessionState.elapsedSeconds >= SESSION_MAX_SECONDS) {
+          clockEl.classList.add('stopped');
+        } else if (sessionState.elapsedSeconds < FAST_DECAY_SECONDS) {
+          clockEl.classList.add('fast');
+        }
+      }
+
+      function pauseSession() {
+        sessionState.isActive = false;
+        updateSessionTimerDisplay();
+      }
+
+      function resumeSession() {
+        // Only resume if we haven't hit 10 minute cap
+        if (sessionState.elapsedSeconds >= SESSION_MAX_SECONDS) return;
+        if (!document.hidden) {
+          sessionState.isActive = true;
+          sessionState.lastDecayCheck = Date.now(); // Reset decay check to prevent catch-up
+        }
+      }
+
+      function handleVisibilityChange() {
+        if (document.hidden) {
+          pauseSession();
+        } else {
+          resumeSession();
+        }
+      }
+
+      function processSessionDecay() {
+        if (!sessionState.isActive || !gameState.chicken) return;
+        if (sessionState.elapsedSeconds >= SESSION_MAX_SECONDS) return;
+        
+        const now = Date.now();
+        const secondsPassed = (now - sessionState.lastDecayCheck) / 1000;
+        sessionState.lastDecayCheck = now;
+        
+        // Determine decay rate: faster in first 2 minutes
+        const isFastDecay = sessionState.elapsedSeconds < FAST_DECAY_SECONDS;
+        const decayMultiplier = isFastDecay ? 3.0 : 1.0; // 3x faster in first 2 mins
+        
+        // Base decay per second (adjusted for visibility)
+        // Normal: 0.5 per minute = 0.0083 per second
+        // We want visible changes, so use higher base rate
+        const baseDecayPerSecond = 0.05 * decayMultiplier;
+        const decay = secondsPassed * baseDecayPerSecond;
+        
+        // Store old values to detect changes
+        const oldNeeds = { ...gameState.chicken.needs };
+        
+        // Calculate decay rates with item effects
+        let hungerDecay = decay;
+        let thirstDecay = decay * 1.2;
+        let happinessDecay = decay * 0.2;
+        let cleanlinessDecay = decay * 0.3;
+        let sleepDecay = decay * 0.4;
+        let exerciseDecay = decay * 0.3;
+        
+        // Apply item effects
+        if (gameState.inventory.includes('vitamins')) {
+          hungerDecay *= 0.7;
+        }
+        if (gameState.inventory.includes('feather-polish')) {
+          cleanlinessDecay *= 0.7;
+        }
+        if (gameState.inventory.includes('robot-friend')) {
+          happinessDecay *= 0.7;
+        }
+        if (gameState.inventory.includes('mirror')) {
+          happinessDecay *= 0.8;
+        }
+        
+        // Apply decay
+        gameState.chicken.needs.hunger = Math.max(0, gameState.chicken.needs.hunger - hungerDecay);
+        gameState.chicken.needs.thirst = Math.max(0, gameState.chicken.needs.thirst - thirstDecay);
+        gameState.chicken.needs.cleanliness = Math.max(0, gameState.chicken.needs.cleanliness - cleanlinessDecay);
+        gameState.chicken.needs.sleep = Math.max(0, gameState.chicken.needs.sleep - sleepDecay);
+        gameState.chicken.needs.happiness = Math.max(0, gameState.chicken.needs.happiness - happinessDecay);
+        gameState.chicken.needs.exercise = Math.max(0, gameState.chicken.needs.exercise - exerciseDecay);
+        
+        // Check for sickness
+        const avgNeeds = Object.values(gameState.chicken.needs).reduce((a, b) => a + b, 0) / 6;
+        let sickChance = 0.005; // Lower chance per tick
+        if (gameState.inventory.includes('deworm-tablets')) {
+          sickChance *= 0.5;
+        }
+        if (avgNeeds < 30 && Math.random() < sickChance) {
+          gameState.chicken.isSick = true;
+        }
+        
+        // Check for visible changes and trigger effects
+        const changedNeeds = [];
+        const needKeys = ['hunger', 'thirst', 'cleanliness', 'sleep', 'happiness', 'exercise'];
+        for (const key of needKeys) {
+          const oldVal = Math.floor(oldNeeds[key]);
+          const newVal = Math.floor(gameState.chicken.needs[key]);
+          if (oldVal !== newVal) {
+            changedNeeds.push(key);
+          }
+        }
+        
+        // Trigger visual/audio effects if something changed significantly
+        if (changedNeeds.length > 0) {
+          triggerDecayEffects(changedNeeds);
+        }
+        
+        // Save and render
+        gameState.lastUpdate = now;
+        saveGame();
+        renderHealthIndicators();
+      }
+
+      function triggerDecayEffects(changedNeeds) {
+        // Play sound (throttle to not be annoying)
+        if (!triggerDecayEffects.lastSound || Date.now() - triggerDecayEffects.lastSound > 3000) {
+          decaySound();
+          triggerDecayEffects.lastSound = Date.now();
+        }
+        
+        // Add visual effects to changed indicators
+        for (const need of changedNeeds) {
+          const barEl = document.getElementById(`${need}-bar`);
+          const indicatorEl = barEl?.closest('.health-indicator');
+          
+          if (barEl) {
+            barEl.classList.add('decaying');
+            setTimeout(() => barEl.classList.remove('decaying'), 500);
+          }
+          
+          if (indicatorEl) {
+            indicatorEl.classList.add('decay-alert');
+            setTimeout(() => indicatorEl.classList.remove('decay-alert'), 400);
+          }
+        }
       }
 
       // ============= SCREEN MANAGEMENT =============
@@ -3142,7 +3446,10 @@
         gameState.lastUpdate = Date.now();
         saveGame();
         updateGame();
+        updateMoneyDisplay();
+        updateDailyActionsDisplay();
         showScreen("game-screen");
+        startSessionTimer();
         showPopup(
           `🎉 Welcome ${chickenName}! 🐣<br>Your egg is about to hatch!`
         );
@@ -3150,72 +3457,11 @@
 
       // ============= GAME LOGIC =============
       function updateGame() {
+        // This function is now mainly for rendering updates
+        // Real-time decay is handled by the session timer system
         if (!gameState.chicken) return;
-
-        const now = Date.now();
-        const timePassed = now - gameState.lastUpdate;
-        const minutesPassed = timePassed / 60000;
-
-        // Update needs (decrease over time) - with item effects
-        const decay = minutesPassed * 0.5; // Needs decrease by 0.5 per minute
-
-        // Check for item effects that reduce decay
-        let hungerDecay = decay;
-        let thirstDecay = decay * 1.2;
-        let happinessDecay = decay * 0.2;
-        let cleanlinessDecay = decay * 0.3;
-        let sickChance = 0.1;
-
-        // Apply item effects
-        if (gameState.inventory.includes("vitamins")) {
-          hungerDecay *= 0.7; // 30% slower hunger decay
-        }
-        if (gameState.inventory.includes("feather-polish")) {
-          cleanlinessDecay *= 0.7; // 30% slower cleanliness decay
-        }
-        if (gameState.inventory.includes("robot-friend")) {
-          happinessDecay *= 0.7; // 30% slower happiness decay
-        }
-        if (gameState.inventory.includes("mirror")) {
-          happinessDecay *= 0.8; // 20% slower happiness decay
-        }
-        if (gameState.inventory.includes("deworm-tablets")) {
-          sickChance *= 0.5; // 50% less chance of sickness
-        }
-
-        gameState.chicken.needs.hunger = Math.max(
-          0,
-          gameState.chicken.needs.hunger - hungerDecay
-        );
-        gameState.chicken.needs.thirst = Math.max(
-          0,
-          gameState.chicken.needs.thirst - thirstDecay
-        );
-        gameState.chicken.needs.cleanliness = Math.max(
-          0,
-          gameState.chicken.needs.cleanliness - cleanlinessDecay
-        );
-        gameState.chicken.needs.sleep = Math.max(
-          0,
-          gameState.chicken.needs.sleep - decay * 0.4
-        );
-        gameState.chicken.needs.happiness = Math.max(
-          0,
-          gameState.chicken.needs.happiness - happinessDecay
-        );
-        gameState.chicken.needs.exercise = Math.max(
-          0,
-          gameState.chicken.needs.exercise - decay * 0.3
-        );
-
-        // Check if chicken gets sick (if needs are too low)
-        const avgNeeds =
-          Object.values(gameState.chicken.needs).reduce((a, b) => a + b, 0) / 6;
-        if (avgNeeds < 30 && Math.random() < sickChance) {
-          gameState.chicken.isSick = true;
-        }
-
-        gameState.lastUpdate = now;
+        
+        gameState.lastUpdate = Date.now();
         saveGame();
         renderChicken();
       }
