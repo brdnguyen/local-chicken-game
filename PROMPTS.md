@@ -70,12 +70,68 @@ auto create the commit with the right commit message + push + capture change log
 
     12. DONE: fix graphics (Hatching stage should show a baby from the egg, then one week old, then baby chick (both showing the chickens only)
 
-    -   Make beautiful graphics!!! (chicken + decoration, I want to have custom graphics,
+    13. DONE! Make beautiful graphics!!! (chicken + decoration, I want to have custom graphics,
     not just discrete emoji.
 
         For example, if a chicken at 20 weeks old , is ISA BROWN + have head band, I want to
         custom-draw it.
 
+    14. DONE: Help me implement better visibility for the decay system:
+        -   only start decaying when the users are ACTIVELY on the page. Time stops (does not count) when the user has quit the app, or > 10 mins.
+        -   Implement faster decay during the first 2 minutes (so that users can see visible changes sooner), and then slower during the last 8 minutes
+        -   Display a real clock counter near the "Overall health", showing the 00:00 counter, showing the seconds keep increasing in real time, so that users can see the time passes (until 10 minutes, then the clock stops)
+        -   When there's a change because of decay (like Thirst drops, animate or have some visual effect so that it's visible, and play a sound.)
+
+    -   Improve UI, consolidate a bit so that it does not stretch too long , easier to see
+
+    -   Make helping chickens easier threshold, so easier to earn money
+
+    -   what's penalty for not taking care of chicken - will it dies? Perhaps
+    -   play sounds when you "taking care" actions for it
+
+
+    15. DONE IMplement a house chore challenge (makes it a new tab). YOu can earn 2 more actions per day.
+                -   This requires parent's approval. The workflow:
+                    -   first, parent needs to register (once-off event), by taking a face photo.
+                    -   you have to finish 2 house chores. Write down the chore in a note. The chore cannot be too small. Each has to be around 5-minute chore (like tidy up a room, watering the garden, wash the dish, study hard on a subject etc.)
+                    -   Then, present the note (a summary of the 2 chores what you did) to the parent. IF parent agrees, approves by authenticate with the camera. Confirm that it's the same person (using a simple face heuristics that can be implemented in HTML/javascript).
+                    -   INclude the necessary guides / legends or labels /  tool tips in the house chore tab (like "how to approve a chore" and "what chore is accepted"), so that both the user and the parent knows what to do.
+
+
+    16. DONE! OVerhaul the incentive
+
+        -   Keeping chickens healthy: implement a "money-to-claim pot", which is linked to how much $ you can "earn" at each earning event
+
+        -   High level incentive:
+                -   Keep chicken healthy -> pot money increases faster -> earn more money
+                -   Buy stuff (vitamins, decoration) also increases happiness and wellness for the chicken
+                -   If chicken dies, you lose everything
+                -   If chicken grows, you collect more badges, including some rare badges (growing badge, hatching badge, layer badge, friendly badge (> 2 friends) sociable chicken badge (> 5 friends), layer badge (laying first egg)
+                    -   Brainstorm more badges. Be creative, across multiple events in the Milestones, across multiple dimensions. If the chicken has many decorations, could be "beautiful chicken". Many toys: "Happiest ever chicken".
+                If owner cares daily without a miss > 7 days, something like "never skip a bit". Think of Github badges systems.                 
+
+
+        -   Have a prompt at the top (under $ balance) to hint (especially for new users): care for chickens to earn $, the more healthy the more $, then having a tooltip to explain details:
+
+                +   there's a pot (call it "pot", with a visual so that easy for kid to understand) to track how much money ($) you can earn immediately at each "earning event"
+                        Rename the total money like "Total bank balance" to differentiate 
+                +   an earning event triggers at every 20 days, days 40 etc
+                +   for every "Green" bar (healthy), as each days passed, the $ in the pot increases and compounds. For every "Red" bar, the $ decreases. Set the weight so that organically the money in the pot should increase by around 5$ every 20 days, based on stardard caring pattern. Cap it at $5 max (exclude Bonus)
+                    -   for every event where the pot grows or shrinks, pop up a message with a clear visual to explain
+
+                +   if chicken is sick, the money pot is frozen (does NOT increase at all, until the chicken is no longer sick)
+                +   The following actions also earns bonus:
+                        1)  Add a new friend
+                        2)  Finish the house chore challenge
+
+                +   If there are 2 days of no activity, the pot resets
+
+
+    -   If chicken grows, you also begin to have eggs. At some point, egg also hatches, the chicken has babies! (up to 4 chicks!)
+
+
+
+    -   Refactoring, split to smaller files for easier of maintenance (just like svg.js). For example: Shopping items logic, QR code logic. Ask AI to help.
 
     -   Various UI fix:
             -   make Days More prominent!!!

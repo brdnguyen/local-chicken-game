@@ -63,7 +63,7 @@ Needs decrease in **real-time** only while the user is **actively on the page**.
 #### Session Timer Display
 A real-time clock (MM:SS format) is shown near Overall Health:
 - ⏱️ **Red pulsing** (00:00-02:00): Fast decay period
-- ⏱️ **Blue** (02:00-10:00): Normal decay period  
+- ⏱️ **Blue** (02:00-10:00): Normal decay period
 - ⏱️ **Grey** (10:00): Stopped - come back later!
 
 #### Decay Rates
@@ -174,10 +174,46 @@ The game uses **custom SVG graphics** that combine:
 | 🪞 Chicken Mirror | $2 | 20% slower boredom |
 
 ### Economy
-- Start with $5
-- Earn $1 per action **only if health improves** (needs must not be at 100%)
-- Visual feedback: ⬆️ arrow on improved health bars, encouraging message displayed
-- Money awarded when color status changes: Red→Yellow or Yellow→Green
+- Start with $5 (Bank Balance)
+- **All money goes to the POT first** - only pot payouts update bank balance!
+- Caring actions that improve health add +$1 to pot (not bank)
+- Visual feedback: ⬆️ arrow on improved health bars, pot growth animation
+- Money to pot awarded when color status changes: Red→Yellow or Yellow→Green
+
+### Money Pot System 🏺
+The Money Pot is the **primary way to earn money**! All earnings flow through the pot.
+
+#### How It Works
+- **Caring actions that improve health**: +$1 added to pot instantly
+- **Pot also fills based on health status** while actively playing:
+  - 💚 **Green bars (≥60%)**: Pot grows (+$0.00025/second per green bar)
+  - 💛 **Yellow bars (40-59%)**: No change
+  - ❤️ **Red bars (<40%)**: Pot shrinks (-$0.00015/second per red bar)
+  - 🤒 **Sick chicken**: Pot is **frozen** (no growth/shrink)
+  
+- **Payday every 20 virtual days!** (Day 20, 40, 60, etc.)
+  - Pot empties into bank balance
+  - Celebration popup shows payout
+  - Pot resets to $0
+
+- **Maximum pot value**: $5.00 (excludes bonuses)
+
+#### Bonus Rewards
+| Action | Bonus |
+|--------|-------|
+| 👥 Add a new friend | +$0.50 to pot |
+| 🧹 Complete house chores | +$1.00 to pot |
+
+#### Inactivity Penalty
+- **2 days without playing** = Pot resets to $0!
+- Warning shown on return
+
+#### Visual Elements
+- 🏺 Pot display shows current value
+- Pot glows when growing
+- Pot shrinks animation when losing money
+- Frozen/grey appearance when chicken is sick
+- ❓ Help button explains the system
 
 ### Daily Usage Quota
 - **Maximum 10 actions per calendar day** (to prevent excessive use by kids!)
@@ -240,6 +276,16 @@ bonusActionsDate: null       // Resets daily
 - Bonus actions reset at midnight (local time)
 - Pending chores are cleared when bonus is earned or day changes
 - Parent registration persists (one-time setup)
+
+### Money Pot State Management
+```javascript
+// Added to gameState (v0.18.0)
+moneyPot: 0,                 // Current pot value in dollars
+lastEarningEventDay: 0,      // Virtual day of last earning event payout
+lastActivityDate: null,      // Date string of last activity (for inactivity reset)
+potBonusToday: 0,            // Track bonus pot additions today
+badges: []                   // Array of earned badge IDs (future feature)
+```
 
 ## Technical Features
 

@@ -2157,6 +2157,180 @@
         }
       }
 
+      /* ============= MONEY POT STYLES ============= */
+      .pot-display {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+      }
+
+      .pot-container {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: linear-gradient(135deg, #d4a574 0%, #c4956a 50%, #b8895c 100%);
+        padding: 6px 12px;
+        border-radius: 15px;
+        border: 2px solid #8b6914;
+        box-shadow: 0 3px 8px rgba(139, 105, 20, 0.3), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+      }
+
+      .pot-icon {
+        font-size: 1.2em;
+        animation: pot-glow 2s ease-in-out infinite;
+      }
+
+      @keyframes pot-glow {
+        0%, 100% { filter: brightness(1); }
+        50% { filter: brightness(1.2); }
+      }
+
+      .pot-value {
+        font-weight: 700;
+        font-size: 1em;
+        color: #5d4e37;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+      }
+
+      .pot-help {
+        font-size: 0.8em;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+
+      .pot-help:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      .pot-label {
+        font-size: 0.65em;
+        color: #8b7355;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .pot-container.growing {
+        animation: pot-grow 0.5s ease-out;
+      }
+
+      @keyframes pot-grow {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+        100% { transform: scale(1); }
+      }
+
+      .pot-container.shrinking {
+        animation: pot-shrink 0.5s ease-out;
+      }
+
+      @keyframes pot-shrink {
+        0% { transform: scale(1); }
+        50% { transform: scale(0.9); box-shadow: 0 0 10px rgba(255, 0, 0, 0.4); }
+        100% { transform: scale(1); }
+      }
+
+      .pot-container.frozen {
+        filter: saturate(0.5);
+        background: linear-gradient(135deg, #a0a0a0 0%, #909090 50%, #808080 100%);
+        border-color: #666;
+      }
+
+      .pot-container.frozen .pot-icon::after {
+        content: "❄️";
+        font-size: 0.6em;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+      }
+
+      /* Earning hint banner */
+      .earning-hint {
+        background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        border: 2px solid #81c784;
+        border-radius: 10px;
+        padding: 8px 12px;
+        margin: 5px 0 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85em;
+        position: relative;
+      }
+
+      .earning-hint .hint-icon {
+        font-size: 1.1em;
+      }
+
+      .earning-hint .hint-text {
+        flex: 1;
+        color: #2e7d32;
+        line-height: 1.3;
+      }
+
+      .earning-hint .hint-close {
+        cursor: pointer;
+        color: #666;
+        font-size: 1.1em;
+        padding: 2px 5px;
+        border-radius: 50%;
+        transition: background 0.2s;
+      }
+
+      .earning-hint .hint-close:hover {
+        background: rgba(0,0,0,0.1);
+      }
+
+      .earning-hint.hidden {
+        display: none;
+      }
+
+      /* Pot payout celebration */
+      .pot-payout-popup {
+        text-align: center;
+      }
+
+      .pot-payout-amount {
+        font-size: 2.5em;
+        font-weight: 700;
+        color: #2e7d32;
+        margin: 10px 0;
+        animation: bounce-in 0.5s ease-out;
+      }
+
+      @keyframes bounce-in {
+        0% { transform: scale(0); opacity: 0; }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); opacity: 1; }
+      }
+
+      .pot-breakdown {
+        text-align: left;
+        font-size: 0.9em;
+        background: #f5f5f5;
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 10px;
+      }
+
+      .pot-breakdown-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 3px 0;
+        border-bottom: 1px dashed #ddd;
+      }
+
+      .pot-breakdown-row:last-child {
+        border-bottom: none;
+        font-weight: 700;
+        margin-top: 5px;
+        padding-top: 8px;
+        border-top: 2px solid #ccc;
+      }
+
       /* ============= CHORES TAB STYLES ============= */
       .chores-header {
         background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
@@ -2664,7 +2838,15 @@
       <!-- Main Game Screen -->
       <div id="game-screen" class="screen">
         <div class="status-bar">
-          <div class="money-display">💰 $<span id="money-amount">5</span></div>
+          <div class="money-display">🏦 $<span id="money-amount">5</span></div>
+          <div class="pot-display" id="pot-display">
+            <div class="pot-container">
+              <span class="pot-icon">🏺</span>
+              <span class="pot-value">$<span id="pot-amount">0.00</span></span>
+              <span class="pot-help" onclick="showPotHelp()" title="What's the pot?">❓</span>
+            </div>
+            <div class="pot-label">Pot</div>
+          </div>
           <div class="daily-actions-wrapper">
             <div class="daily-actions-display" id="daily-actions-display">
               ⚡ <span id="daily-actions-remaining">10</span>/10 today
@@ -2673,6 +2855,13 @@
               remaining allowed actions today
             </div>
           </div>
+        </div>
+
+        <!-- New user hint -->
+        <div class="earning-hint" id="earning-hint">
+          <span class="hint-icon">💡</span>
+          <span class="hint-text">Keep your chicken healthy to fill the pot! Pot pays out every 20 days! 🎉</span>
+          <span class="hint-close" onclick="hideEarningHint()">✕</span>
         </div>
 
         <div class="nav-bar">
@@ -3699,10 +3888,13 @@
       };
 
       // ============= GAME STATE =============
-      const GAME_VERSION = "0.17.0";
+      const GAME_VERSION = "0.18.0";
       const DAILY_ACTION_LIMIT = 10;
       const SESSION_MAX_SECONDS = 600; // 10 minutes max
       const FAST_DECAY_SECONDS = 120; // First 2 minutes = fast decay
+      const EARNING_EVENT_INTERVAL = 20; // Pot pays out every 20 virtual days
+      const POT_MAX_AMOUNT = 5.00; // Cap pot at $5 (before bonuses)
+      const POT_INACTIVITY_DAYS = 2; // Reset pot after 2 days of no activity
 
       let gameState = {
         chicken: null,
@@ -3719,6 +3911,12 @@
         pendingChores: [], // Chores awaiting approval [{title, desc, addedAt}]
         bonusActionsEarned: 0, // 0, 1, or 2 bonus actions earned today
         bonusActionsDate: null, // Date when bonus was last earned
+        // Money Pot system (v0.18.0)
+        moneyPot: 0, // Current pot value in dollars
+        lastEarningEventDay: 0, // Virtual day of last earning event payout
+        lastActivityDate: null, // Date string of last activity (for inactivity reset)
+        potBonusToday: 0, // Track bonus pot additions today (friend/chores)
+        badges: [], // Array of earned badge IDs
       };
 
       // Session timer state (not persisted - resets on page load)
@@ -3820,6 +4018,12 @@
           pendingChores: [],
           bonusActionsEarned: 0,
           bonusActionsDate: null,
+          // Money Pot system
+          moneyPot: 0,
+          lastEarningEventDay: 0,
+          lastActivityDate: null,
+          potBonusToday: 0,
+          badges: [],
         };
         hidePopup();
         // Restore overlay onclick
@@ -3963,10 +4167,16 @@
         if (gameState.chicken) {
           // Don't run old updateGame on load - start fresh session
           updateMoneyDisplay();
+          updatePotDisplay();
           updateDailyActionsDisplay();
           renderChicken();
           showScreen("game-screen");
           startSessionTimer();
+          
+          // Check if user has dismissed the earning hint
+          if (localStorage.getItem('hideEarningHint') === 'true') {
+            hideEarningHint();
+          }
         }
         // Check for day change every minute
         setInterval(() => {
@@ -4154,10 +4364,196 @@
           triggerDecayEffects(changedNeeds);
         }
 
+        // ============= POT GROWTH/SHRINK LOGIC =============
+        updatePotFromHealth(secondsPassed);
+
         // Save and render
         gameState.lastUpdate = now;
         saveGame();
         renderHealthIndicators();
+        updatePotDisplay();
+      }
+
+      // Update pot based on current health status
+      function updatePotFromHealth(secondsPassed) {
+        if (!gameState.chicken || gameState.chicken.isSick) {
+          // Pot is frozen when sick - show frozen state
+          return;
+        }
+
+        const needs = gameState.chicken.needs;
+        const needKeys = ['hunger', 'thirst', 'cleanliness', 'sleep', 'happiness', 'exercise'];
+        
+        // Count green (healthy) and red (critical) bars
+        let greenCount = 0;
+        let redCount = 0;
+        
+        for (const key of needKeys) {
+          const value = needs[key];
+          if (value >= 60) greenCount++;
+          else if (value < 40) redCount++;
+        }
+
+        // Calculate pot change
+        // Goal: ~$5 per 20 days with good care
+        // Assuming ~10 minute sessions, ~2 sessions/day = 1200 seconds active/day
+        // 20 days = 24000 seconds active time
+        // $5 / 24000 = ~$0.0002 per second with all green bars
+        // With 6 green bars: 6 * 0.00004 = $0.00024/sec
+        const greenRate = 0.00025; // $ per second per green bar
+        const redRate = 0.00015; // $ per second per red bar (penalty)
+        
+        const potGrowth = (greenCount * greenRate * secondsPassed) - (redCount * redRate * secondsPassed);
+        
+        const oldPot = gameState.moneyPot;
+        gameState.moneyPot = Math.max(0, Math.min(POT_MAX_AMOUNT, gameState.moneyPot + potGrowth));
+        
+        // Visual feedback if significant change
+        const significantChange = Math.abs(gameState.moneyPot - oldPot) >= 0.01;
+        if (significantChange && potGrowth > 0) {
+          animatePotGrowth();
+        } else if (significantChange && potGrowth < 0) {
+          animatePotShrink();
+        }
+      }
+
+      // Add bonus to pot (from friend or chores)
+      function addPotBonus(source, amount) {
+        const today = getTodayDateString();
+        
+        // Reset daily bonus tracking if new day
+        if (gameState.lastActivityDate !== today) {
+          gameState.potBonusToday = 0;
+        }
+        
+        // Bonus can exceed the cap
+        gameState.moneyPot += amount;
+        gameState.potBonusToday += amount;
+        
+        animatePotGrowth();
+        updatePotDisplay();
+        saveGame();
+        
+        return amount;
+      }
+
+      // Check and process earning event (payday)
+      function checkEarningEvent(newAge) {
+        const lastEvent = gameState.lastEarningEventDay || 0;
+        const nextEvent = Math.floor(lastEvent / EARNING_EVENT_INTERVAL) * EARNING_EVENT_INTERVAL + EARNING_EVENT_INTERVAL;
+        
+        if (newAge >= nextEvent && lastEvent < nextEvent) {
+          // Payday!
+          const payout = gameState.moneyPot;
+          if (payout > 0) {
+            gameState.money += payout;
+            const oldPot = gameState.moneyPot;
+            gameState.moneyPot = 0;
+            gameState.lastEarningEventDay = newAge;
+            
+            // Show celebratory popup
+            showPaydayPopup(payout, nextEvent);
+            updateMoneyDisplay();
+            updatePotDisplay();
+            saveGame();
+            
+            return payout;
+          } else {
+            gameState.lastEarningEventDay = newAge;
+          }
+        }
+        
+        return 0;
+      }
+
+      function showPaydayPopup(amount, day) {
+        const html = `
+          <div class="pot-payout-popup">
+            <div style="font-size: 2.5em; margin-bottom: 5px;">🎉</div>
+            <div style="font-size: 1.2em; font-weight: 600; color: #666;">Day ${day} Payday!</div>
+            <div class="pot-payout-amount">+$${amount.toFixed(2)}</div>
+            <div style="font-size: 0.9em; color: #666;">
+              The pot has been emptied into your bank!<br>
+              Keep your chicken healthy to fill it again! 🏺
+            </div>
+          </div>
+        `;
+        document.getElementById("popup-content").innerHTML = html;
+        document.getElementById("popup").classList.remove("hidden");
+        document.getElementById("overlay").classList.remove("hidden");
+      }
+
+      function animatePotGrowth() {
+        const potContainer = document.querySelector('.pot-container');
+        if (potContainer) {
+          potContainer.classList.remove('shrinking');
+          potContainer.classList.add('growing');
+          setTimeout(() => potContainer.classList.remove('growing'), 500);
+        }
+      }
+
+      function animatePotShrink() {
+        const potContainer = document.querySelector('.pot-container');
+        if (potContainer) {
+          potContainer.classList.remove('growing');
+          potContainer.classList.add('shrinking');
+          setTimeout(() => potContainer.classList.remove('shrinking'), 500);
+        }
+      }
+
+      function updatePotDisplay() {
+        const potAmount = document.getElementById('pot-amount');
+        const potContainer = document.querySelector('.pot-container');
+        
+        if (potAmount) {
+          potAmount.textContent = gameState.moneyPot.toFixed(2);
+        }
+        
+        if (potContainer && gameState.chicken) {
+          potContainer.classList.toggle('frozen', gameState.chicken.isSick);
+        }
+      }
+
+      function showPotHelp() {
+        const html = `
+          <div style="text-align: left; font-size: 0.95em;">
+            <div style="text-align: center; font-size: 1.5em; margin-bottom: 10px;">🏺 The Money Pot</div>
+            
+            <p style="margin-bottom: 10px;">The pot collects money based on your chicken's health!</p>
+            
+            <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+              <strong style="color: #2e7d32;">💚 Green bars</strong> = Pot fills faster!<br>
+              <strong style="color: #f57c00;">💛 Yellow bars</strong> = No change<br>
+              <strong style="color: #c62828;">❤️ Red bars</strong> = Pot shrinks!<br>
+              <strong style="color: #666;">🤒 Sick</strong> = Pot is frozen!
+            </div>
+            
+            <div style="background: #fff3e0; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+              <strong>💰 Payday every 20 days!</strong><br>
+              Pot empties into your bank. Max pot: $${POT_MAX_AMOUNT.toFixed(2)}
+            </div>
+            
+            <div style="background: #e3f2fd; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+              <strong>🎁 Bonus rewards:</strong><br>
+              • Add a friend: +$0.50<br>
+              • Complete chores: +$1.00
+            </div>
+            
+            <div style="background: #ffebee; padding: 10px; border-radius: 8px;">
+              <strong>⚠️ Warning:</strong> 2 days without playing = pot resets to $0!
+            </div>
+          </div>
+        `;
+        document.getElementById("popup-content").innerHTML = html;
+        document.getElementById("popup").classList.remove("hidden");
+        document.getElementById("overlay").classList.remove("hidden");
+      }
+
+      function hideEarningHint() {
+        const hint = document.getElementById('earning-hint');
+        if (hint) hint.classList.add('hidden');
+        // Store preference
+        localStorage.setItem('hideEarningHint', 'true');
       }
 
       function triggerDecayEffects(changedNeeds) {
@@ -4457,9 +4853,10 @@
         }
 
         // Only earn money if a color status improved (red->yellow or yellow->green)
+        // Money goes to POT, not directly to balance
         if (colorUpgradeHappened) {
-          gameState.money += 1;
-          message += '<br><span class="coin-earn">+$1 💰</span>';
+          gameState.moneyPot = Math.min(POT_MAX_AMOUNT + 5, gameState.moneyPot + 1); // Allow up to $5 over cap for bonuses
+          message += '<br><span class="coin-earn">🏺 +$1 to pot!</span>';
           message +=
             '<br><span style="color: #2e7d32; font-size: 0.85em;">📈 My health improves! Thanks for caring for me! 💕</span>';
 
@@ -4485,7 +4882,22 @@
           message += `<br><br>🎉 <strong>Milestone!</strong><br>${milestoneReached.name}`;
         }
 
+        // Update last activity date (for pot inactivity tracking)
+        gameState.lastActivityDate = getTodayDateString();
+
+        // Check for earning event (payday every 20 days)
+        const payout = checkEarningEvent(newAge);
+        if (payout > 0) {
+          // Don't show regular message if we have a payday popup
+          updateMoneyDisplay();
+          updatePotDisplay();
+          saveGame();
+          renderChicken();
+          return;
+        }
+
         updateMoneyDisplay();
+        updatePotDisplay();
 
         saveGame();
         renderChicken();
@@ -4958,7 +5370,10 @@
           saveGame();
           renderFriends();
           document.getElementById("friend-code-input").value = "";
-          showPopup(`🎉 ${data.n} is now your friend!`);
+          
+          // Add pot bonus for adding a friend
+          const bonus = addPotBonus('friend', 0.50);
+          showPopup(`🎉 ${data.n} is now your friend!<br><span style="color: #d4a574;">🏺 +$0.50 added to pot!</span>`);
         } catch (e) {
           console.error("Error adding friend:", e);
           showPopup("😕 Invalid chicken code. Try again!");
@@ -5381,6 +5796,12 @@
                 : [],
               bonusActionsEarned: loaded.bonusActionsEarned || 0,
               bonusActionsDate: loaded.bonusActionsDate || null,
+              // Money Pot system (v0.18.0)
+              moneyPot: loaded.moneyPot || 0,
+              lastEarningEventDay: loaded.lastEarningEventDay || 0,
+              lastActivityDate: loaded.lastActivityDate || null,
+              potBonusToday: loaded.potBonusToday || 0,
+              badges: Array.isArray(loaded.badges) ? loaded.badges : [],
             };
             // Ensure virtualDays exists for old saves - calculate from real time
             if (
@@ -5393,6 +5814,9 @@
               );
               gameState.chicken.virtualDays = realDays;
             }
+            
+            // Check for pot inactivity reset (2 days of no activity)
+            checkPotInactivityReset();
           }
         } catch (e) {
           console.error("Failed to load game:", e);
@@ -5402,11 +5826,33 @@
         }
       }
 
+      // Check if pot should be reset due to inactivity
+      function checkPotInactivityReset() {
+        if (!gameState.lastActivityDate || gameState.moneyPot === 0) return;
+        
+        const today = new Date();
+        const lastActivity = new Date(gameState.lastActivityDate);
+        const daysDiff = Math.floor((today - lastActivity) / (1000 * 60 * 60 * 24));
+        
+        if (daysDiff >= POT_INACTIVITY_DAYS) {
+          const lostPot = gameState.moneyPot;
+          gameState.moneyPot = 0;
+          gameState.potBonusToday = 0;
+          saveGame();
+          
+          // Show warning message after a short delay
+          setTimeout(() => {
+            showPopup(`😢 Oh no! You were away for ${daysDiff} days...<br><br>🏺 Your pot of <strong>$${lostPot.toFixed(2)}</strong> has been reset!<br><br>Come back daily to keep your pot safe! 💕`);
+          }, 500);
+        }
+      }
+
       function loadExistingChicken() {
         loadGame();
         if (gameState.chicken) {
           updateGame();
           updateMoneyDisplay();
+          updatePotDisplay();
           showScreen("game-screen");
           renderFriends();
         } else {

@@ -5,18 +5,55 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.18.0] - 2026-01-21
+
+### Added
+- **Money Pot System** 🏺 - New economy overhaul! All earnings now flow through the pot!
+  - Caring actions that improve health add +$1 to pot (not directly to bank)
+  - Pot also fills based on chicken health status while actively playing
+  - 💚 Green bars (≥60%): Pot grows (+$0.00025/sec per green bar)
+  - ❤️ Red bars (<40%): Pot shrinks (-$0.00015/sec per red bar)
+  - 🤒 Sick chicken: Pot is frozen (no growth/shrink)
+  
+- **Payday Events** every 20 virtual days
+  - Pot empties into bank balance automatically
+  - Celebration popup shows payout breakdown
+  - Maximum pot value: $5.00 (before bonuses)
+
+- **Pot Bonus Rewards**
+  - Adding a new friend: +$0.50 to pot
+  - Completing house chores: +$1.00 to pot
+  - Bonuses can exceed the $5 cap
+
+- **Inactivity Penalty**
+  - 2 days without playing = Pot resets to $0
+  - Warning message shown when returning
+
+- **New UI Elements**
+  - Pot display with 🏺 icon showing current value
+  - Help button (❓) explaining pot mechanics
+  - Earning hint banner for new users
+  - Visual animations: pot glowing/shrinking
+  - Frozen pot appearance when chicken is sick
+
+### Changed
+- **Economy Overhaul**: All money goes to pot first - only pot payouts update bank balance!
+- Bank balance icon changed from 💰 to 🏦 to distinguish from pot
+- Game state now includes pot tracking fields
+- Secret reset clears pot-related data
+
 ## [0.17.0] - 2026-01-21
 
 ### Added
 - **House Chore Challenge** - New "🧹 Chores" tab to earn bonus actions!
   - Complete 2 real-world chores (~5 minutes each) to earn **+2 bonus actions per day**
   - Examples: tidy up a room, wash dishes, water the garden, study hard
-  
+
 - **Parent Registration & Approval System**
   - One-time parent face registration using device camera
   - Face data stored locally as color histogram signature
   - Parent verifies identity to approve completed chores
-  
+
 - **Simple Face Recognition** (JavaScript-only, no external APIs)
   - Color histogram comparison (RGB, 16 bins each)
   - 3x3 region average color analysis
