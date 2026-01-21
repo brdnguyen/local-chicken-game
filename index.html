@@ -1562,16 +1562,20 @@
         justify-content: space-around;
         background: #ffe4e1;
         border-radius: 15px;
-        padding: 10px;
+        padding: 8px 5px;
         margin-bottom: 15px;
+        gap: 2px;
       }
 
       .nav-item {
         text-align: center;
         cursor: pointer;
-        padding: 8px 12px;
+        padding: 6px 8px;
         border-radius: 10px;
         font-weight: 500;
+        flex: 1;
+        min-width: 0;
+        font-size: 0.75em;
       }
 
       .nav-item.active {
@@ -1580,9 +1584,25 @@
       }
 
       .nav-item .icon {
-        font-size: 1.4em;
+        font-size: 1.3em;
         display: block;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
+      }
+
+      /* Larger screens - restore bigger nav */
+      @media (min-width: 400px) {
+        .nav-bar {
+          padding: 10px;
+          gap: 5px;
+        }
+        .nav-item {
+          padding: 8px 10px;
+          font-size: 0.85em;
+        }
+        .nav-item .icon {
+          font-size: 1.4em;
+          margin-bottom: 2px;
+        }
       }
 
       .scan-area {
