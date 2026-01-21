@@ -5,6 +5,36 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.17.0] - 2026-01-21
+
+### Added
+- **House Chore Challenge** - New "🧹 Chores" tab to earn bonus actions!
+  - Complete 2 real-world chores (~5 minutes each) to earn **+2 bonus actions per day**
+  - Examples: tidy up a room, wash dishes, water the garden, study hard
+  
+- **Parent Registration & Approval System**
+  - One-time parent face registration using device camera
+  - Face data stored locally as color histogram signature
+  - Parent verifies identity to approve completed chores
+  
+- **Simple Face Recognition** (JavaScript-only, no external APIs)
+  - Color histogram comparison (RGB, 16 bins each)
+  - 3x3 region average color analysis
+  - Brightness average and variance metrics
+  - 55% similarity threshold for matching
+  - All data stored locally, never transmitted
+
+- **Chore Workflow UI**
+  - 3-step progress indicators (Parent Setup → Do Chores → Get Approved)
+  - Info boxes with accepted chore examples
+  - Tooltips explaining each step for both kids and parents
+  - Chore cards showing pending/approved status
+  - Face guide overlay for camera positioning
+
+### Changed
+- Daily action display now shows bonus (e.g., "⚡ 5/12 today" when bonus earned)
+- Secret reset now also clears chore-related data
+
 ## [0.16.1] - 2026-01-18
 
 ### Changed

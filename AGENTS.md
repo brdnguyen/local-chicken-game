@@ -183,11 +183,63 @@ The game uses **custom SVG graphics** that combine:
 - **Maximum 10 actions per calendar day** (to prevent excessive use by kids!)
 - Actions include: caring actions (feed, water, etc.) and shop purchases
 - Counter resets at midnight (local time)
-- Display shows remaining actions: ⚡ X/10 today
+- Display shows remaining actions: ⚡ X/10 today (or X/12 if bonus earned)
 - Visual indicators:
   - Blue: Normal (4+ actions remaining)
   - Red/pulsing: Low (1-3 actions remaining)
   - Grey: Empty (0 actions - come back tomorrow!)
+
+### House Chore Challenge 🧹
+Earn **+2 bonus actions per day** by completing real-world chores!
+
+#### How It Works
+1. **Parent Registration** (one-time setup)
+   - Parent takes a face photo using the device camera
+   - Face data is stored locally as a color histogram signature
+   - Used for verification when approving chores
+
+2. **Record Chores** (child does this)
+   - Complete 2 real-world chores (~5 minutes each)
+   - Write down what you did with a title and description
+   - Chores must be meaningful (not too small)
+
+3. **Parent Approval**
+   - Parent reviews the recorded chores
+   - Verifies identity using face recognition
+   - If approved, child earns +2 bonus actions for the day
+
+#### Accepted Chores (Examples)
+| Chore | Description |
+|-------|-------------|
+| 🧹 Tidy up a room | Clean and organize a space |
+| 🌿 Water the garden | Care for plants |
+| 🍽️ Wash the dishes | Clean up after meals |
+| 📚 Study hard | Focus on schoolwork |
+| 🛏️ Make your bed | Keep bedroom tidy |
+| 🗑️ Take out the trash | Help with household duties |
+
+#### Face Recognition System
+Uses simple heuristics implemented in JavaScript (no external APIs):
+- **Color histograms**: RGB channel distribution (16 bins each)
+- **Region analysis**: 3x3 grid average colors
+- **Brightness metrics**: Average and variance
+- **Match threshold**: 55% similarity required
+- **Privacy**: All data stored locally, never transmitted
+
+#### State Management
+```javascript
+// Added to gameState
+parentFaceData: null,        // Face histogram signature
+parentPhotoDataUrl: null,    // Small preview image
+pendingChores: [],           // [{title, desc, addedAt}]
+bonusActionsEarned: 0,       // 0, 1, or 2
+bonusActionsDate: null       // Resets daily
+```
+
+#### Daily Reset
+- Bonus actions reset at midnight (local time)
+- Pending chores are cleared when bonus is earned or day changes
+- Parent registration persists (one-time setup)
 
 ## Technical Features
 
