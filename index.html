@@ -2331,6 +2331,199 @@
         border-top: 2px solid #ccc;
       }
 
+      /* ============= BADGE STYLES ============= */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 0.75em;
+        font-weight: 600;
+        border: 2px solid;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        white-space: nowrap;
+      }
+
+      .badge:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+      }
+
+      .badge-icon {
+        font-size: 1.1em;
+      }
+
+      .badge-name {
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Rarity colors */
+      .badge.common {
+        background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+        border-color: #bdbdbd;
+        color: #616161;
+      }
+
+      .badge.uncommon {
+        background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        border-color: #81c784;
+        color: #2e7d32;
+      }
+
+      .badge.rare {
+        background: linear-gradient(135deg, #e3f2fd, #90caf9);
+        border-color: #42a5f5;
+        color: #1565c0;
+      }
+
+      .badge.epic {
+        background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+        border-color: #ab47bc;
+        color: #7b1fa2;
+      }
+
+      .badge.legendary {
+        background: linear-gradient(135deg, #fff3e0, #ffcc80);
+        border-color: #ff9800;
+        color: #e65100;
+        animation: legendary-glow 2s ease-in-out infinite;
+      }
+
+      @keyframes legendary-glow {
+        0%, 100% { box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3); }
+        50% { box-shadow: 0 4px 15px rgba(255, 152, 0, 0.6); }
+      }
+
+      .badge.locked {
+        background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+        border-color: #bdbdbd;
+        color: #9e9e9e;
+        filter: grayscale(1);
+        opacity: 0.5;
+      }
+
+      .badge.locked:hover {
+        transform: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      }
+
+      /* Milestone with badge */
+      .milestone {
+        padding: 8px 10px;
+        border-bottom: 1px dashed #ffb6c1;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .milestone-text {
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .milestone-badge-slot {
+        flex-shrink: 0;
+      }
+
+      .milestone.achieved {
+        color: #32cd32;
+      }
+
+      .milestone.current {
+        font-weight: bold;
+        color: #ff69b4;
+        background: rgba(255, 105, 180, 0.1);
+        border-radius: 8px;
+        margin: 2px -5px;
+        padding: 8px 15px;
+      }
+
+      /* Badge popup */
+      .badge-popup-content {
+        text-align: center;
+      }
+
+      .badge-popup-icon {
+        font-size: 4em;
+        margin: 10px 0;
+        animation: badge-bounce 0.5s ease-out;
+      }
+
+      @keyframes badge-bounce {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+      }
+
+      .badge-popup-name {
+        font-size: 1.4em;
+        font-weight: 700;
+        margin: 5px 0;
+      }
+
+      .badge-popup-desc {
+        color: #666;
+        font-size: 0.95em;
+        margin: 10px 0;
+      }
+
+      .badge-popup-rarity {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 10px;
+        font-size: 0.8em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .badge-popup-rarity.common { background: #e0e0e0; color: #616161; }
+      .badge-popup-rarity.uncommon { background: #c8e6c9; color: #2e7d32; }
+      .badge-popup-rarity.rare { background: #90caf9; color: #1565c0; }
+      .badge-popup-rarity.epic { background: #ce93d8; color: #7b1fa2; }
+      .badge-popup-rarity.legendary { background: #ffcc80; color: #e65100; }
+
+      /* Badge earned animation */
+      .badge-earned-flash {
+        animation: badge-earned 0.8s ease-out;
+      }
+
+      @keyframes badge-earned {
+        0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+        50% { transform: scale(1.2) rotate(10deg); }
+        100% { transform: scale(1) rotate(0deg); opacity: 1; }
+      }
+
+      /* Badges summary section */
+      .badges-summary {
+        background: linear-gradient(135deg, #fff8e1, #ffecb3);
+        border: 2px solid #ffc107;
+        border-radius: 12px;
+        padding: 12px;
+        margin: 15px 0;
+        text-align: center;
+      }
+
+      .badges-summary-title {
+        font-weight: 600;
+        color: #ff6f00;
+        margin-bottom: 8px;
+        font-size: 1em;
+      }
+
+      .badges-summary-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        justify-content: center;
+      }
+
       /* ============= CHORES TAB STYLES ============= */
       .chores-header {
         background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
@@ -3101,6 +3294,7 @@
           </div>
 
           <h2>🏆 Milestones</h2>
+          <div class="badges-summary" id="badges-summary"></div>
           <div class="milestone-list" id="milestone-list"></div>
         </div>
 
@@ -3581,6 +3775,260 @@
         { day: 180, name: "🐓 Six Months Old", stage: "adult" },
         { day: 365, name: "🎂 One Year Old!", stage: "mature" },
       ];
+
+      // ============= BADGE SYSTEM =============
+      const BADGES = {
+        // Milestone badges (awarded automatically at each milestone)
+        'egg-starter': {
+          id: 'egg-starter',
+          name: 'Egg-cellent Start!',
+          icon: '🥚',
+          description: 'Started your chicken journey',
+          category: 'milestone',
+          milestone: 0,
+          rarity: 'common',
+          color: '#F5DEB3'
+        },
+        'hatch-day': {
+          id: 'hatch-day',
+          name: 'Hatch Day Hero',
+          icon: '🐣',
+          description: 'Your egg hatched!',
+          category: 'milestone',
+          milestone: 20,
+          rarity: 'common',
+          color: '#FFE4B5'
+        },
+        'week-survivor': {
+          id: 'week-survivor',
+          name: 'Week Warrior',
+          icon: '🏅',
+          description: 'Survived the first week',
+          category: 'milestone',
+          milestone: 27,
+          rarity: 'common',
+          color: '#87CEEB'
+        },
+        'fluffy-achiever': {
+          id: 'fluffy-achiever',
+          name: 'Fluff Master',
+          icon: '☁️',
+          description: 'Reached fluffy chick stage',
+          category: 'milestone',
+          milestone: 40,
+          rarity: 'uncommon',
+          color: '#DDA0DD'
+        },
+        'month-master': {
+          id: 'month-master',
+          name: 'Month Master',
+          icon: '📅',
+          description: 'One month of love!',
+          category: 'milestone',
+          milestone: 50,
+          rarity: 'uncommon',
+          color: '#98FB98'
+        },
+        'two-month-champ': {
+          id: 'two-month-champ',
+          name: 'Double Trouble',
+          icon: '✌️',
+          description: 'Two months strong!',
+          category: 'milestone',
+          milestone: 80,
+          rarity: 'uncommon',
+          color: '#F0E68C'
+        },
+        'teen-spirit': {
+          id: 'teen-spirit',
+          name: 'Teen Spirit',
+          icon: '🎸',
+          description: 'Reached teenager stage!',
+          category: 'milestone',
+          milestone: 110,
+          rarity: 'rare',
+          color: '#FF69B4'
+        },
+        'first-egg-layer': {
+          id: 'first-egg-layer',
+          name: 'Egg-straordinary!',
+          icon: '🏆',
+          description: 'Laid the first egg!',
+          category: 'milestone',
+          milestone: 150,
+          rarity: 'rare',
+          color: '#FFD700'
+        },
+        'half-year-hero': {
+          id: 'half-year-hero',
+          name: 'Half-Year Hero',
+          icon: '🌟',
+          description: 'Six months of dedication!',
+          category: 'milestone',
+          milestone: 180,
+          rarity: 'epic',
+          color: '#9370DB'
+        },
+        'year-legend': {
+          id: 'year-legend',
+          name: 'Year Legend',
+          icon: '👑',
+          description: 'One full year! Legendary!',
+          category: 'milestone',
+          milestone: 365,
+          rarity: 'legendary',
+          color: '#FF4500'
+        },
+        // Social badges
+        'first-friend': {
+          id: 'first-friend',
+          name: 'Social Butterfly',
+          icon: '🦋',
+          description: 'Made your first friend!',
+          category: 'social',
+          condition: 'friends >= 1',
+          rarity: 'common',
+          color: '#87CEEB'
+        },
+        'friendly-chicken': {
+          id: 'friendly-chicken',
+          name: 'Popular Chick',
+          icon: '🤝',
+          description: 'Made 2+ friends!',
+          category: 'social',
+          condition: 'friends >= 2',
+          rarity: 'uncommon',
+          color: '#98FB98'
+        },
+        'sociable-star': {
+          id: 'sociable-star',
+          name: 'Sociable Star',
+          icon: '⭐',
+          description: 'Made 5+ friends!',
+          category: 'social',
+          condition: 'friends >= 5',
+          rarity: 'rare',
+          color: '#FFD700'
+        },
+        // Collection badges
+        'fashionista': {
+          id: 'fashionista',
+          name: 'Fashionista',
+          icon: '👗',
+          description: 'Own 3+ decorations!',
+          category: 'collection',
+          condition: 'decorations >= 3',
+          rarity: 'uncommon',
+          color: '#FF69B4'
+        },
+        'beauty-queen': {
+          id: 'beauty-queen',
+          name: 'Beauty Queen',
+          icon: '👸',
+          description: 'Own 7+ decorations!',
+          category: 'collection',
+          condition: 'decorations >= 7',
+          rarity: 'rare',
+          color: '#DA70D6'
+        },
+        'toy-collector': {
+          id: 'toy-collector',
+          name: 'Toy Collector',
+          icon: '🧸',
+          description: 'Own 3+ toys!',
+          category: 'collection',
+          condition: 'toys >= 3',
+          rarity: 'uncommon',
+          color: '#FFA07A'
+        },
+        'happiest-chicken': {
+          id: 'happiest-chicken',
+          name: 'Happiest Chicken',
+          icon: '🎉',
+          description: 'Own all toys!',
+          category: 'collection',
+          condition: 'allToys',
+          rarity: 'epic',
+          color: '#FFD700'
+        },
+        'health-nut': {
+          id: 'health-nut',
+          name: 'Health Nut',
+          icon: '💪',
+          description: 'Own all health items!',
+          category: 'collection',
+          condition: 'allHealth',
+          rarity: 'rare',
+          color: '#32CD32'
+        },
+        // Economy badges
+        'first-purchase': {
+          id: 'first-purchase',
+          name: 'Shopaholic',
+          icon: '🛍️',
+          description: 'Made your first purchase!',
+          category: 'economy',
+          condition: 'inventory >= 1',
+          rarity: 'common',
+          color: '#87CEEB'
+        },
+        'big-saver': {
+          id: 'big-saver',
+          name: 'Big Saver',
+          icon: '💰',
+          description: 'Saved $10 or more!',
+          category: 'economy',
+          condition: 'money >= 10',
+          rarity: 'uncommon',
+          color: '#FFD700'
+        },
+        'wealthy-farmer': {
+          id: 'wealthy-farmer',
+          name: 'Wealthy Farmer',
+          icon: '🏦',
+          description: 'Saved $25 or more!',
+          category: 'economy',
+          condition: 'money >= 25',
+          rarity: 'rare',
+          color: '#9370DB'
+        },
+        // Care badges
+        'dedicated-carer': {
+          id: 'dedicated-carer',
+          name: 'Dedicated Carer',
+          icon: '❤️',
+          description: 'Completed 50+ caring actions!',
+          category: 'care',
+          condition: 'totalActions >= 50',
+          rarity: 'uncommon',
+          color: '#FF69B4'
+        },
+        'super-parent': {
+          id: 'super-parent',
+          name: 'Super Parent',
+          icon: '🦸',
+          description: 'Completed 100+ caring actions!',
+          category: 'care',
+          condition: 'totalActions >= 100',
+          rarity: 'rare',
+          color: '#4169E1'
+        },
+        'chore-champion': {
+          id: 'chore-champion',
+          name: 'Chore Champion',
+          icon: '🧹',
+          description: 'Completed house chores!',
+          category: 'care',
+          condition: 'choresCompleted',
+          rarity: 'uncommon',
+          color: '#32CD32'
+        }
+      };
+
+      // Get badge by milestone day
+      function getBadgeForMilestone(milestoneDay) {
+        return Object.values(BADGES).find(b => b.category === 'milestone' && b.milestone === milestoneDay);
+      }
 
       const STATUSES = {
         happy: { icon: "😊", text: "Happy", priority: 0 },
@@ -4722,6 +5170,10 @@
           }
         }
 
+        // Track total actions for badges
+        if (!gameState.totalActions) gameState.totalActions = 0;
+        gameState.totalActions++;
+
         // Store old needs to check if health improved
         const oldNeeds = { ...gameState.chicken.needs };
         const oldOverallHealth =
@@ -5031,8 +5483,12 @@
         // Status bar
         renderStatus();
 
-        // Milestones
+        // Milestones and badges
         renderMilestones(ageInDays);
+        renderBadgesSummary();
+        
+        // Check for new badges (silently on render, popup on explicit action)
+        checkAndAwardBadges(false);
       }
 
       function getMainStatus(chicken) {
@@ -5170,7 +5626,9 @@
         list.innerHTML = MILESTONES.map((m) => {
           let className = "milestone";
           let icon = "⬜";
-          if (currentAge >= m.day) {
+          const isAchieved = currentAge >= m.day;
+          
+          if (isAchieved) {
             className += " achieved";
             icon = "✅";
           }
@@ -5180,8 +5638,221 @@
           if (currentMilestone && m.day === currentMilestone.day) {
             className += " current";
           }
-          return `<div class="${className}">${icon} ${m.name} (Day ${m.day})</div>`;
+          
+          // Get badge for this milestone
+          const badge = getBadgeForMilestone(m.day);
+          let badgeHtml = '';
+          if (badge) {
+            const hasBadge = gameState.badges && gameState.badges.includes(badge.id);
+            if (hasBadge) {
+              badgeHtml = `
+                <div class="milestone-badge-slot">
+                  <span class="badge ${badge.rarity}" onclick="showBadgeDetails('${badge.id}')" title="${badge.name}">
+                    <span class="badge-icon">${badge.icon}</span>
+                    <span class="badge-name">${badge.name}</span>
+                  </span>
+                </div>
+              `;
+            } else if (isAchieved) {
+              // Should have badge but doesn't - this shouldn't happen with retrospective awarding
+              badgeHtml = `
+                <div class="milestone-badge-slot">
+                  <span class="badge locked" title="Badge not yet awarded">
+                    <span class="badge-icon">🔒</span>
+                  </span>
+                </div>
+              `;
+            } else {
+              // Milestone not reached yet
+              badgeHtml = `
+                <div class="milestone-badge-slot">
+                  <span class="badge locked" title="${badge.name} - Reach Day ${m.day}">
+                    <span class="badge-icon">🔒</span>
+                    <span class="badge-name">${badge.name}</span>
+                  </span>
+                </div>
+              `;
+            }
+          }
+          
+          return `
+            <div class="${className}">
+              <span class="milestone-text">${icon} ${m.name} (Day ${m.day})</span>
+              ${badgeHtml}
+            </div>
+          `;
         }).join("");
+      }
+
+      // ============= BADGE SYSTEM FUNCTIONS =============
+      function checkAndAwardBadges(showPopup = true) {
+        if (!gameState.chicken) return [];
+        
+        if (!gameState.badges) gameState.badges = [];
+        if (!gameState.totalActions) gameState.totalActions = 0;
+        
+        const newBadges = [];
+        const currentAge = gameState.chicken.virtualDays || 0;
+        
+        // Check milestone badges
+        for (const milestone of MILESTONES) {
+          if (currentAge >= milestone.day) {
+            const badge = getBadgeForMilestone(milestone.day);
+            if (badge && !gameState.badges.includes(badge.id)) {
+              gameState.badges.push(badge.id);
+              newBadges.push(badge);
+            }
+          }
+        }
+        
+        // Check social badges
+        const friendCount = (gameState.friends || []).length;
+        if (friendCount >= 1 && !gameState.badges.includes('first-friend')) {
+          gameState.badges.push('first-friend');
+          newBadges.push(BADGES['first-friend']);
+        }
+        if (friendCount >= 2 && !gameState.badges.includes('friendly-chicken')) {
+          gameState.badges.push('friendly-chicken');
+          newBadges.push(BADGES['friendly-chicken']);
+        }
+        if (friendCount >= 5 && !gameState.badges.includes('sociable-star')) {
+          gameState.badges.push('sociable-star');
+          newBadges.push(BADGES['sociable-star']);
+        }
+        
+        // Check collection badges
+        const inventory = gameState.inventory || [];
+        const decorationItems = ['flower-headband', 'jumper', 'necklace', 'nametag', 'duck-disguise', 
+          'panda-mask', 'eye-patch', 'silly-eyebrows', 'angry-eyebrows', 'fascinator', 
+          'cute-face', 'unicorn-horn', 'cape', 'bow-tie', 'crown'];
+        const toyItems = ['fake-worm', 'robot-friend', 'walky-talky', 'photo', 'mirror'];
+        const healthItems = ['vitamins', 'feather-polish', 'growth-vitamin', 'deworm-tablets'];
+        
+        const ownedDecorations = inventory.filter(i => decorationItems.includes(i)).length;
+        const ownedToys = inventory.filter(i => toyItems.includes(i)).length;
+        const ownedHealth = inventory.filter(i => healthItems.includes(i)).length;
+        
+        if (ownedDecorations >= 3 && !gameState.badges.includes('fashionista')) {
+          gameState.badges.push('fashionista');
+          newBadges.push(BADGES['fashionista']);
+        }
+        if (ownedDecorations >= 7 && !gameState.badges.includes('beauty-queen')) {
+          gameState.badges.push('beauty-queen');
+          newBadges.push(BADGES['beauty-queen']);
+        }
+        if (ownedToys >= 3 && !gameState.badges.includes('toy-collector')) {
+          gameState.badges.push('toy-collector');
+          newBadges.push(BADGES['toy-collector']);
+        }
+        if (ownedToys >= toyItems.length && !gameState.badges.includes('happiest-chicken')) {
+          gameState.badges.push('happiest-chicken');
+          newBadges.push(BADGES['happiest-chicken']);
+        }
+        if (ownedHealth >= healthItems.length && !gameState.badges.includes('health-nut')) {
+          gameState.badges.push('health-nut');
+          newBadges.push(BADGES['health-nut']);
+        }
+        
+        // Check economy badges
+        if (inventory.length >= 1 && !gameState.badges.includes('first-purchase')) {
+          gameState.badges.push('first-purchase');
+          newBadges.push(BADGES['first-purchase']);
+        }
+        if (gameState.money >= 10 && !gameState.badges.includes('big-saver')) {
+          gameState.badges.push('big-saver');
+          newBadges.push(BADGES['big-saver']);
+        }
+        if (gameState.money >= 25 && !gameState.badges.includes('wealthy-farmer')) {
+          gameState.badges.push('wealthy-farmer');
+          newBadges.push(BADGES['wealthy-farmer']);
+        }
+        
+        // Check care badges
+        if (gameState.totalActions >= 50 && !gameState.badges.includes('dedicated-carer')) {
+          gameState.badges.push('dedicated-carer');
+          newBadges.push(BADGES['dedicated-carer']);
+        }
+        if (gameState.totalActions >= 100 && !gameState.badges.includes('super-parent')) {
+          gameState.badges.push('super-parent');
+          newBadges.push(BADGES['super-parent']);
+        }
+        if (gameState.bonusActionsEarned >= 2 && !gameState.badges.includes('chore-champion')) {
+          gameState.badges.push('chore-champion');
+          newBadges.push(BADGES['chore-champion']);
+        }
+        
+        // Save if any new badges
+        if (newBadges.length > 0) {
+          saveGame();
+          if (showPopup && newBadges.length > 0) {
+            showNewBadgesPopup(newBadges);
+          }
+        }
+        
+        return newBadges;
+      }
+
+      function showNewBadgesPopup(badges) {
+        if (badges.length === 0) return;
+        
+        const badge = badges[0]; // Show first badge (can queue multiple)
+        const html = `
+          <div class="badge-popup-content">
+            <div style="font-size: 1.2em; color: #ff69b4;">🎉 Badge Earned! 🎉</div>
+            <div class="badge-popup-icon">${badge.icon}</div>
+            <div class="badge-popup-name">${badge.name}</div>
+            <div class="badge-popup-desc">${badge.description}</div>
+            <div class="badge-popup-rarity ${badge.rarity}">${badge.rarity}</div>
+          </div>
+        `;
+        document.getElementById("popup-content").innerHTML = html;
+        document.getElementById("popup").classList.remove("hidden");
+        document.getElementById("overlay").classList.remove("hidden");
+      }
+
+      function showBadgeDetails(badgeId) {
+        const badge = BADGES[badgeId];
+        if (!badge) return;
+        
+        const hasBadge = gameState.badges && gameState.badges.includes(badgeId);
+        const html = `
+          <div class="badge-popup-content">
+            <div class="badge-popup-icon" style="filter: ${hasBadge ? 'none' : 'grayscale(1)'};">${badge.icon}</div>
+            <div class="badge-popup-name">${badge.name}</div>
+            <div class="badge-popup-desc">${badge.description}</div>
+            <div class="badge-popup-rarity ${badge.rarity}">${badge.rarity}</div>
+            ${!hasBadge ? '<div style="margin-top: 10px; color: #999; font-size: 0.9em;">🔒 Not yet earned</div>' : ''}
+          </div>
+        `;
+        document.getElementById("popup-content").innerHTML = html;
+        document.getElementById("popup").classList.remove("hidden");
+        document.getElementById("overlay").classList.remove("hidden");
+      }
+
+      function renderBadgesSummary() {
+        const container = document.getElementById('badges-summary');
+        if (!container) return;
+        
+        const earnedBadges = (gameState.badges || []).map(id => BADGES[id]).filter(b => b);
+        
+        if (earnedBadges.length === 0) {
+          container.innerHTML = `
+            <div class="badges-summary-title">🏅 No badges yet!</div>
+            <div style="color: #888; font-size: 0.85em;">Keep playing to earn badges!</div>
+          `;
+          return;
+        }
+        
+        const badgeHtml = earnedBadges.map(b => `
+          <span class="badge ${b.rarity}" onclick="showBadgeDetails('${b.id}')" title="${b.name}">
+            <span class="badge-icon">${b.icon}</span>
+          </span>
+        `).join('');
+        
+        container.innerHTML = `
+          <div class="badges-summary-title">🏅 Badges Earned: ${earnedBadges.length}/${Object.keys(BADGES).length}</div>
+          <div class="badges-summary-grid">${badgeHtml}</div>
+        `;
       }
 
       // ============= QR CODE & SHARING =============
@@ -5801,7 +6472,9 @@
               lastEarningEventDay: loaded.lastEarningEventDay || 0,
               lastActivityDate: loaded.lastActivityDate || null,
               potBonusToday: loaded.potBonusToday || 0,
+              // Badge system (v0.18.0)
               badges: Array.isArray(loaded.badges) ? loaded.badges : [],
+              totalActions: loaded.totalActions || 0,
             };
             // Ensure virtualDays exists for old saves - calculate from real time
             if (
@@ -5850,6 +6523,8 @@
       function loadExistingChicken() {
         loadGame();
         if (gameState.chicken) {
+          // Check and award badges retroactively for existing players
+          checkAndAwardBadges(false);
           updateGame();
           updateMoneyDisplay();
           updatePotDisplay();

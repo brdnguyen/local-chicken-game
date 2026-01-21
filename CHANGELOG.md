@@ -29,18 +29,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 2 days without playing = Pot resets to $0
   - Warning message shown when returning
 
+- **Badge System** 🏆 - Earn achievements for milestones and accomplishments!
+  - **25+ badges** across 5 categories: Milestone, Social, Collection, Economy, Care
+  - **5 rarity levels**: Common (grey), Uncommon (green), Rare (blue), Epic (purple), Legendary (gold)
+  - **Retroactive awards**: Badges are checked and awarded when loading the game
+  - Badges appear next to milestones in the Journey tab
+  - Tap/click badges to see details and unlock date
+  - Badge summary shows total collected at top of milestones list
+
 - **New UI Elements**
   - Pot display with 🏺 icon showing current value
   - Help button (❓) explaining pot mechanics
   - Earning hint banner for new users
   - Visual animations: pot glowing/shrinking
   - Frozen pot appearance when chicken is sick
+  - Badge display with rarity-colored borders
+  - Locked badge placeholders showing "???"
 
 ### Changed
 - **Economy Overhaul**: All money goes to pot first - only pot payouts update bank balance!
 - Bank balance icon changed from 💰 to 🏦 to distinguish from pot
-- Game state now includes pot tracking fields
-- Secret reset clears pot-related data
+- Game state now includes pot tracking fields and badge tracking
+- Secret reset clears pot-related data and badges
 
 ## [0.17.0] - 2026-01-21
 

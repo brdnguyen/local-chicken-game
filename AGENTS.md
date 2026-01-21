@@ -284,8 +284,72 @@ moneyPot: 0,                 // Current pot value in dollars
 lastEarningEventDay: 0,      // Virtual day of last earning event payout
 lastActivityDate: null,      // Date string of last activity (for inactivity reset)
 potBonusToday: 0,            // Track bonus pot additions today
-badges: []                   // Array of earned badge IDs (future feature)
+badges: [],                  // Array of earned badge IDs
+totalActions: 0              // Total caring actions taken (for badge tracking)
 ```
+
+### Badge System 🏆
+Earn badges (achievements) for reaching milestones and accomplishments! Badges are awarded **retroactively** when you load the game.
+
+#### Badge Rarity Levels
+| Rarity | Color | Border |
+|--------|-------|--------|
+| ⚪ Common | #9CA3AF | Grey |
+| 🟢 Uncommon | #10B981 | Green |
+| 🔵 Rare | #3B82F6 | Blue |
+| 🟣 Epic | #8B5CF6 | Purple |
+| 🟡 Legendary | #F59E0B | Gold glow |
+
+#### Badge Categories
+
+**🎂 Milestone Badges** (earned by reaching life stages)
+| Badge | Condition | Rarity |
+|-------|-----------|--------|
+| 🐣 Welcome to the World! | Hatched from egg (day 20+) | Common |
+| 🐤 Week-Old Wonder | Reached 1 week old (day 27+) | Common |
+| 🐥 Fluffiest Fluffball | Reached fluffy chick stage (day 40+) | Uncommon |
+| 🐔 Month-Old Marvel | Reached 1 month old (day 50+) | Uncommon |
+| 🥚 Egg-straordinary! | First egg laid (day 150+) | Rare |
+| 🐓 Fully Feathered | Six months old (day 180+) | Rare |
+| 🎂 The Big One! | One year old (day 365+) | Legendary |
+
+**👥 Social Badges** (earned by making friends)
+| Badge | Condition | Rarity |
+|-------|-----------|--------|
+| 👋 First Friend | Added 1 friend | Common |
+| 🤝 Social Butterfly | Added 3 friends | Uncommon |
+| 🎉 Party Animal | Added 5 friends | Rare |
+| 👑 Flock Leader | Added 10 friends | Epic |
+
+**🛍️ Collection Badges** (earned by buying items)
+| Badge | Condition | Rarity |
+|-------|-----------|--------|
+| 🛒 First Purchase | Bought 1 shop item | Common |
+| 🛍️ Shopaholic | Bought 5 items | Uncommon |
+| 💎 Big Spender | Bought 10 items | Rare |
+| 🏰 Chicken Royalty | Own Royal Crown | Epic |
+
+**💰 Economy Badges** (earned through money pot)
+| Badge | Condition | Rarity |
+|-------|-----------|--------|
+| 💵 First Payday | Received first pot payout | Common |
+| 🏦 Saving Up | Pot payout of $2+ | Uncommon |
+| 💰 Pot of Gold | Pot payout of $5 | Rare |
+| 🧹 Helpful Helper | Completed chores for bonus | Common |
+
+**❤️ Care Badges** (earned through consistent care)
+| Badge | Condition | Rarity |
+|-------|-----------|--------|
+| 💚 Health Hero | All health bars green at once | Uncommon |
+| 🏃 Exercise Champion | 50+ total actions | Rare |
+| 🌟 Dedicated Caretaker | 100+ total actions | Epic |
+
+#### Visual Display
+- Badges appear next to milestones in the Journey tab
+- Unlocked badges show full color with rarity border
+- Locked badges appear greyed out with "???" title
+- Tap/click a badge to see details and unlock date
+- Badge summary at top shows total collected
 
 ## Technical Features
 
