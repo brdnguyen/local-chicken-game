@@ -630,14 +630,14 @@ function verifyAndApprove() {
     gameState.bonusActionsEarned = 2;
     gameState.bonusActionsDate = getTodayDateString();
     gameState.pendingChores = []; // Clear pending chores
-    
+
     // Add pot bonus for completing chores (if addPotBonus function exists)
     let potBonusMsg = '';
     if (typeof addPotBonus === 'function') {
       addPotBonus('chores', 1.00);
       potBonusMsg = '<br><span style="color: #d4a574;">🏺 +$1.00 added to pot!</span>';
     }
-    
+
     saveGame();
 
     // Stop camera

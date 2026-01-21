@@ -190,7 +190,7 @@ The Money Pot is the **primary way to earn money**! All earnings flow through th
   - 💛 **Yellow bars (40-59%)**: No change
   - ❤️ **Red bars (<40%)**: Pot shrinks (-$0.00015/second per red bar)
   - 🤒 **Sick chicken**: Pot is **frozen** (no growth/shrink)
-  
+
 - **Payday every 20 virtual days!** (Day 20, 40, 60, etc.)
   - Pot empties into bank balance
   - Celebration popup shows payout

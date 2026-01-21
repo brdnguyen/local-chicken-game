@@ -1545,6 +1545,8 @@
         z-index: 1000;
         text-align: center;
         max-width: 300px;
+        max-height: 80vh;
+        overflow-y: auto;
       }
 
       .overlay {
@@ -2169,11 +2171,17 @@
         display: flex;
         align-items: center;
         gap: 4px;
-        background: linear-gradient(135deg, #d4a574 0%, #c4956a 50%, #b8895c 100%);
+        background: linear-gradient(
+          135deg,
+          #d4a574 0%,
+          #c4956a 50%,
+          #b8895c 100%
+        );
         padding: 6px 12px;
         border-radius: 15px;
         border: 2px solid #8b6914;
-        box-shadow: 0 3px 8px rgba(139, 105, 20, 0.3), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+        box-shadow: 0 3px 8px rgba(139, 105, 20, 0.3),
+          inset 0 1px 3px rgba(255, 255, 255, 0.3);
       }
 
       .pot-icon {
@@ -2182,8 +2190,13 @@
       }
 
       @keyframes pot-glow {
-        0%, 100% { filter: brightness(1); }
-        50% { filter: brightness(1.2); }
+        0%,
+        100% {
+          filter: brightness(1);
+        }
+        50% {
+          filter: brightness(1.2);
+        }
       }
 
       .pot-value {
@@ -2218,9 +2231,16 @@
       }
 
       @keyframes pot-grow {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
-        100% { transform: scale(1); }
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+          box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       .pot-container.shrinking {
@@ -2228,14 +2248,26 @@
       }
 
       @keyframes pot-shrink {
-        0% { transform: scale(1); }
-        50% { transform: scale(0.9); box-shadow: 0 0 10px rgba(255, 0, 0, 0.4); }
-        100% { transform: scale(1); }
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.9);
+          box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       .pot-container.frozen {
         filter: saturate(0.5);
-        background: linear-gradient(135deg, #a0a0a0 0%, #909090 50%, #808080 100%);
+        background: linear-gradient(
+          135deg,
+          #a0a0a0 0%,
+          #909090 50%,
+          #808080 100%
+        );
         border-color: #666;
       }
 
@@ -2281,7 +2313,7 @@
       }
 
       .earning-hint .hint-close:hover {
-        background: rgba(0,0,0,0.1);
+        background: rgba(0, 0, 0, 0.1);
       }
 
       .earning-hint.hidden {
@@ -2302,9 +2334,17 @@
       }
 
       @keyframes bounce-in {
-        0% { transform: scale(0); opacity: 0; }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); opacity: 1; }
+        0% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       .pot-breakdown {
@@ -2341,7 +2381,7 @@
         font-size: 0.75em;
         font-weight: 600;
         border: 2px solid;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         cursor: pointer;
         transition: transform 0.2s, box-shadow 0.2s;
         white-space: nowrap;
@@ -2349,7 +2389,7 @@
 
       .badge:hover {
         transform: scale(1.1);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
       }
 
       .badge-icon {
@@ -2395,8 +2435,13 @@
       }
 
       @keyframes legendary-glow {
-        0%, 100% { box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3); }
-        50% { box-shadow: 0 4px 15px rgba(255, 152, 0, 0.6); }
+        0%,
+        100% {
+          box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
+        }
+        50% {
+          box-shadow: 0 4px 15px rgba(255, 152, 0, 0.6);
+        }
       }
 
       .badge.locked {
@@ -2409,7 +2454,7 @@
 
       .badge.locked:hover {
         transform: none;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
       }
 
       /* Milestone with badge */
@@ -2456,9 +2501,15 @@
       }
 
       @keyframes badge-bounce {
-        0% { transform: scale(0); }
-        50% { transform: scale(1.3); }
-        100% { transform: scale(1); }
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.3);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       .badge-popup-name {
@@ -2483,11 +2534,26 @@
         letter-spacing: 1px;
       }
 
-      .badge-popup-rarity.common { background: #e0e0e0; color: #616161; }
-      .badge-popup-rarity.uncommon { background: #c8e6c9; color: #2e7d32; }
-      .badge-popup-rarity.rare { background: #90caf9; color: #1565c0; }
-      .badge-popup-rarity.epic { background: #ce93d8; color: #7b1fa2; }
-      .badge-popup-rarity.legendary { background: #ffcc80; color: #e65100; }
+      .badge-popup-rarity.common {
+        background: #e0e0e0;
+        color: #616161;
+      }
+      .badge-popup-rarity.uncommon {
+        background: #c8e6c9;
+        color: #2e7d32;
+      }
+      .badge-popup-rarity.rare {
+        background: #90caf9;
+        color: #1565c0;
+      }
+      .badge-popup-rarity.epic {
+        background: #ce93d8;
+        color: #7b1fa2;
+      }
+      .badge-popup-rarity.legendary {
+        background: #ffcc80;
+        color: #e65100;
+      }
 
       /* Badge earned animation */
       .badge-earned-flash {
@@ -2495,9 +2561,17 @@
       }
 
       @keyframes badge-earned {
-        0% { transform: scale(0) rotate(-180deg); opacity: 0; }
-        50% { transform: scale(1.2) rotate(10deg); }
-        100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        0% {
+          transform: scale(0) rotate(-180deg);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.2) rotate(10deg);
+        }
+        100% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
       }
 
       /* Badges summary section */
@@ -3036,7 +3110,12 @@
             <div class="pot-container">
               <span class="pot-icon">🏺</span>
               <span class="pot-value">$<span id="pot-amount">0.00</span></span>
-              <span class="pot-help" onclick="showPotHelp()" title="What's the pot?">❓</span>
+              <span
+                class="pot-help"
+                onclick="showPotHelp()"
+                title="What's the pot?"
+                >❓</span
+              >
             </div>
             <div class="pot-label">Pot</div>
           </div>
@@ -3053,7 +3132,10 @@
         <!-- New user hint -->
         <div class="earning-hint" id="earning-hint">
           <span class="hint-icon">💡</span>
-          <span class="hint-text">Keep your chicken healthy to fill the pot! Pot pays out every 20 days! 🎉</span>
+          <span class="hint-text"
+            >Keep your chicken healthy to fill the pot! Pot pays out every 20
+            days! 🎉</span
+          >
           <span class="hint-close" onclick="hideEarningHint()">✕</span>
         </div>
 
@@ -3779,255 +3861,257 @@
       // ============= BADGE SYSTEM =============
       const BADGES = {
         // Milestone badges (awarded automatically at each milestone)
-        'egg-starter': {
-          id: 'egg-starter',
-          name: 'Egg-cellent Start!',
-          icon: '🥚',
-          description: 'Started your chicken journey',
-          category: 'milestone',
+        "egg-starter": {
+          id: "egg-starter",
+          name: "Egg-cellent Start!",
+          icon: "🥚",
+          description: "Started your chicken journey",
+          category: "milestone",
           milestone: 0,
-          rarity: 'common',
-          color: '#F5DEB3'
+          rarity: "common",
+          color: "#F5DEB3",
         },
-        'hatch-day': {
-          id: 'hatch-day',
-          name: 'Hatch Day Hero',
-          icon: '🐣',
-          description: 'Your egg hatched!',
-          category: 'milestone',
+        "hatch-day": {
+          id: "hatch-day",
+          name: "Hatch Day Hero",
+          icon: "🐣",
+          description: "Your egg hatched!",
+          category: "milestone",
           milestone: 20,
-          rarity: 'common',
-          color: '#FFE4B5'
+          rarity: "common",
+          color: "#FFE4B5",
         },
-        'week-survivor': {
-          id: 'week-survivor',
-          name: 'Week Warrior',
-          icon: '🏅',
-          description: 'Survived the first week',
-          category: 'milestone',
+        "week-survivor": {
+          id: "week-survivor",
+          name: "Week Warrior",
+          icon: "🏅",
+          description: "Survived the first week",
+          category: "milestone",
           milestone: 27,
-          rarity: 'common',
-          color: '#87CEEB'
+          rarity: "common",
+          color: "#87CEEB",
         },
-        'fluffy-achiever': {
-          id: 'fluffy-achiever',
-          name: 'Fluff Master',
-          icon: '☁️',
-          description: 'Reached fluffy chick stage',
-          category: 'milestone',
+        "fluffy-achiever": {
+          id: "fluffy-achiever",
+          name: "Fluff Master",
+          icon: "☁️",
+          description: "Reached fluffy chick stage",
+          category: "milestone",
           milestone: 40,
-          rarity: 'uncommon',
-          color: '#DDA0DD'
+          rarity: "uncommon",
+          color: "#DDA0DD",
         },
-        'month-master': {
-          id: 'month-master',
-          name: 'Month Master',
-          icon: '📅',
-          description: 'One month of love!',
-          category: 'milestone',
+        "month-master": {
+          id: "month-master",
+          name: "Month Master",
+          icon: "📅",
+          description: "One month of love!",
+          category: "milestone",
           milestone: 50,
-          rarity: 'uncommon',
-          color: '#98FB98'
+          rarity: "uncommon",
+          color: "#98FB98",
         },
-        'two-month-champ': {
-          id: 'two-month-champ',
-          name: 'Double Trouble',
-          icon: '✌️',
-          description: 'Two months strong!',
-          category: 'milestone',
+        "two-month-champ": {
+          id: "two-month-champ",
+          name: "Double Trouble",
+          icon: "✌️",
+          description: "Two months strong!",
+          category: "milestone",
           milestone: 80,
-          rarity: 'uncommon',
-          color: '#F0E68C'
+          rarity: "uncommon",
+          color: "#F0E68C",
         },
-        'teen-spirit': {
-          id: 'teen-spirit',
-          name: 'Teen Spirit',
-          icon: '🎸',
-          description: 'Reached teenager stage!',
-          category: 'milestone',
+        "teen-spirit": {
+          id: "teen-spirit",
+          name: "Teen Spirit",
+          icon: "🎸",
+          description: "Reached teenager stage!",
+          category: "milestone",
           milestone: 110,
-          rarity: 'rare',
-          color: '#FF69B4'
+          rarity: "rare",
+          color: "#FF69B4",
         },
-        'first-egg-layer': {
-          id: 'first-egg-layer',
-          name: 'Egg-straordinary!',
-          icon: '🏆',
-          description: 'Laid the first egg!',
-          category: 'milestone',
+        "first-egg-layer": {
+          id: "first-egg-layer",
+          name: "Egg-straordinary!",
+          icon: "🏆",
+          description: "Laid the first egg!",
+          category: "milestone",
           milestone: 150,
-          rarity: 'rare',
-          color: '#FFD700'
+          rarity: "rare",
+          color: "#FFD700",
         },
-        'half-year-hero': {
-          id: 'half-year-hero',
-          name: 'Half-Year Hero',
-          icon: '🌟',
-          description: 'Six months of dedication!',
-          category: 'milestone',
+        "half-year-hero": {
+          id: "half-year-hero",
+          name: "Half-Year Hero",
+          icon: "🌟",
+          description: "Six months of dedication!",
+          category: "milestone",
           milestone: 180,
-          rarity: 'epic',
-          color: '#9370DB'
+          rarity: "epic",
+          color: "#9370DB",
         },
-        'year-legend': {
-          id: 'year-legend',
-          name: 'Year Legend',
-          icon: '👑',
-          description: 'One full year! Legendary!',
-          category: 'milestone',
+        "year-legend": {
+          id: "year-legend",
+          name: "Year Legend",
+          icon: "👑",
+          description: "One full year! Legendary!",
+          category: "milestone",
           milestone: 365,
-          rarity: 'legendary',
-          color: '#FF4500'
+          rarity: "legendary",
+          color: "#FF4500",
         },
         // Social badges
-        'first-friend': {
-          id: 'first-friend',
-          name: 'Social Butterfly',
-          icon: '🦋',
-          description: 'Made your first friend!',
-          category: 'social',
-          condition: 'friends >= 1',
-          rarity: 'common',
-          color: '#87CEEB'
+        "first-friend": {
+          id: "first-friend",
+          name: "Social Butterfly",
+          icon: "🦋",
+          description: "Made your first friend!",
+          category: "social",
+          condition: "friends >= 1",
+          rarity: "common",
+          color: "#87CEEB",
         },
-        'friendly-chicken': {
-          id: 'friendly-chicken',
-          name: 'Popular Chick',
-          icon: '🤝',
-          description: 'Made 2+ friends!',
-          category: 'social',
-          condition: 'friends >= 2',
-          rarity: 'uncommon',
-          color: '#98FB98'
+        "friendly-chicken": {
+          id: "friendly-chicken",
+          name: "Popular Chick",
+          icon: "🤝",
+          description: "Made 2+ friends!",
+          category: "social",
+          condition: "friends >= 2",
+          rarity: "uncommon",
+          color: "#98FB98",
         },
-        'sociable-star': {
-          id: 'sociable-star',
-          name: 'Sociable Star',
-          icon: '⭐',
-          description: 'Made 5+ friends!',
-          category: 'social',
-          condition: 'friends >= 5',
-          rarity: 'rare',
-          color: '#FFD700'
+        "sociable-star": {
+          id: "sociable-star",
+          name: "Sociable Star",
+          icon: "⭐",
+          description: "Made 5+ friends!",
+          category: "social",
+          condition: "friends >= 5",
+          rarity: "rare",
+          color: "#FFD700",
         },
         // Collection badges
-        'fashionista': {
-          id: 'fashionista',
-          name: 'Fashionista',
-          icon: '👗',
-          description: 'Own 3+ decorations!',
-          category: 'collection',
-          condition: 'decorations >= 3',
-          rarity: 'uncommon',
-          color: '#FF69B4'
+        fashionista: {
+          id: "fashionista",
+          name: "Fashionista",
+          icon: "👗",
+          description: "Own 3+ decorations!",
+          category: "collection",
+          condition: "decorations >= 3",
+          rarity: "uncommon",
+          color: "#FF69B4",
         },
-        'beauty-queen': {
-          id: 'beauty-queen',
-          name: 'Beauty Queen',
-          icon: '👸',
-          description: 'Own 7+ decorations!',
-          category: 'collection',
-          condition: 'decorations >= 7',
-          rarity: 'rare',
-          color: '#DA70D6'
+        "beauty-queen": {
+          id: "beauty-queen",
+          name: "Beauty Queen",
+          icon: "👸",
+          description: "Own 7+ decorations!",
+          category: "collection",
+          condition: "decorations >= 7",
+          rarity: "rare",
+          color: "#DA70D6",
         },
-        'toy-collector': {
-          id: 'toy-collector',
-          name: 'Toy Collector',
-          icon: '🧸',
-          description: 'Own 3+ toys!',
-          category: 'collection',
-          condition: 'toys >= 3',
-          rarity: 'uncommon',
-          color: '#FFA07A'
+        "toy-collector": {
+          id: "toy-collector",
+          name: "Toy Collector",
+          icon: "🧸",
+          description: "Own 3+ toys!",
+          category: "collection",
+          condition: "toys >= 3",
+          rarity: "uncommon",
+          color: "#FFA07A",
         },
-        'happiest-chicken': {
-          id: 'happiest-chicken',
-          name: 'Happiest Chicken',
-          icon: '🎉',
-          description: 'Own all toys!',
-          category: 'collection',
-          condition: 'allToys',
-          rarity: 'epic',
-          color: '#FFD700'
+        "happiest-chicken": {
+          id: "happiest-chicken",
+          name: "Happiest Chicken",
+          icon: "🎉",
+          description: "Own all toys!",
+          category: "collection",
+          condition: "allToys",
+          rarity: "epic",
+          color: "#FFD700",
         },
-        'health-nut': {
-          id: 'health-nut',
-          name: 'Health Nut',
-          icon: '💪',
-          description: 'Own all health items!',
-          category: 'collection',
-          condition: 'allHealth',
-          rarity: 'rare',
-          color: '#32CD32'
+        "health-nut": {
+          id: "health-nut",
+          name: "Health Nut",
+          icon: "💪",
+          description: "Own all health items!",
+          category: "collection",
+          condition: "allHealth",
+          rarity: "rare",
+          color: "#32CD32",
         },
         // Economy badges
-        'first-purchase': {
-          id: 'first-purchase',
-          name: 'Shopaholic',
-          icon: '🛍️',
-          description: 'Made your first purchase!',
-          category: 'economy',
-          condition: 'inventory >= 1',
-          rarity: 'common',
-          color: '#87CEEB'
+        "first-purchase": {
+          id: "first-purchase",
+          name: "Shopaholic",
+          icon: "🛍️",
+          description: "Made your first purchase!",
+          category: "economy",
+          condition: "inventory >= 1",
+          rarity: "common",
+          color: "#87CEEB",
         },
-        'big-saver': {
-          id: 'big-saver',
-          name: 'Big Saver',
-          icon: '💰',
-          description: 'Saved $10 or more!',
-          category: 'economy',
-          condition: 'money >= 10',
-          rarity: 'uncommon',
-          color: '#FFD700'
+        "big-saver": {
+          id: "big-saver",
+          name: "Big Saver",
+          icon: "💰",
+          description: "Saved $10 or more!",
+          category: "economy",
+          condition: "money >= 10",
+          rarity: "uncommon",
+          color: "#FFD700",
         },
-        'wealthy-farmer': {
-          id: 'wealthy-farmer',
-          name: 'Wealthy Farmer',
-          icon: '🏦',
-          description: 'Saved $25 or more!',
-          category: 'economy',
-          condition: 'money >= 25',
-          rarity: 'rare',
-          color: '#9370DB'
+        "wealthy-farmer": {
+          id: "wealthy-farmer",
+          name: "Wealthy Farmer",
+          icon: "🏦",
+          description: "Saved $25 or more!",
+          category: "economy",
+          condition: "money >= 25",
+          rarity: "rare",
+          color: "#9370DB",
         },
         // Care badges
-        'dedicated-carer': {
-          id: 'dedicated-carer',
-          name: 'Dedicated Carer',
-          icon: '❤️',
-          description: 'Completed 50+ caring actions!',
-          category: 'care',
-          condition: 'totalActions >= 50',
-          rarity: 'uncommon',
-          color: '#FF69B4'
+        "dedicated-carer": {
+          id: "dedicated-carer",
+          name: "Dedicated Carer",
+          icon: "❤️",
+          description: "Completed 50+ caring actions!",
+          category: "care",
+          condition: "totalActions >= 50",
+          rarity: "uncommon",
+          color: "#FF69B4",
         },
-        'super-parent': {
-          id: 'super-parent',
-          name: 'Super Parent',
-          icon: '🦸',
-          description: 'Completed 100+ caring actions!',
-          category: 'care',
-          condition: 'totalActions >= 100',
-          rarity: 'rare',
-          color: '#4169E1'
+        "super-parent": {
+          id: "super-parent",
+          name: "Super Parent",
+          icon: "🦸",
+          description: "Completed 100+ caring actions!",
+          category: "care",
+          condition: "totalActions >= 100",
+          rarity: "rare",
+          color: "#4169E1",
         },
-        'chore-champion': {
-          id: 'chore-champion',
-          name: 'Chore Champion',
-          icon: '🧹',
-          description: 'Completed house chores!',
-          category: 'care',
-          condition: 'choresCompleted',
-          rarity: 'uncommon',
-          color: '#32CD32'
-        }
+        "chore-champion": {
+          id: "chore-champion",
+          name: "Chore Champion",
+          icon: "🧹",
+          description: "Completed house chores!",
+          category: "care",
+          condition: "choresCompleted",
+          rarity: "uncommon",
+          color: "#32CD32",
+        },
       };
 
       // Get badge by milestone day
       function getBadgeForMilestone(milestoneDay) {
-        return Object.values(BADGES).find(b => b.category === 'milestone' && b.milestone === milestoneDay);
+        return Object.values(BADGES).find(
+          (b) => b.category === "milestone" && b.milestone === milestoneDay
+        );
       }
 
       const STATUSES = {
@@ -4341,7 +4425,7 @@
       const SESSION_MAX_SECONDS = 600; // 10 minutes max
       const FAST_DECAY_SECONDS = 120; // First 2 minutes = fast decay
       const EARNING_EVENT_INTERVAL = 20; // Pot pays out every 20 virtual days
-      const POT_MAX_AMOUNT = 5.00; // Cap pot at $5 (before bonuses)
+      const POT_MAX_AMOUNT = 5.0; // Cap pot at $5 (before bonuses)
       const POT_INACTIVITY_DAYS = 2; // Reset pot after 2 days of no activity
 
       let gameState = {
@@ -4620,9 +4704,9 @@
           renderChicken();
           showScreen("game-screen");
           startSessionTimer();
-          
+
           // Check if user has dismissed the earning hint
-          if (localStorage.getItem('hideEarningHint') === 'true') {
+          if (localStorage.getItem("hideEarningHint") === "true") {
             hideEarningHint();
           }
         }
@@ -4830,12 +4914,19 @@
         }
 
         const needs = gameState.chicken.needs;
-        const needKeys = ['hunger', 'thirst', 'cleanliness', 'sleep', 'happiness', 'exercise'];
-        
+        const needKeys = [
+          "hunger",
+          "thirst",
+          "cleanliness",
+          "sleep",
+          "happiness",
+          "exercise",
+        ];
+
         // Count green (healthy) and red (critical) bars
         let greenCount = 0;
         let redCount = 0;
-        
+
         for (const key of needKeys) {
           const value = needs[key];
           if (value >= 60) greenCount++;
@@ -4850,12 +4941,17 @@
         // With 6 green bars: 6 * 0.00004 = $0.00024/sec
         const greenRate = 0.00025; // $ per second per green bar
         const redRate = 0.00015; // $ per second per red bar (penalty)
-        
-        const potGrowth = (greenCount * greenRate * secondsPassed) - (redCount * redRate * secondsPassed);
-        
+
+        const potGrowth =
+          greenCount * greenRate * secondsPassed -
+          redCount * redRate * secondsPassed;
+
         const oldPot = gameState.moneyPot;
-        gameState.moneyPot = Math.max(0, Math.min(POT_MAX_AMOUNT, gameState.moneyPot + potGrowth));
-        
+        gameState.moneyPot = Math.max(
+          0,
+          Math.min(POT_MAX_AMOUNT, gameState.moneyPot + potGrowth)
+        );
+
         // Visual feedback if significant change
         const significantChange = Math.abs(gameState.moneyPot - oldPot) >= 0.01;
         if (significantChange && potGrowth > 0) {
@@ -4868,28 +4964,31 @@
       // Add bonus to pot (from friend or chores)
       function addPotBonus(source, amount) {
         const today = getTodayDateString();
-        
+
         // Reset daily bonus tracking if new day
         if (gameState.lastActivityDate !== today) {
           gameState.potBonusToday = 0;
         }
-        
+
         // Bonus can exceed the cap
         gameState.moneyPot += amount;
         gameState.potBonusToday += amount;
-        
+
         animatePotGrowth();
         updatePotDisplay();
         saveGame();
-        
+
         return amount;
       }
 
       // Check and process earning event (payday)
       function checkEarningEvent(newAge) {
         const lastEvent = gameState.lastEarningEventDay || 0;
-        const nextEvent = Math.floor(lastEvent / EARNING_EVENT_INTERVAL) * EARNING_EVENT_INTERVAL + EARNING_EVENT_INTERVAL;
-        
+        const nextEvent =
+          Math.floor(lastEvent / EARNING_EVENT_INTERVAL) *
+            EARNING_EVENT_INTERVAL +
+          EARNING_EVENT_INTERVAL;
+
         if (newAge >= nextEvent && lastEvent < nextEvent) {
           // Payday!
           const payout = gameState.moneyPot;
@@ -4898,19 +4997,19 @@
             const oldPot = gameState.moneyPot;
             gameState.moneyPot = 0;
             gameState.lastEarningEventDay = newAge;
-            
+
             // Show celebratory popup
             showPaydayPopup(payout, nextEvent);
             updateMoneyDisplay();
             updatePotDisplay();
             saveGame();
-            
+
             return payout;
           } else {
             gameState.lastEarningEventDay = newAge;
           }
         }
-        
+
         return 0;
       }
 
@@ -4932,63 +5031,61 @@
       }
 
       function animatePotGrowth() {
-        const potContainer = document.querySelector('.pot-container');
+        const potContainer = document.querySelector(".pot-container");
         if (potContainer) {
-          potContainer.classList.remove('shrinking');
-          potContainer.classList.add('growing');
-          setTimeout(() => potContainer.classList.remove('growing'), 500);
+          potContainer.classList.remove("shrinking");
+          potContainer.classList.add("growing");
+          setTimeout(() => potContainer.classList.remove("growing"), 500);
         }
       }
 
       function animatePotShrink() {
-        const potContainer = document.querySelector('.pot-container');
+        const potContainer = document.querySelector(".pot-container");
         if (potContainer) {
-          potContainer.classList.remove('growing');
-          potContainer.classList.add('shrinking');
-          setTimeout(() => potContainer.classList.remove('shrinking'), 500);
+          potContainer.classList.remove("growing");
+          potContainer.classList.add("shrinking");
+          setTimeout(() => potContainer.classList.remove("shrinking"), 500);
         }
       }
 
       function updatePotDisplay() {
-        const potAmount = document.getElementById('pot-amount');
-        const potContainer = document.querySelector('.pot-container');
-        
+        const potAmount = document.getElementById("pot-amount");
+        const potContainer = document.querySelector(".pot-container");
+
         if (potAmount) {
           potAmount.textContent = gameState.moneyPot.toFixed(2);
         }
-        
+
         if (potContainer && gameState.chicken) {
-          potContainer.classList.toggle('frozen', gameState.chicken.isSick);
+          potContainer.classList.toggle("frozen", gameState.chicken.isSick);
         }
       }
 
       function showPotHelp() {
         const html = `
-          <div style="text-align: left; font-size: 0.95em;">
-            <div style="text-align: center; font-size: 1.5em; margin-bottom: 10px;">🏺 The Money Pot</div>
-            
-            <p style="margin-bottom: 10px;">The pot collects money based on your chicken's health!</p>
-            
-            <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-              <strong style="color: #2e7d32;">💚 Green bars</strong> = Pot fills faster!<br>
-              <strong style="color: #f57c00;">💛 Yellow bars</strong> = No change<br>
-              <strong style="color: #c62828;">❤️ Red bars</strong> = Pot shrinks!<br>
-              <strong style="color: #666;">🤒 Sick</strong> = Pot is frozen!
+          <div style="text-align: left; font-size: 0.9em; line-height: 1.3;">
+            <div style="text-align: center; font-size: 1.3em; margin-bottom: 8px;">🏺 Money Pot</div>
+
+            <div style="background: #e8f5e9; padding: 8px; border-radius: 8px; margin-bottom: 8px; font-size: 0.95em;">
+              <strong>How to fill the pot:</strong><br>
+              🌾 Caring actions that help = <strong>+$1</strong><br>
+              💚 Green bars = Pot grows over time
             </div>
-            
-            <div style="background: #fff3e0; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+
+            <div style="background: #fff3e0; padding: 8px; border-radius: 8px; margin-bottom: 8px; font-size: 0.95em;">
+              💛 Yellow bars = No change<br>
+              ❤️ Red bars = Pot shrinks!<br>
+              🤒 Sick = Pot frozen!
+            </div>
+
+            <div style="background: #e3f2fd; padding: 8px; border-radius: 8px; margin-bottom: 8px; font-size: 0.95em;">
               <strong>💰 Payday every 20 days!</strong><br>
-              Pot empties into your bank. Max pot: $${POT_MAX_AMOUNT.toFixed(2)}
+              Pot → Bank (max $${POT_MAX_AMOUNT.toFixed(2)})<br>
+              <strong>🎁 Bonuses:</strong> Friend +$0.50 · Chores +$1
             </div>
-            
-            <div style="background: #e3f2fd; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-              <strong>🎁 Bonus rewards:</strong><br>
-              • Add a friend: +$0.50<br>
-              • Complete chores: +$1.00
-            </div>
-            
-            <div style="background: #ffebee; padding: 10px; border-radius: 8px;">
-              <strong>⚠️ Warning:</strong> 2 days without playing = pot resets to $0!
+
+            <div style="background: #ffebee; padding: 8px; border-radius: 8px; font-size: 0.9em;">
+              ⚠️ 2 days away = pot resets!
             </div>
           </div>
         `;
@@ -4998,10 +5095,10 @@
       }
 
       function hideEarningHint() {
-        const hint = document.getElementById('earning-hint');
-        if (hint) hint.classList.add('hidden');
+        const hint = document.getElementById("earning-hint");
+        if (hint) hint.classList.add("hidden");
         // Store preference
-        localStorage.setItem('hideEarningHint', 'true');
+        localStorage.setItem("hideEarningHint", "true");
       }
 
       function triggerDecayEffects(changedNeeds) {
@@ -5307,7 +5404,10 @@
         // Only earn money if a color status improved (red->yellow or yellow->green)
         // Money goes to POT, not directly to balance
         if (colorUpgradeHappened) {
-          gameState.moneyPot = Math.min(POT_MAX_AMOUNT + 5, gameState.moneyPot + 1); // Allow up to $5 over cap for bonuses
+          gameState.moneyPot = Math.min(
+            POT_MAX_AMOUNT + 5,
+            gameState.moneyPot + 1
+          ); // Allow up to $5 over cap for bonuses
           message += '<br><span class="coin-earn">🏺 +$1 to pot!</span>';
           message +=
             '<br><span style="color: #2e7d32; font-size: 0.85em;">📈 My health improves! Thanks for caring for me! 💕</span>';
@@ -5486,7 +5586,7 @@
         // Milestones and badges
         renderMilestones(ageInDays);
         renderBadgesSummary();
-        
+
         // Check for new badges (silently on render, popup on explicit action)
         checkAndAwardBadges(false);
       }
@@ -5627,7 +5727,7 @@
           let className = "milestone";
           let icon = "⬜";
           const isAchieved = currentAge >= m.day;
-          
+
           if (isAchieved) {
             className += " achieved";
             icon = "✅";
@@ -5638,12 +5738,13 @@
           if (currentMilestone && m.day === currentMilestone.day) {
             className += " current";
           }
-          
+
           // Get badge for this milestone
           const badge = getBadgeForMilestone(m.day);
-          let badgeHtml = '';
+          let badgeHtml = "";
           if (badge) {
-            const hasBadge = gameState.badges && gameState.badges.includes(badge.id);
+            const hasBadge =
+              gameState.badges && gameState.badges.includes(badge.id);
             if (hasBadge) {
               badgeHtml = `
                 <div class="milestone-badge-slot">
@@ -5674,7 +5775,7 @@
               `;
             }
           }
-          
+
           return `
             <div class="${className}">
               <span class="milestone-text">${icon} ${m.name} (Day ${m.day})</span>
@@ -5687,13 +5788,13 @@
       // ============= BADGE SYSTEM FUNCTIONS =============
       function checkAndAwardBadges(showPopup = true) {
         if (!gameState.chicken) return [];
-        
+
         if (!gameState.badges) gameState.badges = [];
         if (!gameState.totalActions) gameState.totalActions = 0;
-        
+
         const newBadges = [];
         const currentAge = gameState.chicken.virtualDays || 0;
-        
+
         // Check milestone badges
         for (const milestone of MILESTONES) {
           if (currentAge >= milestone.day) {
@@ -5704,83 +5805,142 @@
             }
           }
         }
-        
+
         // Check social badges
         const friendCount = (gameState.friends || []).length;
-        if (friendCount >= 1 && !gameState.badges.includes('first-friend')) {
-          gameState.badges.push('first-friend');
-          newBadges.push(BADGES['first-friend']);
+        if (friendCount >= 1 && !gameState.badges.includes("first-friend")) {
+          gameState.badges.push("first-friend");
+          newBadges.push(BADGES["first-friend"]);
         }
-        if (friendCount >= 2 && !gameState.badges.includes('friendly-chicken')) {
-          gameState.badges.push('friendly-chicken');
-          newBadges.push(BADGES['friendly-chicken']);
+        if (
+          friendCount >= 2 &&
+          !gameState.badges.includes("friendly-chicken")
+        ) {
+          gameState.badges.push("friendly-chicken");
+          newBadges.push(BADGES["friendly-chicken"]);
         }
-        if (friendCount >= 5 && !gameState.badges.includes('sociable-star')) {
-          gameState.badges.push('sociable-star');
-          newBadges.push(BADGES['sociable-star']);
+        if (friendCount >= 5 && !gameState.badges.includes("sociable-star")) {
+          gameState.badges.push("sociable-star");
+          newBadges.push(BADGES["sociable-star"]);
         }
-        
+
         // Check collection badges
         const inventory = gameState.inventory || [];
-        const decorationItems = ['flower-headband', 'jumper', 'necklace', 'nametag', 'duck-disguise', 
-          'panda-mask', 'eye-patch', 'silly-eyebrows', 'angry-eyebrows', 'fascinator', 
-          'cute-face', 'unicorn-horn', 'cape', 'bow-tie', 'crown'];
-        const toyItems = ['fake-worm', 'robot-friend', 'walky-talky', 'photo', 'mirror'];
-        const healthItems = ['vitamins', 'feather-polish', 'growth-vitamin', 'deworm-tablets'];
-        
-        const ownedDecorations = inventory.filter(i => decorationItems.includes(i)).length;
-        const ownedToys = inventory.filter(i => toyItems.includes(i)).length;
-        const ownedHealth = inventory.filter(i => healthItems.includes(i)).length;
-        
-        if (ownedDecorations >= 3 && !gameState.badges.includes('fashionista')) {
-          gameState.badges.push('fashionista');
-          newBadges.push(BADGES['fashionista']);
+        const decorationItems = [
+          "flower-headband",
+          "jumper",
+          "necklace",
+          "nametag",
+          "duck-disguise",
+          "panda-mask",
+          "eye-patch",
+          "silly-eyebrows",
+          "angry-eyebrows",
+          "fascinator",
+          "cute-face",
+          "unicorn-horn",
+          "cape",
+          "bow-tie",
+          "crown",
+        ];
+        const toyItems = [
+          "fake-worm",
+          "robot-friend",
+          "walky-talky",
+          "photo",
+          "mirror",
+        ];
+        const healthItems = [
+          "vitamins",
+          "feather-polish",
+          "growth-vitamin",
+          "deworm-tablets",
+        ];
+
+        const ownedDecorations = inventory.filter((i) =>
+          decorationItems.includes(i)
+        ).length;
+        const ownedToys = inventory.filter((i) => toyItems.includes(i)).length;
+        const ownedHealth = inventory.filter((i) =>
+          healthItems.includes(i)
+        ).length;
+
+        if (
+          ownedDecorations >= 3 &&
+          !gameState.badges.includes("fashionista")
+        ) {
+          gameState.badges.push("fashionista");
+          newBadges.push(BADGES["fashionista"]);
         }
-        if (ownedDecorations >= 7 && !gameState.badges.includes('beauty-queen')) {
-          gameState.badges.push('beauty-queen');
-          newBadges.push(BADGES['beauty-queen']);
+        if (
+          ownedDecorations >= 7 &&
+          !gameState.badges.includes("beauty-queen")
+        ) {
+          gameState.badges.push("beauty-queen");
+          newBadges.push(BADGES["beauty-queen"]);
         }
-        if (ownedToys >= 3 && !gameState.badges.includes('toy-collector')) {
-          gameState.badges.push('toy-collector');
-          newBadges.push(BADGES['toy-collector']);
+        if (ownedToys >= 3 && !gameState.badges.includes("toy-collector")) {
+          gameState.badges.push("toy-collector");
+          newBadges.push(BADGES["toy-collector"]);
         }
-        if (ownedToys >= toyItems.length && !gameState.badges.includes('happiest-chicken')) {
-          gameState.badges.push('happiest-chicken');
-          newBadges.push(BADGES['happiest-chicken']);
+        if (
+          ownedToys >= toyItems.length &&
+          !gameState.badges.includes("happiest-chicken")
+        ) {
+          gameState.badges.push("happiest-chicken");
+          newBadges.push(BADGES["happiest-chicken"]);
         }
-        if (ownedHealth >= healthItems.length && !gameState.badges.includes('health-nut')) {
-          gameState.badges.push('health-nut');
-          newBadges.push(BADGES['health-nut']);
+        if (
+          ownedHealth >= healthItems.length &&
+          !gameState.badges.includes("health-nut")
+        ) {
+          gameState.badges.push("health-nut");
+          newBadges.push(BADGES["health-nut"]);
         }
-        
+
         // Check economy badges
-        if (inventory.length >= 1 && !gameState.badges.includes('first-purchase')) {
-          gameState.badges.push('first-purchase');
-          newBadges.push(BADGES['first-purchase']);
+        if (
+          inventory.length >= 1 &&
+          !gameState.badges.includes("first-purchase")
+        ) {
+          gameState.badges.push("first-purchase");
+          newBadges.push(BADGES["first-purchase"]);
         }
-        if (gameState.money >= 10 && !gameState.badges.includes('big-saver')) {
-          gameState.badges.push('big-saver');
-          newBadges.push(BADGES['big-saver']);
+        if (gameState.money >= 10 && !gameState.badges.includes("big-saver")) {
+          gameState.badges.push("big-saver");
+          newBadges.push(BADGES["big-saver"]);
         }
-        if (gameState.money >= 25 && !gameState.badges.includes('wealthy-farmer')) {
-          gameState.badges.push('wealthy-farmer');
-          newBadges.push(BADGES['wealthy-farmer']);
+        if (
+          gameState.money >= 25 &&
+          !gameState.badges.includes("wealthy-farmer")
+        ) {
+          gameState.badges.push("wealthy-farmer");
+          newBadges.push(BADGES["wealthy-farmer"]);
         }
-        
+
         // Check care badges
-        if (gameState.totalActions >= 50 && !gameState.badges.includes('dedicated-carer')) {
-          gameState.badges.push('dedicated-carer');
-          newBadges.push(BADGES['dedicated-carer']);
+        if (
+          gameState.totalActions >= 50 &&
+          !gameState.badges.includes("dedicated-carer")
+        ) {
+          gameState.badges.push("dedicated-carer");
+          newBadges.push(BADGES["dedicated-carer"]);
         }
-        if (gameState.totalActions >= 100 && !gameState.badges.includes('super-parent')) {
-          gameState.badges.push('super-parent');
-          newBadges.push(BADGES['super-parent']);
+        if (
+          gameState.totalActions >= 100 &&
+          !gameState.badges.includes("super-parent")
+        ) {
+          gameState.badges.push("super-parent");
+          newBadges.push(BADGES["super-parent"]);
         }
-        if (gameState.bonusActionsEarned >= 2 && !gameState.badges.includes('chore-champion')) {
-          gameState.badges.push('chore-champion');
-          newBadges.push(BADGES['chore-champion']);
+        if (
+          gameState.bonusActionsEarned >= 2 &&
+          !gameState.badges.includes("chore-champion")
+        ) {
+          gameState.badges.push("chore-champion");
+          newBadges.push(BADGES["chore-champion"]);
         }
-        
+
         // Save if any new badges
         if (newBadges.length > 0) {
           saveGame();
@@ -5788,13 +5948,13 @@
             showNewBadgesPopup(newBadges);
           }
         }
-        
+
         return newBadges;
       }
 
       function showNewBadgesPopup(badges) {
         if (badges.length === 0) return;
-        
+
         const badge = badges[0]; // Show first badge (can queue multiple)
         const html = `
           <div class="badge-popup-content">
@@ -5813,15 +5973,23 @@
       function showBadgeDetails(badgeId) {
         const badge = BADGES[badgeId];
         if (!badge) return;
-        
+
         const hasBadge = gameState.badges && gameState.badges.includes(badgeId);
         const html = `
           <div class="badge-popup-content">
-            <div class="badge-popup-icon" style="filter: ${hasBadge ? 'none' : 'grayscale(1)'};">${badge.icon}</div>
+            <div class="badge-popup-icon" style="filter: ${
+              hasBadge ? "none" : "grayscale(1)"
+            };">${badge.icon}</div>
             <div class="badge-popup-name">${badge.name}</div>
             <div class="badge-popup-desc">${badge.description}</div>
-            <div class="badge-popup-rarity ${badge.rarity}">${badge.rarity}</div>
-            ${!hasBadge ? '<div style="margin-top: 10px; color: #999; font-size: 0.9em;">🔒 Not yet earned</div>' : ''}
+            <div class="badge-popup-rarity ${badge.rarity}">${
+          badge.rarity
+        }</div>
+            ${
+              !hasBadge
+                ? '<div style="margin-top: 10px; color: #999; font-size: 0.9em;">🔒 Not yet earned</div>'
+                : ""
+            }
           </div>
         `;
         document.getElementById("popup-content").innerHTML = html;
@@ -5830,11 +5998,13 @@
       }
 
       function renderBadgesSummary() {
-        const container = document.getElementById('badges-summary');
+        const container = document.getElementById("badges-summary");
         if (!container) return;
-        
-        const earnedBadges = (gameState.badges || []).map(id => BADGES[id]).filter(b => b);
-        
+
+        const earnedBadges = (gameState.badges || [])
+          .map((id) => BADGES[id])
+          .filter((b) => b);
+
         if (earnedBadges.length === 0) {
           container.innerHTML = `
             <div class="badges-summary-title">🏅 No badges yet!</div>
@@ -5842,15 +6012,21 @@
           `;
           return;
         }
-        
-        const badgeHtml = earnedBadges.map(b => `
+
+        const badgeHtml = earnedBadges
+          .map(
+            (b) => `
           <span class="badge ${b.rarity}" onclick="showBadgeDetails('${b.id}')" title="${b.name}">
             <span class="badge-icon">${b.icon}</span>
           </span>
-        `).join('');
-        
+        `
+          )
+          .join("");
+
         container.innerHTML = `
-          <div class="badges-summary-title">🏅 Badges Earned: ${earnedBadges.length}/${Object.keys(BADGES).length}</div>
+          <div class="badges-summary-title">🏅 Badges Earned: ${
+            earnedBadges.length
+          }/${Object.keys(BADGES).length}</div>
           <div class="badges-summary-grid">${badgeHtml}</div>
         `;
       }
@@ -6041,10 +6217,12 @@
           saveGame();
           renderFriends();
           document.getElementById("friend-code-input").value = "";
-          
+
           // Add pot bonus for adding a friend
-          const bonus = addPotBonus('friend', 0.50);
-          showPopup(`🎉 ${data.n} is now your friend!<br><span style="color: #d4a574;">🏺 +$0.50 added to pot!</span>`);
+          const bonus = addPotBonus("friend", 0.5);
+          showPopup(
+            `🎉 ${data.n} is now your friend!<br><span style="color: #d4a574;">🏺 +$0.50 added to pot!</span>`
+          );
         } catch (e) {
           console.error("Error adding friend:", e);
           showPopup("😕 Invalid chicken code. Try again!");
@@ -6487,7 +6665,7 @@
               );
               gameState.chicken.virtualDays = realDays;
             }
-            
+
             // Check for pot inactivity reset (2 days of no activity)
             checkPotInactivityReset();
           }
@@ -6502,20 +6680,26 @@
       // Check if pot should be reset due to inactivity
       function checkPotInactivityReset() {
         if (!gameState.lastActivityDate || gameState.moneyPot === 0) return;
-        
+
         const today = new Date();
         const lastActivity = new Date(gameState.lastActivityDate);
-        const daysDiff = Math.floor((today - lastActivity) / (1000 * 60 * 60 * 24));
-        
+        const daysDiff = Math.floor(
+          (today - lastActivity) / (1000 * 60 * 60 * 24)
+        );
+
         if (daysDiff >= POT_INACTIVITY_DAYS) {
           const lostPot = gameState.moneyPot;
           gameState.moneyPot = 0;
           gameState.potBonusToday = 0;
           saveGame();
-          
+
           // Show warning message after a short delay
           setTimeout(() => {
-            showPopup(`😢 Oh no! You were away for ${daysDiff} days...<br><br>🏺 Your pot of <strong>$${lostPot.toFixed(2)}</strong> has been reset!<br><br>Come back daily to keep your pot safe! 💕`);
+            showPopup(
+              `😢 Oh no! You were away for ${daysDiff} days...<br><br>🏺 Your pot of <strong>$${lostPot.toFixed(
+                2
+              )}</strong> has been reset!<br><br>Come back daily to keep your pot safe! 💕`
+            );
           }, 500);
         }
       }

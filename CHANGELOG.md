@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 💚 Green bars (≥60%): Pot grows (+$0.00025/sec per green bar)
   - ❤️ Red bars (<40%): Pot shrinks (-$0.00015/sec per red bar)
   - 🤒 Sick chicken: Pot is frozen (no growth/shrink)
-  
+
 - **Payday Events** every 20 virtual days
   - Pot empties into bank balance automatically
   - Celebration popup shows payout breakdown

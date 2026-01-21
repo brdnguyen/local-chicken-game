@@ -108,13 +108,13 @@ auto create the commit with the right commit message + push + capture change log
                 -   If chicken dies, you lose everything
                 -   If chicken grows, you collect more badges, including some rare badges (growing badge, hatching badge, layer badge, friendly badge (> 2 friends) sociable chicken badge (> 5 friends), layer badge (laying first egg)
                     -   Brainstorm more badges. Be creative, across multiple events in the Milestones, across multiple dimensions. If the chicken has many decorations, could be "beautiful chicken". Many toys: "Happiest ever chicken".
-                If owner cares daily without a miss > 7 days, something like "never skip a bit". Think of Github badges systems.                 
+                If owner cares daily without a miss > 7 days, something like "never skip a bit". Think of Github badges systems.
 
 
         -   Have a prompt at the top (under $ balance) to hint (especially for new users): care for chickens to earn $, the more healthy the more $, then having a tooltip to explain details:
 
                 +   there's a pot (call it "pot", with a visual so that easy for kid to understand) to track how much money ($) you can earn immediately at each "earning event"
-                        Rename the total money like "Total bank balance" to differentiate 
+                        Rename the total money like "Total bank balance" to differentiate
                 +   an earning event triggers at every 20 days, days 40 etc
                 +   for every "Green" bar (healthy), as each days passed, the $ in the pot increases and compounds. For every "Red" bar, the $ decreases. Set the weight so that organically the money in the pot should increase by around 5$ every 20 days, based on stardard caring pattern. Cap it at $5 max (exclude Bonus)
                     -   for every event where the pot grows or shrinks, pop up a message with a clear visual to explain
@@ -128,6 +128,8 @@ auto create the commit with the right commit message + push + capture change log
 
 
     -   If chicken grows, you also begin to have eggs. At some point, egg also hatches, the chicken has babies! (up to 4 chicks!)
+
+    -   AUdit SICK - how to avoid sick?
 
 
 
