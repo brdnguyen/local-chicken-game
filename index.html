@@ -5205,7 +5205,7 @@
         }
 
         // Bonus can exceed the cap
-        gameState.moneyPot += amount;
+        gameState.moneyPot = roundToOneDecimal(gameState.moneyPot + amount);
         gameState.potBonusToday += amount;
 
         animatePotGrowth();
@@ -5227,7 +5227,7 @@
           // Payday!
           const payout = gameState.moneyPot;
           if (payout > 0) {
-            gameState.money += payout;
+            gameState.money = roundToOneDecimal(gameState.money + payout);
             const oldPot = gameState.moneyPot;
             gameState.moneyPot = 0;
             gameState.lastEarningEventDay = newAge;
@@ -6925,7 +6925,7 @@
           return;
         }
 
-        gameState.money -= item.price;
+        gameState.money = roundToOneDecimal(gameState.money - item.price);
         gameState.inventory.push(itemId);
 
         // Apply immediate happiness boost if item has happiness effect
