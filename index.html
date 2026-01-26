@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -64,7 +64,7 @@
                 _dataCache = createData(
                   _typeNumber,
                   _errorCorrectionLevel,
-                  _dataList
+                  _dataList,
                 );
               }
               mapData(_dataCache, maskPattern);
@@ -260,7 +260,7 @@
             createData = function (typeNumber, errorCorrectionLevel, dataList) {
               var rsBlocks = QRRSBlock.getRSBlocks(
                   typeNumber,
-                  errorCorrectionLevel
+                  errorCorrectionLevel,
                 ),
                 buffer = qrBitBuffer();
               for (var i = 0; i < dataList.length; i += 1) {
@@ -268,7 +268,7 @@
                 buffer.put(data.getMode(), 4);
                 buffer.put(
                   data.getLength(),
-                  QRUtil.getLengthInBits(data.getMode(), typeNumber)
+                  QRUtil.getLengthInBits(data.getMode(), typeNumber),
                 );
                 data.write(buffer);
               }
@@ -282,7 +282,7 @@
                     buffer.getLengthInBits() +
                     ">" +
                     totalDataCount * 8 +
-                    ")"
+                    ")",
                 );
               }
               if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
@@ -743,7 +743,7 @@
               for (var i = 0; i < _this.getLength(); i += 1) {
                 for (var j = 0; j < e.getLength(); j += 1) {
                   num[i + j] ^= QRMath.gexp(
-                    QRMath.glog(_this.getAt(i)) + QRMath.glog(e.getAt(j))
+                    QRMath.glog(_this.getAt(i)) + QRMath.glog(e.getAt(j)),
                   );
                 }
               }
@@ -942,7 +942,7 @@
                   "bad rs block @ typeNumber:" +
                     typeNumber +
                     "/errorCorrectionLevel:" +
-                    errorCorrectionLevel
+                    errorCorrectionLevel,
                 );
               }
               var length = rsBlock.length / 3,
@@ -998,7 +998,7 @@
                 _buffer.push(0);
               }
               if (bit) {
-                _buffer[bufIndex] |= 0x80 >>> _length % 8;
+                _buffer[bufIndex] |= 0x80 >>> (_length % 8);
               }
               _length += 1;
             };
@@ -1037,7 +1037,8 @@
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
         background: linear-gradient(
           135deg,
@@ -1312,7 +1313,9 @@
         cursor: pointer;
         margin: 5px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
       }
 
       .btn:hover,
@@ -1819,7 +1822,9 @@
       .health-indicator-fill {
         height: 100%;
         border-radius: 5px;
-        transition: width 0.3s ease, background 0.3s ease;
+        transition:
+          width 0.3s ease,
+          background 0.3s ease;
       }
 
       .health-indicator-fill.high {
@@ -2180,7 +2185,8 @@
         padding: 6px 12px;
         border-radius: 15px;
         border: 2px solid #8b6914;
-        box-shadow: 0 3px 8px rgba(139, 105, 20, 0.3),
+        box-shadow:
+          0 3px 8px rgba(139, 105, 20, 0.3),
           inset 0 1px 3px rgba(255, 255, 255, 0.3);
       }
 
@@ -2210,7 +2216,9 @@
         font-size: 0.8em;
         cursor: pointer;
         opacity: 0.7;
-        transition: opacity 0.2s, transform 0.2s;
+        transition:
+          opacity 0.2s,
+          transform 0.2s;
       }
 
       .pot-help:hover {
@@ -2333,6 +2341,84 @@
         animation: bounce-in 0.5s ease-out;
       }
 
+      /* ============= REWARD ANIMATION ============= */
+      .reward-popup-anim {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
+        pointer-events: none;
+      }
+
+      .reward-anim-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding: 15px 25px;
+        background: linear-gradient(
+          135deg,
+          var(--reward-color, #ffd700) 0%,
+          #fff8dc 100%
+        );
+        border-radius: 20px;
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.3),
+          0 0 20px var(--reward-color, #ffd700);
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+        transition: none;
+      }
+
+      .reward-popup-anim.animate .reward-anim-content {
+        animation: reward-pop 1.3s ease-out forwards;
+      }
+
+      @keyframes reward-pop {
+        0% {
+          opacity: 0;
+          transform: scale(0.5) translateY(20px);
+        }
+        20% {
+          opacity: 1;
+          transform: scale(1.2) translateY(0);
+        }
+        40% {
+          transform: scale(1) translateY(0);
+        }
+        80% {
+          opacity: 1;
+          transform: scale(1) translateY(-30px);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.8) translateY(-60px);
+        }
+      }
+
+      .reward-icon {
+        font-size: 2em;
+        animation: reward-bounce 0.5s ease-out;
+      }
+
+      @keyframes reward-bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .reward-amount {
+        font-size: 1.8em;
+        font-weight: 800;
+        color: #333;
+        text-shadow: 2px 2px 0 #fff;
+      }
+
       @keyframes bounce-in {
         0% {
           transform: scale(0);
@@ -2383,7 +2469,9 @@
         border: 2px solid;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
         white-space: nowrap;
       }
 
@@ -3834,15 +3922,51 @@
     <script>
       // ============= GAME DATA =============
       const BREEDS = {
-        "isa-brown": { name: "ISA Brown", color: "#8B4513", eggColor: "brown" },
-        silkie: { name: "Silkie", color: "#F5F5DC", eggColor: "cream" },
-        leghorn: { name: "Leghorn", color: "#FFFFFF", eggColor: "white" },
+        "isa-brown": {
+          name: "ISA Brown",
+          color: "#8B4513",
+          eggColor: "brown",
+          personality: "adventurous",
+          favoriteItems: [
+            "superhero-cape",
+            "fake-worm",
+            "eye-patch",
+            "robot-friend",
+          ],
+        },
+        silkie: {
+          name: "Silkie",
+          color: "#F5F5DC",
+          eggColor: "cream",
+          personality: "gentle",
+          favoriteItems: ["jumper", "necklace", "cute-face-kit", "mirror"],
+        },
+        leghorn: {
+          name: "Leghorn",
+          color: "#FFFFFF",
+          eggColor: "white",
+          personality: "energetic",
+          favoriteItems: [
+            "duck-kit",
+            "walky-talky",
+            "unicorn-horn",
+            "robot-friend",
+          ],
+        },
         plymouth: {
           name: "Plymouth Rock",
           color: "#808080",
           eggColor: "brown",
+          personality: "curious",
+          favoriteItems: ["panda-face", "photo", "fake-eyebrows", "mirror"],
         },
-        orpington: { name: "Orpington", color: "#FFD700", eggColor: "brown" },
+        orpington: {
+          name: "Orpington",
+          color: "#FFD700",
+          eggColor: "brown",
+          personality: "regal",
+          favoriteItems: ["crown", "bow-tie", "fascinator-hat", "necklace"],
+        },
       };
 
       const MILESTONES = [
@@ -4110,7 +4234,7 @@
       // Get badge by milestone day
       function getBadgeForMilestone(milestoneDay) {
         return Object.values(BADGES).find(
-          (b) => b.category === "milestone" && b.milestone === milestoneDay
+          (b) => b.category === "milestone" && b.milestone === milestoneDay,
         );
       }
 
@@ -4420,13 +4544,22 @@
       };
 
       // ============= GAME STATE =============
-      const GAME_VERSION = "0.18.0";
+      const GAME_VERSION = "0.19.0";
       const DAILY_ACTION_LIMIT = 10;
       const SESSION_MAX_SECONDS = 600; // 10 minutes max
       const FAST_DECAY_SECONDS = 120; // First 2 minutes = fast decay
       const EARNING_EVENT_INTERVAL = 20; // Pot pays out every 20 virtual days
       const POT_MAX_AMOUNT = 5.0; // Cap pot at $5 (before bonuses)
       const POT_INACTIVITY_DAYS = 2; // Reset pot after 2 days of no activity
+
+      // Reward amounts (v0.19.0 money overhaul)
+      const REWARD_CORRECT_ACTION = 0.5; // Caring action that helps (e.g., feeding hungry chicken)
+      const REWARD_COLOR_UPGRADE = 1.0; // Health bar milestone (red→yellow or yellow→green)
+      const REWARD_ADD_FRIEND = 1.0; // Adding a new friend
+      const REWARD_BADGE_EARNED = 2.0; // Earning any badge
+      const REWARD_BUY_FAVORITE = 2.0; // Buying item chicken loves
+      const REWARD_BUY_NORMAL = 1.0; // Buying any other item
+      const POT_GROWTH_INTERVAL_DAYS = 5; // Pot grows/shrinks every 5 virtual days
 
       let gameState = {
         chicken: null,
@@ -4443,11 +4576,12 @@
         pendingChores: [], // Chores awaiting approval [{title, desc, addedAt}]
         bonusActionsEarned: 0, // 0, 1, or 2 bonus actions earned today
         bonusActionsDate: null, // Date when bonus was last earned
-        // Money Pot system (v0.18.0)
+        // Money Pot system (v0.18.0, updated v0.19.0)
         moneyPot: 0, // Current pot value in dollars
         lastEarningEventDay: 0, // Virtual day of last earning event payout
         lastActivityDate: null, // Date string of last activity (for inactivity reset)
         potBonusToday: 0, // Track bonus pot additions today (friend/chores)
+        lastPotUpdateDay: 0, // v0.19.0: Track when pot was last updated for 5-day intervals
         badges: [], // Array of earned badge IDs
       };
 
@@ -4463,8 +4597,9 @@
 
       // Create decay sound effect (soft notification sound)
       const decaySound = (function () {
-        const audioCtx = new (window.AudioContext ||
-          window.webkitAudioContext)();
+        const audioCtx = new (
+          window.AudioContext || window.webkitAudioContext
+        )();
         return function playDecaySound() {
           try {
             // Resume audio context if suspended (needed for mobile)
@@ -4478,12 +4613,12 @@
             oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
             oscillator.frequency.exponentialRampToValueAtTime(
               400,
-              audioCtx.currentTime + 0.15
+              audioCtx.currentTime + 0.15,
             );
             gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(
               0.01,
-              audioCtx.currentTime + 0.15
+              audioCtx.currentTime + 0.15,
             );
             oscillator.start(audioCtx.currentTime);
             oscillator.stop(audioCtx.currentTime + 0.15);
@@ -4622,11 +4757,11 @@
           DAILY_ACTION_LIMIT + (gameState.bonusActionsEarned || 0);
         const display = document.getElementById("daily-actions-display");
         const displayBottom = document.getElementById(
-          "daily-actions-display-bottom"
+          "daily-actions-display-bottom",
         );
         const amount = document.getElementById("daily-actions-remaining");
         const amountBottom = document.getElementById(
-          "daily-actions-remaining-bottom"
+          "daily-actions-remaining-bottom",
         );
 
         // Update the display text to show bonus
@@ -4682,7 +4817,7 @@
           updateDailyActionsDisplay();
           secretTapCount = 0;
           showPopup(
-            "🔓 Secret Reset!<br>Daily actions have been reset for testing! 🧪"
+            "🔓 Secret Reset!<br>Daily actions have been reset for testing! 🧪",
           );
         }
       }
@@ -4839,27 +4974,27 @@
         // Apply decay
         gameState.chicken.needs.hunger = Math.max(
           0,
-          gameState.chicken.needs.hunger - hungerDecay
+          gameState.chicken.needs.hunger - hungerDecay,
         );
         gameState.chicken.needs.thirst = Math.max(
           0,
-          gameState.chicken.needs.thirst - thirstDecay
+          gameState.chicken.needs.thirst - thirstDecay,
         );
         gameState.chicken.needs.cleanliness = Math.max(
           0,
-          gameState.chicken.needs.cleanliness - cleanlinessDecay
+          gameState.chicken.needs.cleanliness - cleanlinessDecay,
         );
         gameState.chicken.needs.sleep = Math.max(
           0,
-          gameState.chicken.needs.sleep - sleepDecay
+          gameState.chicken.needs.sleep - sleepDecay,
         );
         gameState.chicken.needs.happiness = Math.max(
           0,
-          gameState.chicken.needs.happiness - happinessDecay
+          gameState.chicken.needs.happiness - happinessDecay,
         );
         gameState.chicken.needs.exercise = Math.max(
           0,
-          gameState.chicken.needs.exercise - exerciseDecay
+          gameState.chicken.needs.exercise - exerciseDecay,
         );
 
         // Check for sickness
@@ -4906,59 +5041,84 @@
         updatePotDisplay();
       }
 
-      // Update pot based on current health status
-      function updatePotFromHealth(secondsPassed) {
+      // Update pot based on health when virtual days pass (called from caring actions)
+      // Simplified: +50% or -50% every 5 days based on overall health
+      function updatePotFromDaysPassed(daysAdded) {
         if (!gameState.chicken || gameState.chicken.isSick) {
-          // Pot is frozen when sick - show frozen state
-          return;
+          return; // Pot frozen when sick
         }
 
-        const needs = gameState.chicken.needs;
-        const needKeys = [
-          "hunger",
-          "thirst",
-          "cleanliness",
-          "sleep",
-          "happiness",
-          "exercise",
-        ];
+        if (!gameState.lastPotUpdateDay) gameState.lastPotUpdateDay = 0;
 
-        // Count green (healthy) and red (critical) bars
-        let greenCount = 0;
-        let redCount = 0;
+        const currentAge = gameState.chicken.virtualDays || 0;
+        const lastCheck = gameState.lastPotUpdateDay;
 
-        for (const key of needKeys) {
-          const value = needs[key];
-          if (value >= 60) greenCount++;
-          else if (value < 40) redCount++;
+        // Check if we've crossed a 5-day boundary
+        const intervalsCrossed =
+          Math.floor(currentAge / POT_GROWTH_INTERVAL_DAYS) -
+          Math.floor(lastCheck / POT_GROWTH_INTERVAL_DAYS);
+
+        if (intervalsCrossed > 0 && gameState.moneyPot > 0) {
+          const needs = gameState.chicken.needs;
+          const needKeys = [
+            "hunger",
+            "thirst",
+            "cleanliness",
+            "sleep",
+            "happiness",
+            "exercise",
+          ];
+
+          let greenCount = 0;
+          let redCount = 0;
+
+          for (const key of needKeys) {
+            const value = needs[key];
+            if (value >= 60) greenCount++;
+            else if (value < 40) redCount++;
+          }
+
+          // Determine if pot grows or shrinks
+          // More green = grow, more red = shrink
+          const oldPot = gameState.moneyPot;
+
+          if (greenCount >= 4 && redCount === 0) {
+            // Healthy chicken: +50% per interval (capped at $5)
+            for (let i = 0; i < intervalsCrossed; i++) {
+              gameState.moneyPot = Math.min(
+                POT_MAX_AMOUNT,
+                gameState.moneyPot * 1.5,
+              );
+            }
+            gameState.moneyPot = roundToOneDecimal(gameState.moneyPot);
+            if (gameState.moneyPot > oldPot) {
+              animatePotGrowth();
+              showRewardAnimation(
+                `+${roundToOneDecimal(gameState.moneyPot - oldPot)}`,
+                "pot-grow",
+              );
+            }
+          } else if (redCount >= 3) {
+            // Unhealthy chicken: -50% per interval
+            for (let i = 0; i < intervalsCrossed; i++) {
+              gameState.moneyPot = gameState.moneyPot * 0.5;
+            }
+            gameState.moneyPot = roundToOneDecimal(
+              Math.max(0, gameState.moneyPot),
+            );
+            if (gameState.moneyPot < oldPot) {
+              animatePotShrink();
+            }
+          }
         }
 
-        // Calculate pot change
-        // Goal: ~$5 per 20 days with good care
-        // Assuming ~10 minute sessions, ~2 sessions/day = 1200 seconds active/day
-        // 20 days = 24000 seconds active time
-        // $5 / 24000 = ~$0.0002 per second with all green bars
-        // With 6 green bars: 6 * 0.00004 = $0.00024/sec
-        const greenRate = 0.00025; // $ per second per green bar
-        const redRate = 0.00015; // $ per second per red bar (penalty)
+        gameState.lastPotUpdateDay = currentAge;
+      }
 
-        const potGrowth =
-          greenCount * greenRate * secondsPassed -
-          redCount * redRate * secondsPassed;
-
-        const oldPot = gameState.moneyPot;
-        gameState.moneyPot = Math.max(
-          0,
-          Math.min(POT_MAX_AMOUNT, gameState.moneyPot + potGrowth)
-        );
-
-        // Visual feedback if significant change
-        const significantChange = Math.abs(gameState.moneyPot - oldPot) >= 0.01;
-        if (significantChange && potGrowth > 0) {
-          animatePotGrowth();
-        } else if (significantChange && potGrowth < 0) {
-          animatePotShrink();
-        }
+      // Legacy function for session-based decay (kept for compatibility but simplified)
+      function updatePotFromHealth(secondsPassed) {
+        // Pot growth now happens on day boundaries, not per-second
+        // This function is kept for compatibility but does nothing
       }
 
       // Add bonus to pot (from friend or chores)
@@ -5018,7 +5178,7 @@
           <div class="pot-payout-popup">
             <div style="font-size: 2.5em; margin-bottom: 5px;">🎉</div>
             <div style="font-size: 1.2em; font-weight: 600; color: #666;">Day ${day} Payday!</div>
-            <div class="pot-payout-amount">+$${amount.toFixed(2)}</div>
+            <div class="pot-payout-amount">+$${formatMoney(amount)}</div>
             <div style="font-size: 0.9em; color: #666;">
               The pot has been emptied into your bank!<br>
               Keep your chicken healthy to fill it again! 🏺
@@ -5028,6 +5188,56 @@
         document.getElementById("popup-content").innerHTML = html;
         document.getElementById("popup").classList.remove("hidden");
         document.getElementById("overlay").classList.remove("hidden");
+      }
+
+      // Helper to round money to 1 decimal place
+      function roundToOneDecimal(num) {
+        return Math.round(num * 10) / 10;
+      }
+
+      // Format money for display (1 decimal, no trailing zero if .0)
+      function formatMoney(amount) {
+        const rounded = roundToOneDecimal(amount);
+        return rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(1);
+      }
+
+      // Show exciting reward animation
+      function showRewardAnimation(amount, type = "normal") {
+        const container = document.createElement("div");
+        container.className = "reward-popup-anim";
+
+        const colors = {
+          normal: "#FFD700",
+          "pot-grow": "#4CAF50",
+          badge: "#9C27B0",
+          friend: "#2196F3",
+          favorite: "#FF4081",
+        };
+
+        const icons = {
+          normal: "💰",
+          "pot-grow": "🏺✨",
+          badge: "🏆",
+          friend: "🤝",
+          favorite: "❤️",
+        };
+
+        container.innerHTML = `
+          <div class="reward-anim-content" style="--reward-color: ${colors[type] || colors.normal}">
+            <span class="reward-icon">${icons[type] || icons.normal}</span>
+            <span class="reward-amount">+$${amount}</span>
+          </div>
+        `;
+
+        document.body.appendChild(container);
+
+        // Trigger animation
+        requestAnimationFrame(() => {
+          container.classList.add("animate");
+        });
+
+        // Remove after animation
+        setTimeout(() => container.remove(), 1500);
       }
 
       function animatePotGrowth() {
@@ -5053,7 +5263,7 @@
         const potContainer = document.querySelector(".pot-container");
 
         if (potAmount) {
-          potAmount.textContent = gameState.moneyPot.toFixed(2);
+          potAmount.textContent = formatMoney(gameState.moneyPot);
         }
 
         if (potContainer && gameState.chicken) {
@@ -5062,30 +5272,49 @@
       }
 
       function showPotHelp() {
+        const breedInfo = gameState.chicken
+          ? BREEDS[gameState.chicken.breed]
+          : null;
+        const favoritesList = breedInfo
+          ? breedInfo.favoriteItems
+              .slice(0, 2)
+              .map((id) => SHOP_ITEMS[id]?.name || id)
+              .join(", ")
+          : "";
+
         const html = `
-          <div style="text-align: left; font-size: 0.9em; line-height: 1.3;">
+          <div style="text-align: left; font-size: 0.9em; line-height: 1.35;">
             <div style="text-align: center; font-size: 1.3em; margin-bottom: 8px;">🏺 Money Pot</div>
 
-            <div style="background: #e8f5e9; padding: 8px; border-radius: 8px; margin-bottom: 8px; font-size: 0.95em;">
-              <strong>How to fill the pot:</strong><br>
-              🌾 Caring actions that help = <strong>+$1</strong><br>
-              💚 Green bars = Pot grows over time
+            <div style="background: #e8f5e9; padding: 8px; border-radius: 8px; margin-bottom: 8px;">
+              <strong>💰 Earn money:</strong><br>
+              🌾 Help when needed = <strong>+$0.5</strong><br>
+              📈 Bar goes green = <strong>+$1</strong><br>
+              🤝 Add friend = <strong>+$1</strong><br>
+              🏆 Earn badge = <strong>+$2</strong>
             </div>
 
-            <div style="background: #fff3e0; padding: 8px; border-radius: 8px; margin-bottom: 8px; font-size: 0.95em;">
-              💛 Yellow bars = No change<br>
-              ❤️ Red bars = Pot shrinks!<br>
+            <div style="background: #fce4ec; padding: 8px; border-radius: 8px; margin-bottom: 8px;">
+              <strong>🛍️ Shopping rewards:</strong><br>
+              ❤️ Favorite item = <strong>+$2</strong><br>
+              🛒 Other items = <strong>+$1</strong>
+              ${breedInfo ? `<br><span style="font-size: 0.85em; color: #666;">Your chicken loves: ${favoritesList}...</span>` : ""}
+            </div>
+
+            <div style="background: #fff3e0; padding: 8px; border-radius: 8px; margin-bottom: 8px;">
+              <strong>📊 Every 5 days:</strong><br>
+              💚 Healthy (4+ green) = Pot +50%<br>
+              ❤️ Unhealthy (3+ red) = Pot -50%<br>
               🤒 Sick = Pot frozen!
             </div>
 
-            <div style="background: #e3f2fd; padding: 8px; border-radius: 8px; margin-bottom: 8px; font-size: 0.95em;">
-              <strong>💰 Payday every 20 days!</strong><br>
-              Pot → Bank (max $${POT_MAX_AMOUNT.toFixed(2)})<br>
-              <strong>🎁 Bonuses:</strong> Friend +$0.50 · Chores +$1
+            <div style="background: #e3f2fd; padding: 8px; border-radius: 8px; margin-bottom: 8px;">
+              <strong>🎉 Payday every 20 days!</strong><br>
+              Pot empties into your bank! (max $${formatMoney(POT_MAX_AMOUNT)})
             </div>
 
             <div style="background: #ffebee; padding: 8px; border-radius: 8px; font-size: 0.9em;">
-              ⚠️ 2 days away = pot resets!
+              ⚠️ 2 days without playing = pot resets!
             </div>
           </div>
         `;
@@ -5224,7 +5453,7 @@
         showScreen("game-screen");
         startSessionTimer();
         showPopup(
-          `🎉 Welcome ${chickenName}! 🐣<br>Your egg is about to hatch!`
+          `🎉 Welcome ${chickenName}! 🐣<br>Your egg is about to hatch!`,
         );
       }
 
@@ -5245,7 +5474,7 @@
         // Check daily quota
         if (!canPerformAction()) {
           showPopup(
-            "⏰ You've used all 10 actions for today!<br>Come back tomorrow to play more! 🌅"
+            "⏰ You've used all 10 actions for today!<br>Come back tomorrow to play more! 🌅",
           );
           return;
         }
@@ -5284,7 +5513,7 @@
             if (gameState.chicken.needs.hunger < 100) {
               gameState.chicken.needs.hunger = Math.min(
                 100,
-                gameState.chicken.needs.hunger + 40
+                gameState.chicken.needs.hunger + 40,
               );
               improvedNeeds.push("hunger");
             }
@@ -5294,7 +5523,7 @@
             if (gameState.chicken.needs.thirst < 100) {
               gameState.chicken.needs.thirst = Math.min(
                 100,
-                gameState.chicken.needs.thirst + 50
+                gameState.chicken.needs.thirst + 50,
               );
               improvedNeeds.push("thirst");
             }
@@ -5304,14 +5533,14 @@
             if (gameState.chicken.needs.cleanliness < 100) {
               gameState.chicken.needs.cleanliness = Math.min(
                 100,
-                gameState.chicken.needs.cleanliness + 60
+                gameState.chicken.needs.cleanliness + 60,
               );
               improvedNeeds.push("cleanliness");
             }
             if (gameState.chicken.needs.happiness < 100) {
               gameState.chicken.needs.happiness = Math.min(
                 100,
-                gameState.chicken.needs.happiness + 10
+                gameState.chicken.needs.happiness + 10,
               );
               improvedNeeds.push("happiness");
             }
@@ -5321,14 +5550,14 @@
             if (gameState.chicken.needs.happiness < 100) {
               gameState.chicken.needs.happiness = Math.min(
                 100,
-                gameState.chicken.needs.happiness + 30
+                gameState.chicken.needs.happiness + 30,
               );
               improvedNeeds.push("happiness");
             }
             if (gameState.chicken.needs.exercise < 100) {
               gameState.chicken.needs.exercise = Math.min(
                 100,
-                gameState.chicken.needs.exercise + 20
+                gameState.chicken.needs.exercise + 20,
               );
               improvedNeeds.push("exercise");
             }
@@ -5338,7 +5567,7 @@
             if (gameState.chicken.needs.sleep < 100) {
               gameState.chicken.needs.sleep = Math.min(
                 100,
-                gameState.chicken.needs.sleep + 50
+                gameState.chicken.needs.sleep + 50,
               );
               improvedNeeds.push("sleep");
             }
@@ -5353,14 +5582,14 @@
             if (gameState.chicken.needs.exercise < 100) {
               gameState.chicken.needs.exercise = Math.min(
                 100,
-                gameState.chicken.needs.exercise + 40
+                gameState.chicken.needs.exercise + 40,
               );
               improvedNeeds.push("exercise");
             }
             if (gameState.chicken.needs.happiness < 100) {
               gameState.chicken.needs.happiness = Math.min(
                 100,
-                gameState.chicken.needs.happiness + 15
+                gameState.chicken.needs.happiness + 15,
               );
               improvedNeeds.push("happiness");
             }
@@ -5401,24 +5630,52 @@
           }
         }
 
-        // Only earn money if a color status improved (red->yellow or yellow->green)
-        // Money goes to POT, not directly to balance
+        // NEW REWARD SYSTEM (v0.19.0):
+        // - Correct caring action (when needed): +$0.5
+        // - Color upgrade (red→yellow or yellow→green): +$1
+
+        let totalReward = 0;
+        let rewardMessages = [];
+
+        // Check if action was helpful (bar was not already maxed/green)
+        const actionWasHelpful = improvedNeeds.length > 0;
+        const anyNeedWasLow = improvedNeeds.some((key) => oldNeeds[key] < 60);
+
+        // Reward for correct caring action (helping when needed)
+        if (actionWasHelpful && anyNeedWasLow) {
+          totalReward += REWARD_CORRECT_ACTION;
+          rewardMessages.push("+$0.5 for helping!");
+        }
+
+        // Additional reward for color upgrade
         if (colorUpgradeHappened) {
-          gameState.moneyPot = Math.min(
-            POT_MAX_AMOUNT + 5,
-            gameState.moneyPot + 1
-          ); // Allow up to $5 over cap for bonuses
-          message += '<br><span class="coin-earn">🏺 +$1 to pot!</span>';
+          totalReward += REWARD_COLOR_UPGRADE;
+          rewardMessages.push("+$1 health boost!");
+          gameState.showOverallHealthUpgrade = true;
+        } else {
+          gameState.showOverallHealthUpgrade = false;
+        }
+
+        // Apply reward to pot
+        if (totalReward > 0) {
+          gameState.moneyPot = roundToOneDecimal(
+            Math.min(
+              POT_MAX_AMOUNT + 10, // Allow bonuses to exceed cap
+              gameState.moneyPot + totalReward,
+            ),
+          );
+
+          showRewardAnimation(formatMoney(totalReward), "normal");
+          message += `<br><span class="coin-earn">🏺 +$${formatMoney(totalReward)} to pot!</span>`;
           message +=
             '<br><span style="color: #2e7d32; font-size: 0.85em;">📈 My health improves! Thanks for caring for me! 💕</span>';
-
-          // Flag to show up arrow in Overall Health box
-          gameState.showOverallHealthUpgrade = true;
         } else {
           message +=
             '<br><span style="color: #888; font-size: 0.85em;">Keep caring to improve my health status! 🐔</span>';
-          gameState.showOverallHealthUpgrade = false;
         }
+
+        // Update pot based on days passed (50% growth/shrink every 5 days)
+        updatePotFromDaysPassed(daysAdded);
 
         // Show remaining daily actions
         const remaining = getRemainingDailyActions();
@@ -5463,7 +5720,7 @@
         const chicken = gameState.chicken;
         // Use virtualDays for age (accelerated time), fallback to real days for old saves
         const realDays = Math.floor(
-          (Date.now() - chicken.birthDate) / (1000 * 60 * 60 * 24)
+          (Date.now() - chicken.birthDate) / (1000 * 60 * 60 * 24),
         );
         const ageInDays =
           chicken.virtualDays !== undefined ? chicken.virtualDays : realDays;
@@ -5480,9 +5737,8 @@
         document.getElementById("display-name").textContent = chicken.name;
         document.getElementById("display-breed").textContent =
           BREEDS[chicken.breed].name;
-        document.getElementById(
-          "display-owner"
-        ).textContent = `Owner: ${chicken.owner}`;
+        document.getElementById("display-owner").textContent =
+          `Owner: ${chicken.owner}`;
         document.getElementById("life-stage").textContent = currentStage.name;
         document.getElementById("chicken-age").textContent = ageInDays;
 
@@ -5530,7 +5786,7 @@
           {
             isSick: chicken.isSick,
             happiness: chicken.needs.happiness,
-          }
+          },
         );
 
         // Set the SVG instead of emoji
@@ -5661,7 +5917,7 @@
 
         // Calculate overall health (average of all needs)
         const overallHealth = Math.round(
-          needs.reduce((sum, need) => sum + need.value, 0) / needs.length
+          needs.reduce((sum, need) => sum + need.value, 0) / needs.length,
         );
 
         // Update overall health display
@@ -5733,7 +5989,7 @@
             icon = "✅";
           }
           const currentMilestone = MILESTONES.filter(
-            (x) => currentAge >= x.day
+            (x) => currentAge >= x.day,
           ).pop();
           if (currentMilestone && m.day === currentMilestone.day) {
             className += " current";
@@ -5858,11 +6114,11 @@
         ];
 
         const ownedDecorations = inventory.filter((i) =>
-          decorationItems.includes(i)
+          decorationItems.includes(i),
         ).length;
         const ownedToys = inventory.filter((i) => toyItems.includes(i)).length;
         const ownedHealth = inventory.filter((i) =>
-          healthItems.includes(i)
+          healthItems.includes(i),
         ).length;
 
         if (
@@ -5943,19 +6199,30 @@
 
         // Save if any new badges
         if (newBadges.length > 0) {
+          // Award $2 per badge earned (v0.19.0)
+          const badgeReward = newBadges.length * REWARD_BADGE_EARNED;
+          gameState.moneyPot = roundToOneDecimal(
+            gameState.moneyPot + badgeReward,
+          );
+
           saveGame();
           if (showPopup && newBadges.length > 0) {
-            showNewBadgesPopup(newBadges);
+            showRewardAnimation(formatMoney(badgeReward), "badge");
+            showNewBadgesPopup(newBadges, badgeReward);
           }
         }
 
         return newBadges;
       }
 
-      function showNewBadgesPopup(badges) {
+      function showNewBadgesPopup(badges, reward = 0) {
         if (badges.length === 0) return;
 
         const badge = badges[0]; // Show first badge (can queue multiple)
+        const rewardHtml =
+          reward > 0
+            ? `<div style="color: #FFD700; font-size: 1.1em; margin-top: 8px;">🏺 +$${formatMoney(reward)} to pot!</div>`
+            : "";
         const html = `
           <div class="badge-popup-content">
             <div style="font-size: 1.2em; color: #ff69b4;">🎉 Badge Earned! 🎉</div>
@@ -5963,6 +6230,7 @@
             <div class="badge-popup-name">${badge.name}</div>
             <div class="badge-popup-desc">${badge.description}</div>
             <div class="badge-popup-rarity ${badge.rarity}">${badge.rarity}</div>
+            ${rewardHtml}
           </div>
         `;
         document.getElementById("popup-content").innerHTML = html;
@@ -5983,8 +6251,8 @@
             <div class="badge-popup-name">${badge.name}</div>
             <div class="badge-popup-desc">${badge.description}</div>
             <div class="badge-popup-rarity ${badge.rarity}">${
-          badge.rarity
-        }</div>
+              badge.rarity
+            }</div>
             ${
               !hasBadge
                 ? '<div style="margin-top: 10px; color: #999; font-size: 0.9em;">🔒 Not yet earned</div>'
@@ -6019,7 +6287,7 @@
           <span class="badge ${b.rarity}" onclick="showBadgeDetails('${b.id}')" title="${b.name}">
             <span class="badge-icon">${b.icon}</span>
           </span>
-        `
+        `,
           )
           .join("");
 
@@ -6045,7 +6313,7 @@
         const c = gameState.chicken;
         // Use virtualDays for age
         const realDays = Math.floor(
-          (Date.now() - c.birthDate) / (1000 * 60 * 60 * 24)
+          (Date.now() - c.birthDate) / (1000 * 60 * 60 * 24),
         );
         const ageInDays =
           c.virtualDays !== undefined ? c.virtualDays : realDays;
@@ -6071,7 +6339,7 @@
               c.needs.sleep +
               c.needs.happiness +
               c.needs.exercise) /
-              6
+              6,
           ),
           i: c.id,
         };
@@ -6218,10 +6486,11 @@
           renderFriends();
           document.getElementById("friend-code-input").value = "";
 
-          // Add pot bonus for adding a friend
-          const bonus = addPotBonus("friend", 0.5);
+          // Add pot bonus for adding a friend (v0.19.0: $1)
+          const bonus = addPotBonus("friend", REWARD_ADD_FRIEND);
+          showRewardAnimation(formatMoney(REWARD_ADD_FRIEND), "friend");
           showPopup(
-            `🎉 ${data.n} is now your friend!<br><span style="color: #d4a574;">🏺 +$0.50 added to pot!</span>`
+            `🎉 ${data.n} is now your friend!<br><span style="color: #d4a574;">🏺 +$${formatMoney(REWARD_ADD_FRIEND)} added to pot!</span>`,
           );
         } catch (e) {
           console.error("Error adding friend:", e);
@@ -6271,7 +6540,7 @@
         // Check if jsQR library is available
         if (typeof jsQR === "undefined") {
           showPopup(
-            "📷 Camera scanning requires internet connection.\n\nPlease paste the code manually instead!"
+            "📷 Camera scanning requires internet connection.\n\nPlease paste the code manually instead!",
           );
           return;
         }
@@ -6356,7 +6625,7 @@
 
         // Continue scanning
         scannerAnimationId = requestAnimationFrame(() =>
-          scanFrame(video, canvas, ctx, statusEl)
+          scanFrame(video, canvas, ctx, statusEl),
         );
       }
 
@@ -6437,7 +6706,7 @@
           saveGame();
           renderFriends();
           showPopup(
-            `🎉 ${data.n} is now your friend!\n\nScanned successfully via camera! 📸`
+            `🎉 ${data.n} is now your friend!\n\nScanned successfully via camera! 📸`,
           );
         } catch (e) {
           console.error("Failed to process scanned code:", e);
@@ -6503,7 +6772,7 @@
 
         // Filter items by current category
         const categoryItems = Object.values(SHOP_ITEMS).filter(
-          (item) => item.category === currentShopCategory
+          (item) => item.category === currentShopCategory,
         );
 
         shopDiv.innerHTML = categoryItems
@@ -6511,8 +6780,8 @@
             const owned = gameState.inventory.includes(item.id);
             return `
                     <div class="shop-item ${item.category} ${
-              owned ? "owned" : ""
-            }">
+                      owned ? "owned" : ""
+                    }">
                         <div class="item-icon">${item.icon}</div>
                         <div class="item-info">
                             <div class="item-name">${item.name}</div>
@@ -6536,7 +6805,7 @@
 
         // Filter out any old items that no longer exist in shop
         const validItems = gameState.inventory.filter(
-          (itemId) => SHOP_ITEMS[itemId]
+          (itemId) => SHOP_ITEMS[itemId],
         );
 
         if (validItems.length === 0) {
@@ -6573,7 +6842,7 @@
         // Check daily quota
         if (!canPerformAction()) {
           showPopup(
-            "⏰ You've used all 10 actions for today!<br>Come back tomorrow to shop more! 🌅"
+            "⏰ You've used all 10 actions for today!<br>Come back tomorrow to shop more! 🌅",
           );
           return;
         }
@@ -6585,7 +6854,7 @@
 
         if (gameState.money < item.price) {
           showPopup(
-            "💸 Not enough money!<br>Take care of your chicken to earn more!"
+            "💸 Not enough money!<br>Take care of your chicken to earn more!",
           );
           return;
         }
@@ -6600,15 +6869,43 @@
         if (item.effect && item.effect.happiness && gameState.chicken) {
           gameState.chicken.needs.happiness = Math.min(
             100,
-            gameState.chicken.needs.happiness + item.effect.happiness
+            gameState.chicken.needs.happiness + item.effect.happiness,
           );
         }
 
+        // v0.19.0: Reward for buying items - favorite items get $2, others get $1
+        let shopReward = REWARD_BUY_NORMAL;
+        let isFavorite = false;
+
+        if (gameState.chicken) {
+          const breedInfo = BREEDS[gameState.chicken.breed];
+          if (
+            breedInfo &&
+            breedInfo.favoriteItems &&
+            breedInfo.favoriteItems.includes(itemId)
+          ) {
+            shopReward = REWARD_BUY_FAVORITE;
+            isFavorite = true;
+          }
+        }
+
+        gameState.moneyPot = roundToOneDecimal(gameState.moneyPot + shopReward);
+        showRewardAnimation(
+          formatMoney(shopReward),
+          isFavorite ? "favorite" : "normal",
+        );
+
         updateMoneyDisplay();
+        updatePotDisplay();
         saveGame();
         renderShop();
+        renderChicken(); // Update chicken appearance with new item
+
+        const favoriteMsg = isFavorite
+          ? '<br><span style="color: #ff4081;">❤️ Your chicken LOVES this!</span>'
+          : "";
         showPopup(
-          `🎉 You bought ${item.name}!<br>${item.icon} ${item.description}`
+          `🎉 You bought ${item.name}!<br>${item.icon} ${item.description}${favoriteMsg}<br><span style="color: #d4a574;">🏺 +$${formatMoney(shopReward)} to pot!</span>`,
         );
       }
 
@@ -6645,11 +6942,12 @@
                 : [],
               bonusActionsEarned: loaded.bonusActionsEarned || 0,
               bonusActionsDate: loaded.bonusActionsDate || null,
-              // Money Pot system (v0.18.0)
-              moneyPot: loaded.moneyPot || 0,
+              // Money Pot system (v0.18.0, updated v0.19.0)
+              moneyPot: roundToOneDecimal(loaded.moneyPot || 0),
               lastEarningEventDay: loaded.lastEarningEventDay || 0,
               lastActivityDate: loaded.lastActivityDate || null,
               potBonusToday: loaded.potBonusToday || 0,
+              lastPotUpdateDay: loaded.lastPotUpdateDay || 0, // v0.19.0: for 5-day pot growth intervals
               // Badge system (v0.18.0)
               badges: Array.isArray(loaded.badges) ? loaded.badges : [],
               totalActions: loaded.totalActions || 0,
@@ -6661,7 +6959,7 @@
             ) {
               const realDays = Math.floor(
                 (Date.now() - gameState.chicken.birthDate) /
-                  (1000 * 60 * 60 * 24)
+                  (1000 * 60 * 60 * 24),
               );
               gameState.chicken.virtualDays = realDays;
             }
@@ -6684,7 +6982,7 @@
         const today = new Date();
         const lastActivity = new Date(gameState.lastActivityDate);
         const daysDiff = Math.floor(
-          (today - lastActivity) / (1000 * 60 * 60 * 24)
+          (today - lastActivity) / (1000 * 60 * 60 * 24),
         );
 
         if (daysDiff >= POT_INACTIVITY_DAYS) {
@@ -6697,8 +6995,8 @@
           setTimeout(() => {
             showPopup(
               `😢 Oh no! You were away for ${daysDiff} days...<br><br>🏺 Your pot of <strong>$${lostPot.toFixed(
-                2
-              )}</strong> has been reset!<br><br>Come back daily to keep your pot safe! 💕`
+                2,
+              )}</strong> has been reset!<br><br>Come back daily to keep your pot safe! 💕`,
             );
           }, 500);
         }
@@ -6725,7 +7023,7 @@
           try {
             const isPersisted = await navigator.storage.persist();
             console.log(
-              `Persistent storage ${isPersisted ? "granted" : "not granted"}`
+              `Persistent storage ${isPersisted ? "granted" : "not granted"}`,
             );
           } catch (e) {
             console.log("Persistent storage not available");

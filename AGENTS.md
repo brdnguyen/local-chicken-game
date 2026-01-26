@@ -99,15 +99,17 @@ When decay causes a visible change:
 - Sleep action has 30% chance to cure sickness
 
 ### Breeds Available
-Each breed has unique custom SVG graphics with breed-specific colors:
+Each breed has unique custom SVG graphics with breed-specific colors and **personality traits**:
 
-| Breed | Body Color | Special Features |
-|-------|------------|------------------|
-| ISA Brown | Warm brown (#8B4513) | Classic farm chicken look |
-| Silkie | Cream/Beige (#F5F5DC) | Fluffy texture, purple comb |
-| Leghorn | Pure white (#FFFFFF) | Bright red comb |
-| Plymouth Rock | Grey (#606060) | Barred pattern stripes |
-| Orpington | Golden buff (#DAA520) | Rich golden feathers |
+| Breed | Body Color | Personality | Favorite Items |
+|-------|------------|-------------|----------------|
+| ISA Brown | Warm brown (#8B4513) | Adventurous | Superhero Cape, Fake Worm, Eye Patch, Robot Friend |
+| Silkie | Cream/Beige (#F5F5DC) | Gentle | Cozy Jumper, Pearl Necklace, Cute Face Kit, Mirror |
+| Leghorn | Pure white (#FFFFFF) | Energetic | Duck Disguise, Walky-Talky, Unicorn Horn, Robot Friend |
+| Plymouth Rock | Grey (#606060) | Curious | Panda Mask, Photo, Silly Eyebrows, Mirror |
+| Orpington | Golden buff (#DAA520) | Regal | Royal Crown, Bow Tie, Fancy Fascinator, Pearl Necklace |
+
+**Personality affects shop rewards**: Buying a chicken's favorite item = **+$2** to pot (vs +$1 for other items)!
 
 ### Graphics System
 The game uses **custom SVG graphics** that combine:
@@ -173,47 +175,50 @@ The game uses **custom SVG graphics** that combine:
 | 🖼️ Photo of Itself | $2 | +6 happiness |
 | 🪞 Chicken Mirror | $2 | 20% slower boredom |
 
-### Economy
+### Economy (v0.19.0 Money Overhaul)
 - Start with $5 (Bank Balance)
+- **All money uses 1 decimal place** (e.g., $4.5, not $4.52)
 - **All money goes to the POT first** - only pot payouts update bank balance!
-- Caring actions that improve health add +$1 to pot (not bank)
-- Visual feedback: ⬆️ arrow on improved health bars, pot growth animation
-- Money to pot awarded when color status changes: Red→Yellow or Yellow→Green
+- Visual feedback: ⬆️ arrow on improved health bars, **exciting reward animations** on each earning
 
 ### Money Pot System 🏺
 The Money Pot is the **primary way to earn money**! All earnings flow through the pot.
 
-#### How It Works
-- **Caring actions that improve health**: +$1 added to pot instantly
-- **Pot also fills based on health status** while actively playing:
-  - 💚 **Green bars (≥60%)**: Pot grows (+$0.00025/second per green bar)
-  - 💛 **Yellow bars (40-59%)**: No change
-  - ❤️ **Red bars (<40%)**: Pot shrinks (-$0.00015/second per red bar)
-  - 🤒 **Sick chicken**: Pot is **frozen** (no growth/shrink)
+#### Earning Rewards (v0.19.0)
+| Action | Reward | Notes |
+|--------|--------|-------|
+| 🌾 Correct caring action | **+$0.5** | When you help a need that's not already green |
+| 📈 Health bar upgrade | **+$1** | When a bar goes red→yellow or yellow→green |
+| 🤝 Add a friend | **+$1** | Each new friend added |
+| 🏆 Earn a badge | **+$2** | Per badge earned |
+| 🛍️ Buy favorite item | **+$2** | Based on chicken's personality |
+| 🛒 Buy other item | **+$1** | Any shop purchase |
+| 🧹 Complete chores | **+$1** | House chore challenge |
 
+#### Passive Pot Growth/Shrink (every 5 virtual days)
+| Condition | Effect |
+|-----------|--------|
+| 💚 **4+ green bars, 0 red** | Pot **+50%** |
+| ❤️ **3+ red bars** | Pot **-50%** |
+| 💛 **Mixed/neutral** | No change |
+| 🤒 **Sick chicken** | Pot **frozen** |
+
+*Note: Growth is checked every 5 virtual days (each action = 5 days), rounded to 1 decimal*
+
+#### Pot Rules
 - **Payday every 20 virtual days!** (Day 20, 40, 60, etc.)
   - Pot empties into bank balance
   - Celebration popup shows payout
   - Pot resets to $0
-
-- **Maximum pot value**: $5.00 (excludes bonuses)
-
-#### Bonus Rewards
-| Action | Bonus |
-|--------|-------|
-| 👥 Add a new friend | +$0.50 to pot |
-| 🧹 Complete house chores | +$1.00 to pot |
-
-#### Inactivity Penalty
-- **2 days without playing** = Pot resets to $0!
-- Warning shown on return
+- **Maximum pot value**: $5 (bonuses can exceed this)
+- **Inactivity penalty**: 2 days without playing = Pot resets to $0!
 
 #### Visual Elements
-- 🏺 Pot display shows current value
+- 🏺 Pot display shows current value (1 decimal)
+- **Reward animations** pop up on screen when earning money
 - Pot glows when growing
-- Pot shrinks animation when losing money
 - Frozen/grey appearance when chicken is sick
-- ❓ Help button explains the system
+- ❓ Help button explains the system with chicken's favorite items
 
 ### Daily Usage Quota
 - **Maximum 10 actions per calendar day** (to prevent excessive use by kids!)
@@ -279,11 +284,12 @@ bonusActionsDate: null       // Resets daily
 
 ### Money Pot State Management
 ```javascript
-// Added to gameState (v0.18.0)
+// Added to gameState (v0.18.0, updated v0.19.0)
 moneyPot: 0,                 // Current pot value in dollars
 lastEarningEventDay: 0,      // Virtual day of last earning event payout
 lastActivityDate: null,      // Date string of last activity (for inactivity reset)
 potBonusToday: 0,            // Track bonus pot additions today
+lastPotUpdateDay: 0,         // Track when pot was last updated (for 5-day intervals)
 badges: [],                  // Array of earned badge IDs
 totalActions: 0              // Total caring actions taken (for badge tracking)
 ```
