@@ -5,6 +5,19 @@ All notable changes to the Virtual Chicken Game will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.19.1] - 2026-01-26
+
+### Changed
+- **Daily action limit increased from 10 to 15** - More playtime per day!
+- **Only caring actions count** toward daily quota
+  - Caring actions: Feed, Water, Dust Bath, Play, Sleep, Flap
+  - Shop purchases no longer consume daily actions
+  - Adding friends does not consume daily actions
+
+### Fixed
+- Updated all UI text to reflect new 15-action limit
+- Clarified "remaining caring actions" in display legend
+
 ## [0.18.0] - 2026-01-21
 
 ### Added

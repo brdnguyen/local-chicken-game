@@ -221,10 +221,11 @@ The Money Pot is the **primary way to earn money**! All earnings flow through th
 - ❓ Help button explains the system with chicken's favorite items
 
 ### Daily Usage Quota
-- **Maximum 10 actions per calendar day** (to prevent excessive use by kids!)
-- Actions include: caring actions (feed, water, etc.) and shop purchases
+- **Maximum 15 caring actions per calendar day** (to prevent excessive use by kids!)
+- **Only caring actions count**: Feed, Water, Dust Bath, Play, Sleep, Flap
+- **Does NOT count**: Shop purchases, adding friends, etc.
 - Counter resets at midnight (local time)
-- Display shows remaining actions: ⚡ X/10 today (or X/12 if bonus earned)
+- Display shows remaining actions: ⚡ X/15 today (or X/17 if bonus earned)
 - Visual indicators:
   - Blue: Normal (4+ actions remaining)
   - Red/pulsing: Low (1-3 actions remaining)

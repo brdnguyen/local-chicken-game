@@ -3283,10 +3283,10 @@
           </div>
           <div class="daily-actions-wrapper">
             <div class="daily-actions-display" id="daily-actions-display">
-              ⚡ <span id="daily-actions-remaining">10</span>/10 today
+              ⚡ <span id="daily-actions-remaining">15</span>/15 today
             </div>
             <div class="daily-actions-legend">
-              remaining allowed actions today
+              remaining caring actions today
             </div>
           </div>
         </div>
@@ -3530,10 +3530,10 @@
               class="daily-actions-display"
               id="daily-actions-display-bottom"
             >
-              ⚡ <span id="daily-actions-remaining-bottom">10</span>/10 today
+              ⚡ <span id="daily-actions-remaining-bottom">15</span>/15 today
             </div>
             <div class="daily-actions-legend">
-              remaining allowed actions today
+              remaining caring actions today
             </div>
           </div>
 
@@ -4618,8 +4618,8 @@
       };
 
       // ============= GAME STATE =============
-      const GAME_VERSION = "0.19.0";
-      const DAILY_ACTION_LIMIT = 10;
+      const GAME_VERSION = "0.19.1";
+      const DAILY_ACTION_LIMIT = 15;
       const SESSION_MAX_SECONDS = 600; // 10 minutes max
       const FAST_DECAY_SECONDS = 120; // First 2 minutes = fast decay
       const EARNING_EVENT_INTERVAL = 20; // Pot pays out every 20 virtual days
@@ -5548,7 +5548,7 @@
         // Check daily quota
         if (!canPerformAction()) {
           showPopup(
-            "⏰ You've used all 10 actions for today!<br>Come back tomorrow to play more! 🌅",
+            "⏰ You've used all 15 caring actions for today!<br>Come back tomorrow to play more! 🌅",
           );
           return;
         }
@@ -5753,7 +5753,7 @@
 
         // Show remaining daily actions
         const remaining = getRemainingDailyActions();
-        message += `<br><span style="color: #4169e1; font-size: 0.85em;">⚡ ${remaining}/10 actions left today</span>`;
+        message += `<br><span style="color: #4169e1; font-size: 0.85em;">⚡ ${remaining}/${DAILY_ACTION_LIMIT + (gameState.bonusActionsEarned || 0)} caring actions left today</span>`;
 
         // Show time passing message
         if (daysAdded > 0) {
@@ -6913,14 +6913,6 @@
           return;
         }
 
-        // Check daily quota
-        if (!canPerformAction()) {
-          showPopup(
-            "⏰ You've used all 10 actions for today!<br>Come back tomorrow to shop more! 🌅",
-          );
-          return;
-        }
-
         if (gameState.inventory.includes(itemId)) {
           showPopup("🛒 You already have this item!");
           return;
@@ -6932,9 +6924,6 @@
           );
           return;
         }
-
-        // Consume a daily action for the purchase
-        consumeDailyAction();
 
         gameState.money -= item.price;
         gameState.inventory.push(itemId);
