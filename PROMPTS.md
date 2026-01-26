@@ -110,6 +110,46 @@ auto create the commit with the right commit message + push + capture change log
                     -   Brainstorm more badges. Be creative, across multiple events in the Milestones, across multiple dimensions. If the chicken has many decorations, could be "beautiful chicken". Many toys: "Happiest ever chicken".
                 If owner cares daily without a miss > 7 days, something like "never skip a bit". Think of Github badges systems.
 
+    17. DONE - Improve Money system:
+        -   Avoid decimal, use up to 1 decimal only (like $4.2)
+        -   Fix Passive Pot Growth/Sink behaviour, so that it's less fractional. Perhaps or increase or decrease 50% every 5 days, round up to 1 decimal point.
+        -   increase so that the pot money from caring actions is maximum 5$ every 20 days, but bonuses do not count. We want to see direct money goes into the pot. Each caring action that is correct (such as Hunger is amber -> feed it) will get 0.5$ immediately, while upgrading health bar milestones (e.g. red to yellow will get 1$). Sharing or adding  friend is 1$. Buying an item that chicken like is 2$ (this depends on their personality), 1$ otherwise.
+
+
+
+            Each time there's a reward, do an exciting animation!
+
+            Earning a badge will get you $2.
+
+            Update the money guidance action / tool tip, to explain all behaviours. Keep them really brief, easy to read.
+
+            Update AGENTS.md as well.
+
+        -
+
+    19.    Implement a surprise lottery:
+            -   50% you don't earn anything
+            -  5% chance you'll earn ANY toy
+            -   10% chance you'll earn a health status upgrade
+            -   1
+
+
+    20. With QR code, can you share and sync the latest status with your chicken?
+
+    18.     Implement a personality or "special talents for each chicken"
+
+    19.     Implement a surprise, hidden treasure as a SPECIAL badge (5$ each). This can happen at special occasions like
+            -   reach 100% health across 3 categories
+            -   buying 2 items that the chicken really like
+            -   a surprise lottery ticket drops in some day !!
+
+    17.     exclude shoppings from actions
+    18.     celebrate every time a badge is added
+    19.     audit the add badge (historicall). Why first badge wasn't added?
+    20. Add friend should add $3 to the pot!
+    21. Pot should increase faster + more substantial each time (== more fun)
+
+
 
         -   Have a prompt at the top (under $ balance) to hint (especially for new users): care for chickens to earn $, the more healthy the more $, then having a tooltip to explain details:
 

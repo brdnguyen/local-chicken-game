@@ -1720,6 +1720,188 @@
         -webkit-appearance: none;
       }
 
+      /* ============= WALLET SECTION (Bank + Pot) ============= */
+      .wallet-section {
+        display: flex;
+        align-items: stretch;
+        background: linear-gradient(145deg, #2d2d2d 0%, #1a1a1a 100%);
+        border-radius: 16px;
+        padding: 4px;
+        box-shadow:
+          0 4px 15px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .wallet-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 12px;
+        min-width: 90px;
+      }
+
+      .wallet-divider {
+        width: 1px;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        margin: 4px 0;
+      }
+
+      .bank-display {
+        background: linear-gradient(145deg, #ffd700 0%, #f4a020 100%);
+      }
+
+      .wallet-icon {
+        font-size: 1.4em;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+      }
+
+      .wallet-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1.2;
+      }
+
+      .wallet-label {
+        font-size: 0.65em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.8;
+      }
+
+      .bank-display .wallet-label {
+        color: #8b6914;
+      }
+
+      .bank-display .wallet-amount {
+        color: #5d4e10;
+        font-weight: 800;
+        font-size: 1.2em;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+      }
+
+      .pot-container {
+        background: linear-gradient(145deg, #7cb342 0%, #558b2f 100%);
+        transition: all 0.3s ease;
+      }
+
+      .pot-container .wallet-label {
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      .pot-container .wallet-amount {
+        color: #fff;
+        font-weight: 800;
+        font-size: 1.2em;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      .pot-help {
+        font-size: 0.9em;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        margin-left: 3px;
+        color: #fff;
+        font-weight: bold;
+        text-shadow: none;
+      }
+
+      .pot-help:hover {
+        background: rgba(255, 255, 255, 0.5);
+        transform: scale(1.15);
+      }
+
+      .pot-icon {
+        animation: pot-glow 3s ease-in-out infinite;
+      }
+
+      @keyframes pot-glow {
+        0%,
+        100% {
+          filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2)) brightness(1);
+        }
+        50% {
+          filter: drop-shadow(0 2px 8px rgba(255, 200, 0, 0.4)) brightness(1.1);
+        }
+      }
+
+      .pot-container.growing {
+        animation: pot-grow 0.5s ease-out;
+      }
+
+      @keyframes pot-grow {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .pot-container.shrinking {
+        animation: pot-shrink 0.5s ease-out;
+      }
+
+      @keyframes pot-shrink {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.95);
+          box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .pot-container.frozen {
+        background: linear-gradient(145deg, #90a4ae 0%, #607d8b 100%);
+      }
+
+      .pot-container.frozen .wallet-label,
+      .pot-container.frozen .wallet-amount {
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      }
+
+      .pot-container.frozen .pot-icon::after {
+        content: "❄️";
+        font-size: 0.6em;
+        position: absolute;
+        top: -6px;
+        right: -8px;
+      }
+
+      .pot-container.frozen .pot-icon {
+        position: relative;
+        animation: none;
+      }
+
+      .pot-container.frozen .pot-help {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
       .money-display {
         background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
         color: #333;
@@ -2162,129 +2344,6 @@
         100% {
           transform: scale(1);
         }
-      }
-
-      /* ============= MONEY POT STYLES ============= */
-      .pot-display {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-      }
-
-      .pot-container {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        background: linear-gradient(
-          135deg,
-          #d4a574 0%,
-          #c4956a 50%,
-          #b8895c 100%
-        );
-        padding: 6px 12px;
-        border-radius: 15px;
-        border: 2px solid #8b6914;
-        box-shadow:
-          0 3px 8px rgba(139, 105, 20, 0.3),
-          inset 0 1px 3px rgba(255, 255, 255, 0.3);
-      }
-
-      .pot-icon {
-        font-size: 1.2em;
-        animation: pot-glow 2s ease-in-out infinite;
-      }
-
-      @keyframes pot-glow {
-        0%,
-        100% {
-          filter: brightness(1);
-        }
-        50% {
-          filter: brightness(1.2);
-        }
-      }
-
-      .pot-value {
-        font-weight: 700;
-        font-size: 1em;
-        color: #5d4e37;
-        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
-      }
-
-      .pot-help {
-        font-size: 0.8em;
-        cursor: pointer;
-        opacity: 0.7;
-        transition:
-          opacity 0.2s,
-          transform 0.2s;
-      }
-
-      .pot-help:hover {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-
-      .pot-label {
-        font-size: 0.65em;
-        color: #8b7355;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .pot-container.growing {
-        animation: pot-grow 0.5s ease-out;
-      }
-
-      @keyframes pot-grow {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.1);
-          box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-
-      .pot-container.shrinking {
-        animation: pot-shrink 0.5s ease-out;
-      }
-
-      @keyframes pot-shrink {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(0.9);
-          box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-
-      .pot-container.frozen {
-        filter: saturate(0.5);
-        background: linear-gradient(
-          135deg,
-          #a0a0a0 0%,
-          #909090 50%,
-          #808080 100%
-        );
-        border-color: #666;
-      }
-
-      .pot-container.frozen .pot-icon::after {
-        content: "❄️";
-        font-size: 0.6em;
-        position: absolute;
-        top: -5px;
-        right: -5px;
       }
 
       /* Earning hint banner */
@@ -3193,19 +3252,34 @@
       <!-- Main Game Screen -->
       <div id="game-screen" class="screen">
         <div class="status-bar">
-          <div class="money-display">🏦 $<span id="money-amount">5</span></div>
-          <div class="pot-display" id="pot-display">
-            <div class="pot-container">
-              <span class="pot-icon">🏺</span>
-              <span class="pot-value">$<span id="pot-amount">0.00</span></span>
-              <span
-                class="pot-help"
-                onclick="showPotHelp()"
-                title="What's the pot?"
-                >❓</span
-              >
+          <div class="wallet-section">
+            <div class="wallet-item bank-display">
+              <span class="wallet-icon">🏦</span>
+              <div class="wallet-info">
+                <span class="wallet-label">Bank</span>
+                <span class="wallet-amount"
+                  >$<span id="money-amount">5</span></span
+                >
+              </div>
             </div>
-            <div class="pot-label">Pot</div>
+            <div class="wallet-divider"></div>
+            <div class="wallet-item pot-container" id="pot-display">
+              <span class="wallet-icon pot-icon">🏺</span>
+              <div class="wallet-info">
+                <span class="wallet-label"
+                  >Pot
+                  <span
+                    class="pot-help"
+                    onclick="showPotHelp()"
+                    title="What's the pot?"
+                    >ⓘ</span
+                  ></span
+                >
+                <span class="wallet-amount pot-value"
+                  >$<span id="pot-amount">0</span></span
+                >
+              </div>
+            </div>
           </div>
           <div class="daily-actions-wrapper">
             <div class="daily-actions-display" id="daily-actions-display">
