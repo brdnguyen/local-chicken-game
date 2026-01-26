@@ -5083,11 +5083,11 @@
           const oldPot = gameState.moneyPot;
 
           if (greenCount >= 4 && redCount === 0) {
-            // Healthy chicken: +50% per interval (capped at $5)
+            // Healthy chicken: +5% per interval (capped at $5)
             for (let i = 0; i < intervalsCrossed; i++) {
               gameState.moneyPot = Math.min(
                 POT_MAX_AMOUNT,
-                gameState.moneyPot * 1.5,
+                gameState.moneyPot * 1.05,
               );
             }
             gameState.moneyPot = roundToOneDecimal(gameState.moneyPot);
@@ -5099,9 +5099,9 @@
               );
             }
           } else if (redCount >= 3) {
-            // Unhealthy chicken: -50% per interval
+            // Unhealthy chicken: -5% per interval
             for (let i = 0; i < intervalsCrossed; i++) {
-              gameState.moneyPot = gameState.moneyPot * 0.5;
+              gameState.moneyPot = gameState.moneyPot * 0.95;
             }
             gameState.moneyPot = roundToOneDecimal(
               Math.max(0, gameState.moneyPot),

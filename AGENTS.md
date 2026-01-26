@@ -198,8 +198,8 @@ The Money Pot is the **primary way to earn money**! All earnings flow through th
 #### Passive Pot Growth/Shrink (every 5 virtual days)
 | Condition | Effect |
 |-----------|--------|
-| 💚 **4+ green bars, 0 red** | Pot **+50%** |
-| ❤️ **3+ red bars** | Pot **-50%** |
+| 💚 **4+ green bars, 0 red** | Pot **+5%** |
+| ❤️ **3+ red bars** | Pot **-5%** |
 | 💛 **Mixed/neutral** | No change |
 | 🤒 **Sick chicken** | Pot **frozen** |
 
